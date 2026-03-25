@@ -1,0 +1,6 @@
+- [x] Update `src/components/CaseStudies.jsx` data and layout for exactly 4 Featured Projects
+- [x] Remove category filter and case-study-specific blocks (challenge/solution/results)
+- [x] Apply `bc8` as Featured Projects section background with readability overlay
+- [x] Keep animations and CTA behavior intact
+- [x] Run build check to ensure no errors
+- [x] Mark TODO completion after verification
