@@ -50,13 +50,23 @@ export default function Services() {
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, y: 30 },
+    visible: i => ({ opacity: 1, y: 0, transition: { duration: 0.5, delay: i * 0.08 } }),
   }
 
   return (
-    <section id="services" className="py-20 md:py-32 bg-dark">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="services" className="py-20 md:py-32 relative overflow-hidden" style={{
+      background: `linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 248, 248, 0.1) 100%), url('/images/bc8.jpg')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      backgroundBlendMode: 'overlay',
+      filter: 'blur(0.5px)'
+    }}>
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-red-50/10"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0 }}
@@ -64,10 +74,15 @@ export default function Services() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="section-title">
-            Services I <span className="gradient-text">Provide</span>
+          <h2 className="text-4xl md:text-5xl font-black font-syne mb-4" style={{ color: '#F8F9FA' }}>
+            Services I <span style={{
+              background: 'linear-gradient(45deg, #88CC00, #A8E011, #88CC00)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>Provide</span>
           </h2>
-          <p className="section-subtitle">
+          <p className="text-lg mb-12 font-semibold" style={{ color: '#A6ADBE' }}>
             Comprehensive solutions for all your web design and development needs
           </p>
         </motion.div>
@@ -84,22 +99,28 @@ export default function Services() {
             return (
               <motion.div
                 key={idx}
-                className="card group hover:border-primary/50"
+                custom={idx}
+                className="bg-dark-card/80 backdrop-blur-[18px] rounded-xl p-6 border-2 border-red-500/60 hover:border-red-400 shadow-[0_8px_30px_rgba(220,20,60,0.25)] hover:shadow-[0_12px_40px_rgba(220,20,60,0.35)] transition-all duration-300 group"
                 variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
                 whileHover={{ y: -8, scale: 1.02 }}
+                style={{ boxShadow: '0 10px 30px rgba(220, 20, 60, 0.15)' }}
+                aria-label={`${service.title} service card`}
               >
                 <motion.div
-                  className="inline-flex items-center justify-center w-14 h-14 bg-primary/10 border border-primary/30 rounded-lg mb-6"
+                  className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-lg mb-6 shadow-md"
                   whileHover={{ scale: 1.15, rotate: 10 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <Icon size={24} className="text-primary" />
+                  <Icon size={24} className="text-white" />
                 </motion.div>
 
-                <h3 className="text-2xl font-bold font-syne mb-3">
+                <h3 className="text-2xl font-black font-syne mb-3" style={{ color: '#F8F9FA' }}>
                   {service.title}
                 </h3>
-                <p className="text-text-secondary mb-6 leading-relaxed">
+                <p className="text-text-secondary mb-6 leading-relaxed font-semibold">
                   {service.description}
                 </p>
 
@@ -107,13 +128,13 @@ export default function Services() {
                   {service.features.map((feature, fidx) => (
                     <motion.li
                       key={fidx}
-                      className="flex items-center gap-2 text-sm text-text-secondary"
+                      className="flex items-center gap-2 text-sm text-text-secondary font-medium"
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: fidx * 0.1 }}
                       viewport={{ once: true }}
                     >
-                      <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                      <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
                       {feature}
                     </motion.li>
                   ))}
@@ -121,41 +142,6 @@ export default function Services() {
               </motion.div>
             )
           })}
-        </motion.div>
-
-        {/* Process Overview */}
-        <motion.div
-          className="mt-20 md:mt-32 p-8 md:p-12 rounded-2xl border border-border-dark bg-gradient-to-r from-primary/5 to-transparent"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="text-3xl font-bold font-syne mb-6">
-            How It Works
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              { num: 1, title: 'Discovery', desc: 'Understand your goals and vision' },
-              { num: 2, title: 'Strategy', desc: 'Create a comprehensive plan' },
-              { num: 3, title: 'Build', desc: 'Develop and design your solution' },
-              { num: 4, title: 'Launch', desc: 'Deploy and optimize for success' },
-            ].map((step) => (
-              <motion.div
-                key={step.num}
-                className="relative"
-                whileHover={{ y: -5 }}
-              >
-                <div className="absolute top-0 left-6 w-8 h-8 bg-primary rounded-full flex items-center justify-center font-bold text-dark text-sm">
-                  {step.num}
-                </div>
-                <div className="pl-20">
-                  <h4 className="font-bold mb-1">{step.title}</h4>
-                  <p className="text-sm text-text-secondary">{step.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </motion.div>
       </div>
     </section>
