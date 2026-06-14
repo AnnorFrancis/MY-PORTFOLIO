@@ -19,35 +19,36 @@ export default function Contact() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  // OPTIONAL: paste your Formspree form ID here to also receive emails (https://formspree.io)
-  const FORMSPREE_ID = ''
-  const WHATSAPP_NUMBER = '233538713916'
+  // Web3Forms delivers submissions to your email inbox. This is a public key.
+  const WEB3FORMS_KEY = '54c0f086-6bde-4ea9-85f8-342de5e5bc70'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
     const { name, email, phone, projectType, budget, message } = formData
     try {
-      if (FORMSPREE_ID) {
-        await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(formData),
-        })
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: 'New enquiry from the Perkins website',
+          from_name: 'Perkins Website',
+          name,
+          email,
+          phone,
+          service: projectType,
+          budget,
+          message,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setSubmitStatus('success')
+        setFormData({ name: '', email: '', phone: '', projectType: '', budget: '', message: '' })
+      } else {
+        setSubmitStatus('error')
       }
-      const lines = [
-        'New enquiry from the Perkins website',
-        `Name: ${name}`,
-        email ? `Email: ${email}` : '',
-        phone ? `Phone: ${phone}` : '',
-        projectType ? `Service: ${projectType}` : '',
-        budget ? `Budget: ${budget}` : '',
-        message ? `Message: ${message}` : '',
-      ].filter(Boolean)
-      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`
-      window.open(waUrl, '_blank', 'noopener,noreferrer')
-      setSubmitStatus('success')
-      setFormData({ name: '', email: '', phone: '', projectType: '', budget: '', message: '' })
       setTimeout(() => setSubmitStatus(null), 6000)
     } catch (error) {
       setSubmitStatus('error')
