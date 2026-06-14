@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 export default function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
-  const images = ['images/my-image.png', 'images/my-image2.jpeg', 'images/my-image3.png'];
+  const images = ['/images/my-image.jpg', '/images/my-image3.jpg'];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -60,7 +60,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen bg-dark pt-20 md:pt-0 flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <motion.div className="absolute inset-0" style={{backgroundImage: 'url(images/bc1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(3px) opacity(0.6)'}} animate={{ scale: [1, 1.02, 1] }} transition={{ duration: 20, repeat: Infinity }}></motion.div>
+      <motion.div className="absolute inset-0" style={{backgroundImage: 'url(/images/bc1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(3px) opacity(0.6)'}} animate={{ scale: [1, 1.02, 1] }} transition={{ duration: 20, repeat: Infinity }}></motion.div>
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark/40"></div>
       {/* Background Elements */}
@@ -97,11 +97,11 @@ export default function Hero() {
 
             {/* Main Heading */}
             <motion.div className="space-y-6" variants={itemVariants}>
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold font-syne leading-tight">
-                Hi, I'm Perkins. Website & Creative <span className="gradient-text"> Designer</span>
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight">
+                Websites, AI &amp; Brands,<br /><span className="gradient-text">Built to Win Clients</span>
               </h1>
-              <p className="text-xl text-text-secondary leading-relaxed max-w-lg">
-                I build elegant, high-performance websites that help businesses grow. || I write top-notch academic papers for students of all levels and help with applications. || I design smart business cards, Fliers, art videos for birthdays and anniversaries. || I run meta ads for businesses and individuals.
+              <p className="text-xl text-text-secondary leading-relaxed max-w-xl">
+                I&apos;m Francis Annor — founder of <span className="text-primary font-semibold">Perkins Creative Digital Agency</span>. I design premium websites, build AI automations, and craft brands &amp; content that make ambitious businesses impossible to ignore.
               </p>
             </motion.div>
 
@@ -170,17 +170,19 @@ export default function Hero() {
             variants={floatingVariants}
           >
             <motion.div
-              className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl border border-border-dark flex items-center justify-center"
+              className="relative w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl border border-border-dark overflow-hidden flex items-center justify-center"
               animate={{ y: [0, -20, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
-              <div className="text-center text-text-secondary">
+              {images.map((src, idx) => (
                 <img
-                  src={images[currentImage]}
+                  key={idx}
+                  src={src}
                   alt="Francis Annor"
-                  className={`w-full h-full object-cover rounded-2xl transition-opacity duration-500 ${currentImage === 1 ? 'scale-90' : ''}`}
+                  className="absolute inset-0 w-full h-full object-cover rounded-2xl transition-opacity ease-in-out"
+                  style={{ opacity: idx === currentImage ? 1 : 0, transitionDuration: '1400ms' }}
                 />
-              </div>
+              ))}
               {/* Slideshow Dots */}
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
                 {images.map((_, idx) => (
@@ -203,10 +205,10 @@ export default function Hero() {
           animate="visible"
         >
           {[
-            { label: 'Projects', value: '50+' },
-            { label: 'Clients', value: '45+' },
-            { label: 'Years Exp.', value: '8+' },
-            { label: 'Satisfaction', value: '4.9★' },
+            { label: 'Projects Shipped', value: '15+' },
+            { label: 'Services', value: '9' },
+            { label: 'Years Experience', value: '7+' },
+            { label: 'Certifications', value: '8+' },
           ].map((stat, idx) => (
             <motion.div
               key={idx}

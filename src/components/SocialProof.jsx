@@ -1,218 +1,124 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'react-feather'
+import { motion } from 'framer-motion'
+import { Award, Clock, RefreshCw, DollarSign, Shield, Zap } from 'react-feather'
 
 export default function SocialProof() {
-  const [activeIndex, setActiveIndex] = useState(0)
-
-  const testimonials = [
-    {
-      name: 'Mr. Kobby Bruce',
-      company: 'Tech Startup Ghana',
-      role: 'Founder',
-      category: 'Startup',
-      achievement: '45% conversion increase',
-      text: 'Francis transformed our vision into reality. The website increased our conversions by 45% in the first month.',
-      accentColor: 'border-blue-500/30 hover:border-blue-500/60',
-      tagColor: 'bg-blue-500/20 text-blue-300',
-      badgeColor: 'bg-blue-500/10 text-blue-400',
-    },
-    {
-      name: 'Mr. Samuel Asare',
-      company: 'Digital Agency',
-      role: 'CEO',
-      category: 'Agency',
-      achievement: 'Performance optimized',
-      text: 'Outstanding work. The attention to detail and performance optimization was exactly what we needed.',
-      accentColor: 'border-purple-500/30 hover:border-purple-500/60',
-      tagColor: 'bg-purple-500/20 text-purple-300',
-      badgeColor: 'bg-purple-500/10 text-purple-400',
-    },
-    {
-      name: 'Mrs. Ivy Mensah',
-      company: 'E-commerce Business',
-      role: 'Owner',
-      category: 'E-commerce',
-      achievement: '2x faster loading',
-      text: 'Best investment we made. The new site is fast, beautiful, and our customers love it.',
-      accentColor: 'border-emerald-500/30 hover:border-emerald-500/60',
-      tagColor: 'bg-emerald-500/20 text-emerald-300',
-      badgeColor: 'bg-emerald-500/10 text-emerald-400',
-    },
+  const certifications = [
+    'Google IT Support Professional',
+    'Google IT Security',
+    'Meta React Developer',
+    'AI Automation (Coursera)',
+    'Claude & Claude Code',
+    'AWS Cloud Practitioner',
+    'Google Project Management',
+    'Customer Service Excellence',
   ]
 
-  const nextTestimonial = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length)
-  }
+  const guarantees = [
+    { icon: DollarSign, title: 'Transparent pricing', text: 'Clear, fixed packages. You always know the cost before we start — no surprises.' },
+    { icon: Clock, title: 'On-time delivery', text: 'Agreed timelines, honoured. Your project ships when I say it will.' },
+    { icon: RefreshCw, title: 'Revisions included', text: 'We refine until it is right. Your satisfaction is built into every package.' },
+    { icon: Shield, title: 'Reliable & certified', text: '7+ years of work and genuine, verifiable certifications behind every service.' },
+  ]
 
-  const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  }
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   }
 
   return (
-    <section className="py-20 md:py-32 bg-dark">
+    <section className="py-20 md:py-32 bg-dark relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Testimonials */}
         <motion.div
+          className="text-center mb-14"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h3 className="section-title text-center mb-16">
-            What Clients Are Saying
-          </h3>
+          <span className="eyebrow">Why clients trust Perkins</span>
+          <h2 className="section-title">
+            Real Credentials, <span className="gradient-text">Real Standards</span>
+          </h2>
+          <p className="section-subtitle max-w-2xl mx-auto">
+            No fluff — just verifiable certifications and the way I work on every single project.
+          </p>
+        </motion.div>
 
-          {/* Desktop Grid View (hidden on mobile) */}
-          <div className="hidden md:block">
-            <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial, idx) => (
-                <motion.div
-                  key={idx}
-                  className={`card flex flex-col gap-6 border-l-4 transition-all duration-300 ${testimonial.accentColor}`}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                >
-                  {/* Quote Icon */}
-                  <div className="text-4xl text-primary/40">❝</div>
-
-                  {/* Category Tag */}
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full ${testimonial.tagColor}`}>
-                      {testimonial.category}
-                    </span>
-                  </div>
-
-                  {/* Rating */}
-                  <motion.div className="flex gap-1" whileHover={{ scale: 1.08 }}>
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-lg">
-                        ⭐
-                      </span>
-                    ))}
-                  </motion.div>
-
-                  {/* Quote */}
-                  <p className="text-text-secondary italic leading-relaxed flex-grow">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-
-                  {/* Achievement Badge */}
-                  <div className={`text-xs font-medium px-3 py-2 rounded ${testimonial.badgeColor} w-fit`}>
-                    ✓ {testimonial.achievement}
-                  </div>
-
-                  {/* Author */}
-                  <div className="pt-6 border-t border-border-dark">
-                    <div className="font-semibold text-sm">{testimonial.name}</div>
-                    <div className="text-xs text-text-tertiary">
-                      {testimonial.role} at {testimonial.company}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Mobile Carousel View (visible only on mobile) */}
-          <div className="md:hidden">
-            <div className="relative">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {(() => {
-                    const testimonial = testimonials[activeIndex]
-                    return (
-                      <div
-                        className={`card flex flex-col gap-6 border-l-4 transition-all duration-300 ${testimonial.accentColor}`}
-                      >
-                        {/* Quote Icon */}
-                        <div className="text-4xl text-primary/40">❝</div>
-
-                        {/* Category Tag */}
-                        <div className="flex items-center gap-2">
-                          <span className={`text-xs font-semibold px-3 py-1 rounded-full ${testimonial.tagColor}`}>
-                            {testimonial.category}
-                          </span>
-                        </div>
-
-                        {/* Rating */}
-                        <motion.div className="flex gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <span key={i} className="text-lg">
-                              ⭐
-                            </span>
-                          ))}
-                        </motion.div>
-
-                        {/* Quote */}
-                        <p className="text-text-secondary italic leading-relaxed flex-grow">
-                          &ldquo;{testimonial.text}&rdquo;
-                        </p>
-
-                        {/* Achievement Badge */}
-                        <div className={`text-xs font-medium px-3 py-2 rounded ${testimonial.badgeColor} w-fit`}>
-                          ✓ {testimonial.achievement}
-                        </div>
-
-                        {/* Author */}
-                        <div className="pt-6 border-t border-border-dark">
-                          <div className="font-semibold text-sm">{testimonial.name}</div>
-                          <div className="text-xs text-text-tertiary">
-                            {testimonial.role} at {testimonial.company}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })()}
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Carousel Controls */}
-              <div className="flex items-center justify-between mt-6 gap-4">
-                <motion.button
-                  onClick={prevTestimonial}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2 rounded-full border border-border-dark hover:border-primary/50 hover:text-primary transition-colors"
-                >
-                  <ChevronLeft size={20} />
-                </motion.button>
-
-                {/* Indicators */}
-                <div className="flex gap-2">
-                  {testimonials.map((_, idx) => (
-                    <motion.button
-                      key={idx}
-                      onClick={() => setActiveIndex(idx)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        idx === activeIndex ? 'bg-primary w-6' : 'bg-border-dark'
-                      }`}
-                      whileHover={{ scale: 1.2 }}
-                    />
-                  ))}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {guarantees.map((g, idx) => {
+            const Icon = g.icon
+            return (
+              <motion.div key={idx} className="card text-center" variants={itemVariants} whileHover={{ y: -4 }}>
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 border border-primary/30 mb-4">
+                  <Icon size={20} className="text-primary" />
                 </div>
+                <h3 className="font-bold text-lg mb-2 text-text-primary">{g.title}</h3>
+                <p className="text-text-secondary text-sm leading-relaxed">{g.text}</p>
+              </motion.div>
+            )
+          })}
+        </motion.div>
 
-                <motion.button
-                  onClick={nextTestimonial}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2 rounded-full border border-border-dark hover:border-primary/50 hover:text-primary transition-colors"
-                >
-                  <ChevronRight size={20} />
-                </motion.button>
-              </div>
-
-              {/* Counter */}
-              <div className="text-center mt-4 text-sm text-text-tertiary">
-                {activeIndex + 1} / {testimonials.length}
-              </div>
-            </div>
+        <motion.div
+          className="rounded-2xl border border-border-dark bg-dark-card/60 p-8 md:p-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="flex items-center gap-3 mb-8 justify-center">
+            <Award size={22} className="text-primary" />
+            <h3 className="text-2xl font-bold text-text-primary" style={{ fontFamily: '"Playfair Display", Georgia, serif' }}>
+              Certifications & Credentials
+            </h3>
           </div>
+          <motion.div
+            className="flex flex-wrap justify-center gap-3"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {certifications.map((cert, idx) => (
+              <motion.span
+                key={idx}
+                className="px-4 py-2.5 rounded-full bg-primary/5 border border-primary/30 text-sm text-primary-light font-medium"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+              >
+                {cert}
+              </motion.span>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="text-center mt-16 max-w-2xl mx-auto"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Zap size={18} className="text-primary" />
+            <span className="text-primary font-semibold uppercase text-xs tracking-[0.2em]">Now taking new clients</span>
+          </div>
+          <p className="text-text-secondary leading-relaxed mb-6">
+            Be one of the first featured success stories. Early clients get my full attention, the sharpest pricing, and results we&apos;ll proudly showcase right here.
+          </p>
+          <a href="https://wa.me/233538713916" target="_blank" rel="noopener noreferrer" className="btn-primary inline-flex">
+            Start your project
+          </a>
         </motion.div>
       </div>
     </section>

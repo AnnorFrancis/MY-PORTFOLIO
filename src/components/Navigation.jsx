@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Moon, Sun } from 'react-feather'
+import { Menu, X } from 'react-feather'
 
-export default function Navigation({ isDark, setIsDark }) {
+export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -47,8 +47,8 @@ export default function Navigation({ isDark, setIsDark }) {
           whileHover={{ scale: 1.05 }}
           onClick={(e) => handleNavClick(e, '#')}
         >
-          <img src="images/my-logo.png" alt="Perkins-Creatives Logo" className="w-10 h-10 rounded-lg" />
-          <span className="font-syne font-bold text-lg hidden sm:block text-primary">Perkins-Creatives</span>
+          <img src="/perkins-logo.png" alt="Perkins Creative Digital Agency" className="w-10 h-10" />
+          <span className="font-bold text-lg hidden sm:block text-primary tracking-wide" style={{ fontFamily: '"Playfair Display", Georgia, serif' }}>Perkins</span>
         </motion.div>
 
         {/* Desktop Menu */}
@@ -68,15 +68,6 @@ export default function Navigation({ isDark, setIsDark }) {
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
-          <motion.button
-            onClick={() => setIsDark(!isDark)}
-            className="p-2 rounded-lg border border-border-dark hover:border-primary transition-colors"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {isDark ? <Sun size={20} /> : <Moon size={20} />}
-          </motion.button>
-
           <motion.button
             className="btn-primary hidden sm:flex"
             onClick={(e) => handleNavClick(e, '#contact')}

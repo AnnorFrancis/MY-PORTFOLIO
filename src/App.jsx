@@ -10,14 +10,10 @@ import Process from './components/Process'
 import Pricing from './components/Pricing'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import PerkinsAI from './components/PerkinsAI'
 
 export default function App() {
-  const [isDark, setIsDark] = useState(true)
   const [scrollProgress, setScrollProgress] = useState(0)
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark)
-  }, [isDark])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,10 +35,10 @@ export default function App() {
       />
 
       {/* Navigation */}
-      <Navigation isDark={isDark} setIsDark={setIsDark} />
+      <Navigation />
 
       {/* Main Content */}
-      <main className="bg-dark dark:bg-light text-white dark:text-gray-900 overflow-hidden">
+      <main className="bg-dark text-text-primary overflow-hidden">
         <Hero />
         <About />
         <SocialProof />
@@ -55,6 +51,9 @@ export default function App() {
 
       {/* Footer */}
       <Footer />
+
+      {/* Perkins AI concierge */}
+      <PerkinsAI />
     </div>
   )
 }

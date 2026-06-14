@@ -214,7 +214,7 @@ export default function Process() {
               <motion.div className="md:col-span-2">
                 <motion.h3
                   className="text-2xl font-black font-syne mb-3"
-                  whileHover={{ color: '#88CC00', scale: 1.01 }}
+                  whileHover={{ color: '#C9A24B', scale: 1.01 }}
                 >
                   {step.title}
                 </motion.h3>
@@ -238,7 +238,7 @@ export default function Process() {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: didx * 0.1 }}
                       viewport={{ once: true }}
-                      whileHover={{ borderColor: '#88CC00', scale: 1.04 }}
+                      whileHover={{ borderColor: '#C9A24B', scale: 1.04 }}
                     >
                       <CheckCircle size={14} className="text-primary flex-shrink-0" />
                       {detail}

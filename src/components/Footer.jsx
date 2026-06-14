@@ -63,14 +63,13 @@ export default function Footer() {
               className="flex items-center gap-2"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-dark font-bold text-lg">P</span>
-              </div>
-              <span className="font-syne font-bold text-lg">Perkins</span>
+              <img src="/perkins-logo.png" alt="Perkins logo" className="w-10 h-10" />
+              <span className="font-bold text-lg" style={{ fontFamily: '"Playfair Display", Georgia, serif' }}>Perkins</span>
             </motion.div>
             <p className="text-text-secondary text-sm leading-relaxed">
-              Building elegant, high-performance websites that help businesses grow.
+              Perkins Creative Digital Agency — websites, AI, branding, video &amp; more. One trusted partner, delivered at a premium.
             </p>
+            <p className="text-primary text-sm font-medium italic">Elevate Everything.</p>
             {/* Social Links */}
             <motion.div className="flex gap-3 pt-4" variants={containerVariants}>
               {socialLinks.map((link, idx) => {
@@ -116,10 +115,10 @@ export default function Footer() {
             <h4 className="font-semibold text-text-primary">Services</h4>
             <ul className="space-y-2">
               {[
-                'Web Development',
-                'UI/UX Design',
-                'E-commerce',
-                'Performance Optimization',
+                'Web & App Development',
+                'AI Automation & Chatbots',
+                'Branding & Design',
+                'Social Media & Marketing',
               ].map((service, idx) => (
                 <motion.li
                   key={idx}

@@ -9,7 +9,7 @@ export default function About() {
     { name: 'Python', level: 85 },
     { name: 'Node.js', level: 82 },
     { name: 'Academic Consultant', level: 90 },
-    { name: 'AI & Machine Learning', level: 75 },
+    { name: 'AI Automation & Chatbots', level: 88 },
     { name: 'CRM Systems (Salesforce, Zendesk, Freshdesk)', level: 92 },
     { name: 'MongoDB', level: 80 },
     { name: 'Git & Deployment', level: 85 },
@@ -33,7 +33,7 @@ export default function About() {
   return (
     <section id="about" className="relative py-16 md:py-24 bg-dark overflow-hidden">
       {/* Background Image */}
-      <motion.div className="absolute inset-0" style={{backgroundImage: 'url(images/bc3.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(2px) opacity(0.6)'}} animate={{ scale: [1, 1.01, 1] }} transition={{ duration: 25, repeat: Infinity }}></motion.div>
+      <motion.div className="absolute inset-0" style={{backgroundImage: 'url(/images/bc3.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(2px) opacity(0.6)'}} animate={{ scale: [1, 1.01, 1] }} transition={{ duration: 25, repeat: Infinity }}></motion.div>
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-dark/90 via-dark/70 to-dark/50"></div>
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,7 +54,7 @@ export default function About() {
           >
             <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
               <img
-                src="images/my-image8.png"
+                src="/images/my-image8.jpg"
                 alt="Francis Perkins Annor - Digital Creator"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />

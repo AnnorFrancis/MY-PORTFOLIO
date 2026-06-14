@@ -1,87 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply transition-colors duration-200;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
+  * { @apply transition-colors duration-200; }
+  html { scroll-behavior: smooth; }
   body {
-    @apply bg-dark text-text-primary dark:bg-light dark:text-gray-900;
-    font-family: 'DM Sans', sans-serif;
+    @apply bg-dark text-text-primary;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Playfair Display', Georgia, serif;
     @apply font-bold;
+    letter-spacing: 0.005em;
   }
-
-  code {
-    font-family: 'Space Mono', monospace;
-  }
+  code { font-family: 'Space Mono', monospace; }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 bg-primary text-dark font-semibold rounded-lg hover:bg-primary hover:shadow-lg hover:shadow-primary hover:shadow-primary/30 transition-all duration-300 transform hover:scale-105 active:scale-95;
+    @apply px-6 py-3 font-semibold rounded-lg text-dark transition-all duration-300 transform hover:scale-105 active:scale-95;
+    background-image: linear-gradient(120deg, #F1E2B4 0%, #C9A24B 45%, #9A7B2E 100%);
+    box-shadow: 0 6px 24px rgba(201, 162, 75, 0.22);
   }
-
+  .btn-primary:hover { box-shadow: 0 10px 32px rgba(201, 162, 75, 0.38); }
   .btn-secondary {
     @apply px-6 py-3 border border-border-dark text-text-primary rounded-lg hover:border-primary hover:bg-primary/5 transition-all duration-300;
   }
-
   .btn-outline {
     @apply px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-dark transition-all duration-300;
   }
-
   .card {
     @apply bg-dark-card rounded-xl p-6 border border-border-dark hover:border-primary/50 transition-all duration-300;
   }
-
   .section-title {
-    @apply text-4xl md:text-5xl font-bold font-syne mb-4;
+    @apply text-4xl md:text-5xl font-bold mb-4;
+    font-family: 'Playfair Display', Georgia, serif;
   }
-
-  .section-subtitle {
-    @apply text-text-secondary text-lg mb-12;
+  .section-subtitle { @apply text-text-secondary text-lg mb-12; }
+  .eyebrow {
+    @apply inline-block text-primary font-semibold text-xs uppercase mb-3;
+    letter-spacing: 0.28em;
   }
-
   .gradient-text {
-    @apply bg-gradient-to-r from-primary via-primary to-primary/50 bg-clip-text text-transparent;
+    background-image: linear-gradient(120deg, #F1E2B4 0%, #C9A24B 45%, #9A7B2E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
-
-  .glass-effect {
-    @apply backdrop-blur-md bg-dark-card/40 border border-white/10 rounded-xl;
-  }
+  .gold-rule { height: 1px; background: linear-gradient(90deg, transparent, #C9A24B, transparent); }
+  .glass-effect { @apply backdrop-blur-md bg-dark-card/40 border border-white/10 rounded-xl; }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #88CC00;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #A8E011;
-}
-
-/* Selection */
-::selection {
-  background-color: #88CC00;
-  color: #0A0E27;
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C9A24B; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #E8D6A6; }
+::selection { background-color: #C9A24B; color: #0E0F12; }

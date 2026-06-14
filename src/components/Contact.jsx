@@ -19,19 +19,39 @@ export default function Contact() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
+  // OPTIONAL: paste your Formspree form ID here to also receive emails (https://formspree.io)
+  const FORMSPREE_ID = ''
+  const WHATSAPP_NUMBER = '233538713916'
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-
+    const { name, email, phone, projectType, budget, message } = formData
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      if (FORMSPREE_ID) {
+        await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(formData),
+        })
+      }
+      const lines = [
+        'New enquiry from the Perkins website',
+        `Name: ${name}`,
+        email ? `Email: ${email}` : '',
+        phone ? `Phone: ${phone}` : '',
+        projectType ? `Service: ${projectType}` : '',
+        budget ? `Budget: ${budget}` : '',
+        message ? `Message: ${message}` : '',
+      ].filter(Boolean)
+      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`
+      window.open(waUrl, '_blank', 'noopener,noreferrer')
       setSubmitStatus('success')
       setFormData({ name: '', email: '', phone: '', projectType: '', budget: '', message: '' })
-      setTimeout(() => setSubmitStatus(null), 5000)
+      setTimeout(() => setSubmitStatus(null), 6000)
     } catch (error) {
       setSubmitStatus('error')
-      setTimeout(() => setSubmitStatus(null), 5000)
+      setTimeout(() => setSubmitStatus(null), 6000)
     } finally {
       setIsSubmitting(false)
     }
@@ -107,7 +127,7 @@ export default function Contact() {
           >
             <motion.div
               className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-8"
-              whileHover={{ borderColor: '#88CC00', scale: 1.02 }}
+              whileHover={{ borderColor: '#C9A24B', scale: 1.02 }}
             >
               <h3 className="text-2xl font-bold font-syne mb-6">Quick Response Time</h3>
               <p className="text-text-secondary mb-4">

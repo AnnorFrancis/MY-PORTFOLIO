@@ -9,7 +9,7 @@ export default function Pricing() {
       duration: 'Perfect for small projects',
       description: 'Essential web presence for growing businesses',
       features: [
-        { text: '5 Pages', included: true },
+        { text: '4 Pages', included: true },
         { text: 'Responsive Design', included: true },
         { text: 'Mobile Optimized', included: true },
         { text: 'Basic SEO', included: true },
@@ -28,7 +28,7 @@ export default function Pricing() {
       duration: 'Most popular choice',
       description: 'Full-featured website with custom design',
       features: [
-        { text: '12 Pages', included: true },
+        { text: '10 Pages', included: true },
         { text: 'Responsive Design', included: true },
         { text: 'Mobile Optimized', included: true },
         { text: 'Full SEO', included: true },
@@ -63,10 +63,12 @@ export default function Pricing() {
   ]
 
   const additionalServices = [
-    { name: 'SEO Only', price: '₵800 — ₵2,500' },
+    { name: 'AI Chatbot & Automation', price: '₵1,500 — ₵6,000' },
+    { name: 'Social Media Management', price: '₵600 — ₵2,500/mo' },
+    { name: 'Brand & Flyer Design', price: '₵80 — ₵600' },
+    { name: 'CV / SOP Writing', price: '₵150 — ₵400' },
     { name: 'Landing Page', price: '₵1,500 — ₵4,000' },
-    { name: 'CRM Setup', price: '₵1,200 — ₵3,500' },
-    { name: 'Monthly Maintenance', price: '₵500 — ₵1,200/mo' },
+    { name: 'Website Care Plan', price: '₵300 — ₵1,200/mo' },
   ]
 
   const containerVariants = {
@@ -181,7 +183,7 @@ export default function Pricing() {
                       ? 'btn-primary'
                       : 'border border-border-dark text-text-secondary hover:border-primary hover:text-primary'
                   }`}
-                  whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(136, 204, 0, 0.3)' }}
+                  whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(201, 162, 75, 0.3)' }}
                   whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
                     e.preventDefault()
