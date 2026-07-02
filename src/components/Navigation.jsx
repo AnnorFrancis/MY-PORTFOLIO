@@ -7,12 +7,15 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
+    const handleScroll = () => setIsScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isMobileMenuOpen])
 
   const menuItems = [
     { label: 'Work', href: '#work' },
@@ -34,7 +37,7 @@ export default function Navigation() {
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled ? 'bg-dark-card/80 dark:bg-light-card/80 backdrop-blur-md border-b border-border-dark dark:border-border-light' : 'bg-transparent'
+        isScrolled ? 'bg-dark-card/80 backdrop-blur-md border-b border-border-dark' : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -91,31 +94,29 @@ export default function Navigation() {
 
       {/* Mobile Menu */}
       <motion.div
-        className="md:hidden bg-dark-card dark:bg-light-card border-t border-border-dark dark:border-border-light"
+        className="md:hidden bg-dark-card border-t border-border-dark"
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: isMobileMenuOpen ? 1 : 0, height: isMobileMenuOpen ? 'auto' : 0 }}
         transition={{ duration: 0.3 }}
+        style={{ overflow: 'hidden' }}
       >
-        <div className="px-4 py-4 space-y-3">
+        <div className="px-4 py-4 space-y-1">
           {menuItems.map((item) => (
-            <motion.a
+            <a
               key={item.label}
               href={item.href}
               onClick={(e) => handleNavClick(e, item.href)}
-              className="block text-text-secondary hover:text-primary transition-colors py-2"
-              whileHover={{ x: 5 }}
+              className="block text-text-secondary hover:text-primary active:text-primary transition-colors py-3 text-base font-medium"
             >
               {item.label}
-            </motion.a>
+            </a>
           ))}
-          <motion.button
+          <button
             className="btn-primary w-full mt-4"
             onClick={(e) => handleNavClick(e, '#contact')}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
           >
             Get Started
-          </motion.button>
+          </button>
         </div>
       </motion.div>
     </motion.nav>

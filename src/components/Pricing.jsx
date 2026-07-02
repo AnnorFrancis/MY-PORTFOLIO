@@ -115,11 +115,11 @@ export default function Pricing() {
               key={idx}
               className={`relative rounded-2xl overflow-hidden transition-all ${
                 plan.badge
-                  ? 'border-2 border-primary scale-105 md:scale-110 shadow-2xl shadow-primary/20'
+                  ? 'border-2 border-primary md:scale-105 shadow-2xl shadow-primary/20'
                   : 'border border-border-dark card'
               }`}
               variants={itemVariants}
-              whileHover={{ y: -8, scale: plan.badge ? 1.08 : 1.03 }}
+              whileHover={{ y: -8 }}
             >
               {/* Badge */}
               {plan.badge && (
@@ -137,12 +137,9 @@ export default function Pricing() {
                 <div className="mb-8 pt-4">
                   <h3 className="text-2xl font-bold font-syne mb-2">{plan.name}</h3>
                   <p className="text-text-secondary text-sm mb-4">{plan.duration}</p>
-                  <motion.div
-                    className="text-4xl font-bold text-primary mb-2"
-                    whileHover={{ scale: 1.05 }}
-                  >
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-2">
                     {plan.price}
-                  </motion.div>
+                  </div>
                   <p className="text-text-tertiary text-sm mb-6">{plan.description}</p>
                   <div className="inline-block px-3 py-1 bg-primary/10 border border-primary/30 rounded-full text-xs text-primary font-medium">
                     {plan.timeline} turnaround

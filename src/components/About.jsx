@@ -31,7 +31,7 @@ export default function About() {
   }
 
   return (
-    <section id="about" className="relative py-16 md:py-24 bg-dark overflow-hidden">
+    <section id="about" className="relative py-12 sm:py-16 md:py-24 bg-dark overflow-hidden">
       {/* Background Image */}
       <motion.div className="absolute inset-0" style={{backgroundImage: 'url(/images/bc3.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(2px) opacity(0.6)'}} animate={{ scale: [1, 1.01, 1] }} transition={{ duration: 25, repeat: Infinity }}></motion.div>
       {/* Overlay */}
@@ -52,12 +52,14 @@ export default function About() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+            <div className="relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
               <img
                 src="/images/my-image8.jpg"
                 alt="Francis Perkins Annor - Digital Creator"
                 loading="lazy"
                 decoding="async"
+                width="500"
+                height="500"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent" />
@@ -88,7 +90,7 @@ export default function About() {
                 About Me
               </motion.span>
               <motion.h2
-                className="text-3xl md:text-4xl lg:text-5xl font-bold font-syne leading-tight"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-syne leading-tight"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -98,7 +100,7 @@ export default function About() {
             </div>
 
             <motion.div
-              className="space-y-4 text-lg text-text-secondary leading-relaxed"
+              className="space-y-3 sm:space-y-4 text-base sm:text-lg text-text-secondary leading-relaxed"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -149,7 +151,7 @@ export default function About() {
             Skills & Expertise
           </motion.h3>
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
@@ -16,28 +16,31 @@ export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrolled = (window.scrollY / totalHeight) * 100
-      setScrollProgress(scrolled)
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight
+          setScrollProgress(totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0)
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return (
     <div>
-      {/* Scroll Progress Bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-primary z-50"
-        style={{ width: `${scrollProgress}%` }}
+        className="fixed top-0 left-0 right-0 h-0.5 sm:h-1 bg-primary z-50 origin-left"
+        style={{ scaleX: scrollProgress / 100, transformOrigin: 'left' }}
       />
 
-      {/* Navigation */}
       <Navigation />
 
-      {/* Main Content */}
       <main className="bg-dark text-text-primary overflow-hidden">
         <Hero />
         <About />
@@ -49,10 +52,7 @@ export default function App() {
         <Contact />
       </main>
 
-      {/* Footer */}
       <Footer />
-
-      {/* Perkins AI concierge */}
       <PerkinsAI />
     </div>
   )

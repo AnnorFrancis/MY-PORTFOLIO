@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Code, PenTool, FileText, Video, Cpu, TrendingUp, Tool, ShoppingBag, BookOpen } from 'react-feather'
+import { Code, PenTool, FileText, Video, Cpu, TrendingUp, Tool, ShoppingBag, BookOpen, Grid } from 'react-feather'
 
 export default function Services() {
   const groups = [
@@ -48,6 +48,13 @@ export default function Services() {
           description: 'Custom AI assistants, WhatsApp & website chatbots and workflow automation that save businesses hours every week. Backed by AI Automation & Claude certifications.',
           features: ['AI Assistants', 'WhatsApp Chatbots', 'Workflow Automation', 'AI Content Systems'],
           featured: true,
+        },
+        {
+          icon: Grid,
+          title: 'Business Systems & Software',
+          tag: 'New \u00b7 Goldmine',
+          description: 'Custom POS, CRM, inventory, booking, e-commerce and dashboard systems \u2014 software that runs your whole business.',
+          features: ['POS & Inventory', 'CRM & Bookings', 'E-commerce', 'Dashboards'],
         },
         {
           icon: TrendingUp,
@@ -149,7 +156,7 @@ export default function Services() {
                   return (
                     <motion.div
                       key={idx}
-                      className={`relative rounded-xl p-6 border transition-all duration-300 group bg-dark-card/80 backdrop-blur-sm ${
+                      className={`relative rounded-xl p-4 sm:p-6 border transition-all duration-300 group bg-dark-card/80 backdrop-blur-sm ${
                         service.featured
                           ? 'border-primary/60 shadow-[0_10px_40px_rgba(201,162,75,0.18)]'
                           : 'border-border-dark hover:border-primary/50'
@@ -171,7 +178,7 @@ export default function Services() {
                         <Icon size={24} className="text-dark" />
                       </motion.div>
 
-                      <h3 className="text-xl font-bold mb-3 pr-16 text-text-primary" style={{ fontFamily: '"Playfair Display", Georgia, serif' }}>
+                      <h3 className="text-lg sm:text-xl font-bold mb-3 pr-16 text-text-primary" style={{ fontFamily: '"Playfair Display", Georgia, serif' }}>
                         {service.title}
                       </h3>
                       <p className="text-text-secondary mb-5 leading-relaxed text-sm">

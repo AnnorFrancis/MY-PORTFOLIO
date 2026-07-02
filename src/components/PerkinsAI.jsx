@@ -60,7 +60,7 @@ const KB = [
   {
     keys: ['price', 'pricing', 'cost', 'how much', 'rate', 'budget', 'fee'],
     reply:
-      'Pricing is transparent and package-based. Websites ₵800–₵15,000 · Design ₵80–₵600 · AI chatbots ₵1,500+ · Social media ₵600–₵2,500/mo · Writing ₵150–₵400. Tell me your project and I&apos;ll point you to the right package.',
+      "Pricing is transparent and package-based. Websites ₵800–₵15,000 · Design ₵80–₵600 · AI chatbots ₵1,500+ · Social media ₵600–₵2,500/mo · Writing ₵150–₵400. Tell me your project and I'll point you to the right package.",
     cta: 'See full pricing',
     scrollTo: '#pricing',
   },
@@ -73,7 +73,7 @@ const KB = [
   {
     keys: ['hi', 'hello', 'hey', 'good', 'morning', 'afternoon', 'evening', 'yo'],
     reply:
-      'Hi there! 👋 I&apos;m Perkins AI. I can help with websites, AI automation, branding & design, video, writing, social media, IT and tutoring. What are you working on?',
+      "Hi there! 👋 I'm Perkins AI. I can help with websites, AI automation, branding & design, video, writing, social media, IT and tutoring. What are you working on?",
   },
 ]
 
@@ -106,7 +106,7 @@ export default function PerkinsAI() {
   const [messages, setMessages] = useState([
     {
       from: 'bot',
-      text: "Hi 👋 I&apos;m Perkins AI — your concierge. Ask me anything about websites, AI, design, writing or pricing. How can I help you today?",
+      text: "Hi 👋 I'm Perkins AI — your concierge. Ask me anything about websites, AI, design, writing or pricing. How can I help you today?",
     },
   ])
   const [input, setInput] = useState('')
@@ -188,7 +188,7 @@ export default function PerkinsAI() {
                         : 'bg-graphite text-text-primary rounded-bl-sm border border-border-dark'
                     }`}
                   >
-                    <span dangerouslySetInnerHTML={{ __html: m.text }} />
+                    {m.text}
                     {m.cta && (
                       <button
                         onClick={() => handleCta(m)}

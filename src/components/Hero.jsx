@@ -58,23 +58,12 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen bg-dark pt-20 md:pt-0 flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <motion.div className="absolute inset-0" style={{backgroundImage: 'url(/images/bc1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(3px) opacity(0.6)'}} animate={{ scale: [1, 1.02, 1] }} transition={{ duration: 20, repeat: Infinity }}></motion.div>
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark/40"></div>
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-10 right-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl"
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-10 left-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-          animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
-          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
-        />
+    <section className="relative min-h-[100dvh] bg-dark pt-20 md:pt-0 flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0" style={{backgroundImage: 'url(/images/bc1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(3px) opacity(0.6)'}} />
+      <div className="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark/40" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 right-10 w-48 sm:w-72 h-48 sm:h-72 bg-primary/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-64 sm:w-96 h-64 sm:h-96 bg-primary/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -97,10 +86,10 @@ export default function Hero() {
 
             {/* Main Heading */}
             <motion.div className="space-y-6" variants={itemVariants}>
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold leading-[1.1] sm:leading-tight">
                 Websites, AI &amp; Brands,<br /><span className="gradient-text">Built to Win Clients</span>
               </h1>
-              <p className="text-xl text-text-secondary leading-relaxed max-w-xl">
+              <p className="text-base sm:text-xl text-text-secondary leading-relaxed max-w-xl">
                 I&apos;m Francis Annor — founder of <span className="text-primary font-semibold">Perkins Creative Digital Agency</span>. I design premium websites, build AI automations, and craft brands &amp; content that make ambitious businesses impossible to ignore.
               </p>
             </motion.div>
@@ -166,19 +155,23 @@ export default function Hero() {
 
           {/* Right - Hero Image */}
           <motion.div
-            className="relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden"
+            className="relative h-[350px] sm:h-[450px] md:h-[550px] lg:h-[600px] rounded-2xl overflow-hidden"
             variants={floatingVariants}
           >
             <motion.div
               className="relative w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl border border-border-dark overflow-hidden flex items-center justify-center"
-              animate={{ y: [0, -20, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 5, repeat: Infinity }}
             >
               {images.map((src, idx) => (
                 <img
                   key={idx}
                   src={src}
                   alt="Francis Annor"
+                  width="600"
+                  height="600"
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  decoding={idx === 0 ? 'sync' : 'async'}
                   className="absolute inset-0 w-full h-full object-cover rounded-2xl transition-opacity ease-in-out"
                   style={{ opacity: idx === currentImage ? 1 : 0, transitionDuration: '1400ms' }}
                 />
@@ -199,14 +192,14 @@ export default function Hero() {
 
         {/* Stats */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mt-12 sm:mt-20"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {[
-            { label: 'Projects Shipped', value: '15+' },
-            { label: 'Services', value: '9' },
+            { label: 'Projects Shipped', value: '20+' },
+            { label: 'Services', value: '10' },
             { label: 'Years Experience', value: '7+' },
             { label: 'Certifications', value: '8+' },
           ].map((stat, idx) => (
@@ -215,7 +208,7 @@ export default function Hero() {
               className="card text-center"
               variants={statVariants}
             >
-              <motion.div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+              <motion.div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-1 sm:mb-2">
                 {stat.value}
               </motion.div>
               <div className="text-sm text-text-secondary">{stat.label}</div>

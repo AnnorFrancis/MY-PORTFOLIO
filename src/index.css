@@ -5,12 +5,16 @@
 @tailwind utilities;
 
 @layer base {
-  * { @apply transition-colors duration-200; }
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
   body {
     @apply bg-dark text-text-primary;
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', Georgia, serif;
@@ -18,29 +22,34 @@
     letter-spacing: 0.005em;
   }
   code { font-family: 'Space Mono', monospace; }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 font-semibold rounded-lg text-dark transition-all duration-300 transform hover:scale-105 active:scale-95;
+    @apply px-5 sm:px-6 py-2.5 sm:py-3 font-semibold rounded-lg text-dark transition-all duration-300 transform hover:scale-105 active:scale-95 text-sm sm:text-base;
     background-image: linear-gradient(120deg, #F1E2B4 0%, #C9A24B 45%, #9A7B2E 100%);
     box-shadow: 0 6px 24px rgba(201, 162, 75, 0.22);
   }
   .btn-primary:hover { box-shadow: 0 10px 32px rgba(201, 162, 75, 0.38); }
   .btn-secondary {
-    @apply px-6 py-3 border border-border-dark text-text-primary rounded-lg hover:border-primary hover:bg-primary/5 transition-all duration-300;
+    @apply px-5 sm:px-6 py-2.5 sm:py-3 border border-border-dark text-text-primary rounded-lg hover:border-primary hover:bg-primary/5 transition-all duration-300 text-sm sm:text-base;
   }
   .btn-outline {
-    @apply px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-dark transition-all duration-300;
+    @apply px-5 sm:px-6 py-2.5 sm:py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-dark transition-all duration-300 text-sm sm:text-base;
   }
   .card {
-    @apply bg-dark-card rounded-xl p-6 border border-border-dark hover:border-primary/50 transition-all duration-300;
+    @apply bg-dark-card rounded-xl p-4 sm:p-6 border border-border-dark hover:border-primary/50 transition-colors duration-300;
   }
   .section-title {
-    @apply text-4xl md:text-5xl font-bold mb-4;
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-4;
     font-family: 'Playfair Display', Georgia, serif;
   }
-  .section-subtitle { @apply text-text-secondary text-lg mb-12; }
+  .section-subtitle { @apply text-text-secondary text-base sm:text-lg mb-8 sm:mb-12; }
   .eyebrow {
     @apply inline-block text-primary font-semibold text-xs uppercase mb-3;
     letter-spacing: 0.28em;
@@ -56,8 +65,21 @@
   .glass-effect { @apply backdrop-blur-md bg-dark-card/40 border border-white/10 rounded-xl; }
 }
 
-::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #C9A24B; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #E8D6A6; }
 ::selection { background-color: #C9A24B; color: #0E0F12; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .section-title { line-height: 1.15; }
+}
