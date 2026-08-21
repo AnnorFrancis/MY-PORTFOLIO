@@ -39,6 +39,11 @@
   .btn-secondary {
     @apply px-5 sm:px-6 py-2.5 sm:py-3 border border-border-dark text-text-primary rounded-lg hover:border-primary hover:bg-primary/5 transition-all duration-300 text-sm sm:text-base;
   }
+  .btn-primary:focus-visible,
+  .btn-secondary:focus-visible,
+  .btn-outline:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-dark;
+  }
   .btn-outline {
     @apply px-5 sm:px-6 py-2.5 sm:py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-dark transition-all duration-300 text-sm sm:text-base;
   }
@@ -62,6 +67,11 @@
     color: transparent;
   }
   .gold-rule { height: 1px; background: linear-gradient(90deg, transparent, #C9A24B, transparent); }
+  .skip-link {
+    @apply absolute left-4 -top-24 z-[60] px-4 py-2 rounded-lg bg-primary text-dark font-semibold;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus { @apply top-4; }
   .glass-effect { @apply backdrop-blur-md bg-dark-card/40 border border-white/10 rounded-xl; }
 }
 
@@ -70,6 +80,12 @@
 ::-webkit-scrollbar-thumb { background: #C9A24B; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #E8D6A6; }
 ::selection { background-color: #C9A24B; color: #0E0F12; }
+
+:focus-visible {
+  outline: 2px solid #C9A24B;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

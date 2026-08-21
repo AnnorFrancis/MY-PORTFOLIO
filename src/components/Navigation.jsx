@@ -19,14 +19,18 @@ export default function Navigation() {
 
   const menuItems = [
     { label: 'Work', href: '#work' },
-    { label: 'About', href: '#about' },
     { label: 'Services', href: '#services' },
-    { label: 'Process', href: '#process' },
+    { label: 'About', href: '#about' },
     { label: 'Pricing', href: '#pricing' },
   ]
 
   const handleNavClick = (e, href) => {
     e.preventDefault()
+    if (!href || href === '#') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      setIsMobileMenuOpen(false)
+      return
+    }
     const element = document.querySelector(href)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })

@@ -8,7 +8,6 @@ export default function Contact() {
     email: '',
     phone: '',
     projectType: '',
-    budget: '',
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -25,7 +24,7 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-    const { name, email, phone, projectType, budget, message } = formData
+    const { name, email, phone, projectType, message } = formData
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -38,14 +37,13 @@ export default function Contact() {
           email,
           phone,
           service: projectType,
-          budget,
           message,
         }),
       })
       const data = await res.json()
       if (data.success) {
         setSubmitStatus('success')
-        setFormData({ name: '', email: '', phone: '', projectType: '', budget: '', message: '' })
+        setFormData({ name: '', email: '', phone: '', projectType: '', message: '' })
       } else {
         setSubmitStatus('error')
       }
@@ -75,7 +73,7 @@ export default function Contact() {
       icon: MapPin,
       label: 'Location',
       value: 'Accra, Ghana',
-      href: '#',
+      href: 'https://www.google.com/maps/search/?api=1&query=Accra%2C+Ghana',
     },
   ]
 
@@ -95,11 +93,7 @@ export default function Contact() {
   return (
     <section id="contact" className="py-12 sm:py-20 md:py-32 bg-dark relative overflow-hidden">
       {/* Background Elements */}
-      <motion.div
-        className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
-        animate={{ x: [0, 50, 0], y: [0, -30, 0] }}
-        transition={{ duration: 10, repeat: Infinity }}
-      />
+      <div className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -110,10 +104,10 @@ export default function Contact() {
           viewport={{ once: true }}
         >
           <h2 className="section-title">
-            Let's Work <span className="gradient-text">Together</span>
+            Let&apos;s Work <span className="gradient-text">Together</span>
           </h2>
           <p className="section-subtitle">
-            Have a project in mind? I'd love to hear about it. Get in touch today.
+            Have a project in mind? I&apos;d love to hear about it. Get in touch today.
           </p>
         </motion.div>
 
@@ -192,14 +186,10 @@ export default function Contact() {
               <p className="text-text-secondary text-sm mb-4">
                 Currently available for new projects. I typically take on 1-2 projects at a time to ensure quality.
               </p>
-              <motion.div
-                className="flex items-center gap-2"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <span className="w-3 h-3 bg-primary rounded-full" />
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 bg-primary rounded-full animate-pulse" />
                 <span className="text-sm text-primary font-medium">Open for Opportunities</span>
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
 
@@ -212,6 +202,17 @@ export default function Contact() {
             viewport={{ once: true }}
           >
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Honeypot — invisible to people, catches bots */}
+              <input
+                type="checkbox"
+                name="botcheck"
+                className="hidden"
+                style={{ display: 'none' }}
+                tabIndex="-1"
+                autoComplete="off"
+                aria-hidden="true"
+              />
+
               {/* Name */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -219,15 +220,16 @@ export default function Contact() {
                 transition={{ delay: 0.1 }}
                 viewport={{ once: true }}
               >
-                <label className="block text-sm font-medium mb-2">Your Name</label>
+                <label htmlFor="name" className="block text-sm font-medium mb-2">Your Name</label>
                 <input
                   type="text"
                   name="name"
+                  id="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
                   required
-                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark transition-colors"
                 />
               </motion.div>
 
@@ -238,15 +240,16 @@ export default function Contact() {
                 transition={{ delay: 0.15 }}
                 viewport={{ once: true }}
               >
-                <label className="block text-sm font-medium mb-2">Email Address</label>
+                <label htmlFor="email" className="block text-sm font-medium mb-2">Email Address</label>
                 <input
                   type="email"
                   name="email"
+                  id="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
                   required
-                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark transition-colors"
                 />
               </motion.div>
 
@@ -257,14 +260,15 @@ export default function Contact() {
                 transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                <label className="block text-sm font-medium mb-2">Phone Number</label>
+                <label htmlFor="phone" className="block text-sm font-medium mb-2">Phone Number</label>
                 <input
                   type="tel"
                   name="phone"
+                  id="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+233 XXX XXX XXX"
-                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark transition-colors"
                 />
               </motion.div>
 
@@ -275,13 +279,14 @@ export default function Contact() {
                 transition={{ delay: 0.25 }}
                 viewport={{ once: true }}
               >
-                <label className="block text-sm font-medium mb-2">Project Type</label>
+                <label htmlFor="projectType" className="block text-sm font-medium mb-2">Project Type</label>
                 <select
                   name="projectType"
+                  id="projectType"
                   value={formData.projectType}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark transition-colors"
                 >
                   <option value="">Select a project type</option>
                   <option value="website">Website</option>
@@ -293,27 +298,6 @@ export default function Contact() {
               </motion.div>
 
               {/* Budget */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                viewport={{ once: true }}
-              >
-                <label className="block text-sm font-medium mb-2">Budget Range (GHS)</label>
-                <select
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus:outline-none transition-colors"
-                >
-                  <option value="">Select a budget range</option>
-                  <option value="starter">₵2,000 — ₵3,500</option>
-                  <option value="business">₵5,000 — ₵8,000</option>
-                  <option value="premium">₵10,000 — ₵15,000</option>
-                  <option value="custom">Custom/Inquiry</option>
-                </select>
-              </motion.div>
-
               {/* Message */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -321,37 +305,32 @@ export default function Contact() {
                 transition={{ delay: 0.35 }}
                 viewport={{ once: true }}
               >
-                <label className="block text-sm font-medium mb-2">Message</label>
+                <label htmlFor="message" className="block text-sm font-medium mb-2">Message</label>
                 <textarea
                   name="message"
+                  id="message"
                   value={formData.message}
                   onChange={handleChange}
                   placeholder="Tell me about your project..."
                   required
                   rows={4}
-                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-dark-card border border-border-dark rounded-lg focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark transition-colors resize-none"
                 />
               </motion.div>
 
               {/* Status Messages */}
-              {submitStatus === 'success' && (
-                <motion.div
-                  className="p-4 bg-primary/10 border border-primary/30 rounded-lg text-primary"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                >
-                  ✓ Message sent successfully! I'll get back to you soon.
-                </motion.div>
-              )}
-              {submitStatus === 'error' && (
-                <motion.div
-                  className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-500"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                >
-                  ✗ Failed to send message. Please try again or use WhatsApp.
-                </motion.div>
-              )}
+              <div role="status" aria-live="polite">
+                {submitStatus === 'success' && (
+                  <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg text-primary">
+                    ✓ Message sent successfully! I&apos;ll get back to you soon.
+                  </div>
+                )}
+                {submitStatus === 'error' && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-500">
+                    ✗ Failed to send message. Please try again or use WhatsApp.
+                  </div>
+                )}
+              </div>
 
               {/* Submit Button */}
               <motion.button

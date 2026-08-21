@@ -19,7 +19,6 @@ export default function Footer() {
     { label: 'Work', href: '#work' },
     { label: 'About', href: '#about' },
     { label: 'Services', href: '#services' },
-    { label: 'Process', href: '#process' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'Contact', href: '#contact' },
   ]
@@ -183,31 +182,10 @@ export default function Footer() {
         {/* Copyright */}
         <motion.div className="text-text-tertiary text-sm flex items-center gap-2">
           <span>© {currentYear} Perkins Creative. Made with</span>
-          <motion.span
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
+          <span>
             <Heart size={16} className="text-primary" />
-          </motion.span>
+          </span>
           <span>by Francis Annor</span>
-        </motion.div>
-
-        {/* Links */}
-        <motion.div className="flex items-center gap-6 text-sm text-text-tertiary">
-          <motion.a
-            href="#"
-            className="hover:text-primary transition-colors"
-            whileHover={{ scale: 1.1 }}
-          >
-            Privacy Policy
-          </motion.a>
-          <motion.a
-            href="#"
-            className="hover:text-primary transition-colors"
-            whileHover={{ scale: 1.1 }}
-          >
-            Terms
-          </motion.a>
         </motion.div>
 
         {/* Back to Top */}

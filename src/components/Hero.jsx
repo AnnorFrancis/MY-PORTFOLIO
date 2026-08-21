@@ -1,81 +1,61 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, GitHub, Linkedin, Mail } from 'react-feather'
-import { useState, useEffect } from 'react'
 
 export default function Hero() {
-  const [currentImage, setCurrentImage] = useState(0);
-  const images = ['/images/my-image.jpg', '/images/my-image3.jpg'];
+  const reduce = useReducedMotion()
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const scrollToContact = (e) => {
+  const scrollTo = (e, selector) => {
     e.preventDefault()
-    const element = document.querySelector('#contact')
+    const element = document.querySelector(selector)
     if (element) element.scrollIntoView({ behavior: 'smooth' })
   }
+
+  const stats = [
+    { value: '7', label: 'Live builds you can open' },
+    { value: '40+', label: 'Admin screens behind them' },
+    { value: '8', label: 'Certifications earned' },
+  ]
+
+  const socials = [
+    { icon: Linkedin, href: 'https://linkedin.com/in/francis-annor-649a0a26a', label: 'LinkedIn' },
+    { icon: GitHub, href: 'https://github.com/AnnorFrancis', label: 'GitHub' },
+    { icon: Mail, href: 'mailto:annorfrancis23@outlook.com', label: 'Email' },
+  ]
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
+      transition: { staggerChildren: reduce ? 0 : 0.15, delayChildren: reduce ? 0 : 0.2 },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: 'easeOut' },
-    },
-  }
-
-  const floatingVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 1, ease: 'easeOut' },
-    },
-  }
-
-  const statVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.6 },
-    },
+    hidden: { opacity: 0, y: reduce ? 0 : 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: reduce ? 0 : 0.7, ease: 'easeOut' } },
   }
 
   return (
     <section className="relative min-h-[100dvh] bg-dark pt-20 md:pt-0 flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0" style={{backgroundImage: 'url(/images/bc1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(3px) opacity(0.6)'}} />
-      <div className="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark/40" />
+      <div
+        className="absolute inset-0 opacity-40"
+        style={{ backgroundImage: 'url(/images/bc1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-dark/85 to-dark/55" />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-48 sm:w-72 h-48 sm:h-72 bg-primary/15 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-10 w-64 sm:w-96 h-64 sm:h-96 bg-primary/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Left Content */}
-          <motion.div className="space-y-8" variants={itemVariants}>
-            {/* Badge */}
+          <motion.div className="space-y-7" variants={itemVariants}>
             <motion.div
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full w-fit"
               variants={itemVariants}
@@ -84,134 +64,91 @@ export default function Hero() {
               <span className="text-sm font-medium text-primary">Available for projects</span>
             </motion.div>
 
-            {/* Main Heading */}
-            <motion.div className="space-y-6" variants={itemVariants}>
-              <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold leading-[1.1] sm:leading-tight">
-                Websites, AI &amp; Brands,<br /><span className="gradient-text">Built to Win Clients</span>
+            <motion.div className="space-y-5" variants={itemVariants}>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.15] sm:leading-tight">
+                Ghanaian businesses hire me to build the website —{' '}
+                <span className="gradient-text">and the system behind it.</span>
               </h1>
               <p className="text-base sm:text-xl text-text-secondary leading-relaxed max-w-xl">
-                I&apos;m Francis Annor — founder of <span className="text-primary font-semibold">Perkins Creative Digital Agency</span>. I design premium websites, build AI automations, and craft brands &amp; content that make ambitious businesses impossible to ignore.
+                I&apos;m Francis Annor, a web developer in Accra and founder of{' '}
+                <span className="text-primary font-semibold">Perkins Creative</span>. Six businesses are running on
+                software I built — a till that takes Mobile Money, stock that counts itself, bookings that price
+                themselves. Open any of them below.
               </p>
             </motion.div>
 
-            {/* CTA Buttons */}
             <motion.div className="flex flex-col sm:flex-row gap-4" variants={itemVariants}>
               <motion.button
                 className="btn-primary group"
-                onClick={scrollToContact}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                onClick={(e) => scrollTo(e, '#contact')}
+                whileHover={reduce ? undefined : { scale: 1.04 }}
+                whileTap={reduce ? undefined : { scale: 0.96 }}
               >
                 <span className="flex items-center gap-2">
-                  Start Your Project
+                  Start a project
                   <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </motion.button>
               <motion.button
                 className="btn-secondary"
-                onClick={(e) => {
-                  e.preventDefault()
-                  document.querySelector('#work').scrollIntoView({ behavior: 'smooth' })
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                onClick={(e) => scrollTo(e, '#work')}
+                whileHover={reduce ? undefined : { scale: 1.04 }}
+                whileTap={reduce ? undefined : { scale: 0.96 }}
               >
-                View My Work
+                See the live work
               </motion.button>
             </motion.div>
 
-            {/* Social Links */}
-            <motion.div className="flex gap-6 pt-4" variants={itemVariants}>
-              <motion.a
-                href="https://linkedin.com/in/francis-annor-649a0a26a"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-lg border border-border-dark hover:border-primary hover:text-primary transition-colors"
-                whileHover={{ scale: 1.1, y: -5 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Linkedin size={20} />
-              </motion.a>
-              <motion.a
-                href="https://github.com/AnnorFrancis"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-lg border border-border-dark hover:border-primary hover:text-primary transition-colors"
-                whileHover={{ scale: 1.1, y: -5 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <GitHub size={20} />
-              </motion.a>
-              <motion.a
-                href="mailto:annorfrancis23@outlook.com"
-                className="p-3 rounded-lg border border-border-dark hover:border-primary hover:text-primary transition-colors"
-                whileHover={{ scale: 1.1, y: -5 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Mail size={20} />
-              </motion.a>
+            <motion.div className="flex gap-4 pt-1" variants={itemVariants}>
+              {socials.map((s) => {
+                const Icon = s.icon
+                return (
+                  <motion.a
+                    key={s.label}
+                    href={s.href}
+                    target={s.href.startsWith('mailto:') ? undefined : '_blank'}
+                    rel={s.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                    aria-label={s.label}
+                    className="p-3 rounded-lg border border-border-dark hover:border-primary hover:text-primary transition-colors"
+                    whileHover={reduce ? undefined : { scale: 1.1, y: -4 }}
+                    whileTap={reduce ? undefined : { scale: 0.95 }}
+                  >
+                    <Icon size={20} />
+                  </motion.a>
+                )
+              })}
             </motion.div>
           </motion.div>
 
-          {/* Right - Hero Image */}
+          {/* Right - Portrait */}
           <motion.div
-            className="relative h-[350px] sm:h-[450px] md:h-[550px] lg:h-[600px] rounded-2xl overflow-hidden"
-            variants={floatingVariants}
+            className="relative h-[340px] sm:h-[440px] md:h-[520px] lg:h-[580px] rounded-2xl overflow-hidden border border-border-dark"
+            variants={itemVariants}
           >
-            <motion.div
-              className="relative w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl border border-border-dark overflow-hidden flex items-center justify-center"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 5, repeat: Infinity }}
-            >
-              {images.map((src, idx) => (
-                <img
-                  key={idx}
-                  src={src}
-                  alt="Francis Annor"
-                  width="600"
-                  height="600"
-                  loading={idx === 0 ? 'eager' : 'lazy'}
-                  decoding={idx === 0 ? 'sync' : 'async'}
-                  className="absolute inset-0 w-full h-full object-cover rounded-2xl transition-opacity ease-in-out"
-                  style={{ opacity: idx === currentImage ? 1 : 0, transitionDuration: '1400ms' }}
-                />
-              ))}
-              {/* Slideshow Dots */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                {images.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImage(idx)}
-                    className={`w-3 h-3 rounded-full transition-colors ${idx === currentImage ? 'bg-primary' : 'bg-white/50'}`}
-                  />
-                ))}
-              </div>
-            </motion.div>
+            <img
+              src="/images/my-image.jpg"
+              alt="Francis Annor, founder of Perkins Creative"
+              width="600"
+              height="600"
+              loading="eager"
+              decoding="sync"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-dark/50 via-transparent to-transparent" />
           </motion.div>
         </motion.div>
 
         {/* Stats */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mt-12 sm:mt-20"
+          className="grid grid-cols-3 gap-3 sm:gap-6 mt-12 sm:mt-16"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {[
-            { label: 'Projects Shipped', value: '20+' },
-            { label: 'Services', value: '10' },
-            { label: 'Years Experience', value: '7+' },
-            { label: 'Certifications', value: '8+' },
-          ].map((stat, idx) => (
-            <motion.div
-              key={idx}
-              className="card text-center"
-              variants={statVariants}
-            >
-              <motion.div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-1 sm:mb-2">
-                {stat.value}
-              </motion.div>
-              <div className="text-sm text-text-secondary">{stat.label}</div>
+          {stats.map((stat) => (
+            <motion.div key={stat.label} className="card text-center" variants={itemVariants}>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-1 sm:mb-2">{stat.value}</div>
+              <div className="text-xs sm:text-sm text-text-secondary leading-snug">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>

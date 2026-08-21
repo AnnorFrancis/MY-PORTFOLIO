@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Check, X } from 'react-feather'
+import { Check } from 'react-feather'
 
 export default function Pricing() {
   const plans = [
@@ -14,9 +14,6 @@ export default function Pricing() {
         { text: 'Mobile Optimized', included: true },
         { text: 'Basic SEO', included: true },
         { text: '1 Month Support', included: true },
-        { text: 'CMS Integration', included: false },
-        { text: 'E-commerce', included: false },
-        { text: 'Advanced Analytics', included: false },
       ],
       timeline: '1-2 weeks',
       cta: 'Get Started',
@@ -123,13 +120,9 @@ export default function Pricing() {
             >
               {/* Badge */}
               {plan.badge && (
-                <motion.div
-                  className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-dark px-4 py-1 rounded-full font-semibold text-sm"
-                  animate={{ y: [0, -5, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-dark px-4 py-1 rounded-full font-semibold text-sm">
                   {plan.badge}
-                </motion.div>
+                </div>
               )}
 
               <div className="p-8 flex flex-col h-full">
@@ -157,18 +150,8 @@ export default function Pricing() {
                       transition={{ delay: fidx * 0.05 }}
                       viewport={{ once: true }}
                     >
-                      {feature.included ? (
-                        <Check size={18} className="text-primary flex-shrink-0" />
-                      ) : (
-                        <X size={18} className="text-text-tertiary flex-shrink-0 opacity-30" />
-                      )}
-                      <span
-                        className={
-                          feature.included ? 'text-text-secondary' : 'text-text-tertiary opacity-50'
-                        }
-                      >
-                        {feature.text}
-                      </span>
+                      <Check size={18} className="text-primary flex-shrink-0" />
+                      <span className="text-text-secondary">{feature.text}</span>
                     </motion.div>
                   ))}
                 </div>

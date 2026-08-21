@@ -12,7 +12,7 @@ const KB = [
   {
     keys: ['website', 'web', 'site', 'web app', 'ecommerce', 'e-commerce', 'landing'],
     reply:
-      'Websites are the flagship. I build premium, mobile-ready sites, web apps and online stores with React & Next.js — from a one-page launch (₵800) to full business sites (₵2,500+) and custom web apps (₵5,000+). Want a quick recommendation for your project?',
+      'Websites are the flagship. I build premium, mobile-ready sites, web apps and online stores with React & Next.js — from a landing page (₵1,500+) to full business sites (₵2,000–₵8,000) and custom web apps (₵10,000+). Want a quick recommendation for your project?',
     cta: 'Discuss my website',
   },
   {
@@ -60,7 +60,7 @@ const KB = [
   {
     keys: ['price', 'pricing', 'cost', 'how much', 'rate', 'budget', 'fee'],
     reply:
-      "Pricing is transparent and package-based. Websites ₵800–₵15,000 · Design ₵80–₵600 · AI chatbots ₵1,500+ · Social media ₵600–₵2,500/mo · Writing ₵150–₵400. Tell me your project and I'll point you to the right package.",
+      "Pricing is transparent and package-based. Websites ₵2,000–₵15,000 · Design ₵80–₵600 · AI chatbots ₵1,500–₵6,000 · Social media ₵600–₵2,500/mo · Writing ₵150–₵400. Tell me your project and I'll point you to the right package.",
     cta: 'See full pricing',
     scrollTo: '#pricing',
   },
@@ -92,7 +92,7 @@ function matchReply(text) {
   if (t.includes('service') || t.includes('what do you') || t.includes('everything') || t.includes('offer')) {
     return {
       reply:
-        'Perkins is a full creative & digital department in one place: ① Websites & web apps ② AI automation & chatbots ③ Branding & flyer design ④ Video & motion ⑤ Academic & professional writing ⑥ Social media management ⑦ IT support ⑧ Digital products ⑨ Tutoring. Which one interests you?',
+        'I build five things: ① Business websites ② Business systems — till, stock, debtors, bookings ③ Online stores with MoMo & card checkout ④ AI automation & chatbots ⑤ Launch videos & ads. Also available on request: brand & flyer design, CV/SOP writing, social media and IT support. Which one interests you?',
     }
   }
   for (const item of KB) {
@@ -148,8 +148,7 @@ export default function PerkinsAI() {
         style={{ backgroundImage: 'linear-gradient(120deg, #F1E2B4, #C9A24B 45%, #9A7B2E)' }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
-        animate={open ? {} : { boxShadow: ['0 0 0 0 rgba(201,162,75,0.5)', '0 0 0 14px rgba(201,162,75,0)'] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        transition={{ duration: 0.2 }}
         aria-label="Open Perkins AI assistant"
       >
         {open ? <X size={26} className="text-dark" /> : <MessageCircle size={26} className="text-dark" />}
