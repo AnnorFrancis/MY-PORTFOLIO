@@ -35,3 +35,7 @@ _*.txt
 *.zip
 zimLIXWv
 debug-screenshot.png
+
+# Private handoff brief — client names, commercial detail, credentials.
+# Never commit: this repository is public.
+_brief/
