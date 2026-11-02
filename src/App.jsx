@@ -125,6 +125,50 @@ function useTilt(max = 5) {
 }
 
 /* ------------------------------------------------------------- primitives */
+// One frame-throttled pointer listener shared by all decorative glass sets.
+function useGlassParallax() {
+  useEffect(() => {
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const fine = window.matchMedia("(pointer: fine)");
+    let raf = 0;
+    const root = document.documentElement;
+    const reset = () => {
+      window.cancelAnimationFrame(raf);
+      raf = 0;
+      root.style.removeProperty("--px");
+      root.style.removeProperty("--py");
+    };
+    const move = (event) => {
+      if (motion.matches || !fine.matches || raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        root.style.setProperty("--px", String(Math.max(-1, Math.min(1, event.clientX / window.innerWidth * 2 - 1))));
+        root.style.setProperty("--py", String(Math.max(-1, Math.min(1, event.clientY / window.innerHeight * 2 - 1))));
+      });
+    };
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("blur", reset);
+    motion.addEventListener("change", reset);
+    return () => {
+      reset();
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("blur", reset);
+      motion.removeEventListener("change", reset);
+    };
+  }, []);
+}
+function GlassObjects({ set = "intro" }) {
+  const count = set === "hero" ? 4 : ["selected", "pricing"].includes(set) ? 2 : 3;
+  return (
+    <span className={`glass-objects objects-${set}`} aria-hidden="true">
+      {["sphere", "ring", "pill", "cube"].slice(0, count).map((shape) => (
+        <span key={shape} className={`glass-object object-${shape}`} aria-hidden="true" />
+      ))}
+    </span>
+  );
+}
+GlassObjects.propTypes = { set: PropTypes.string };
+
 function Link({ href, children, className = "" }) {
   return (
     <a className={className} href={href}>
@@ -192,15 +236,30 @@ function Shot({ base, alt, sizes = "(max-width: 760px) 92vw, 50vw", width = 1200
 function Slideshow({ shots, alt, interval = 4200, eager = false, sizes = "(max-width: 760px) 92vw, 50vw" }) {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
+  // Only the first slide downloads with the page; the rest wait until the page
+  // has loaded, so they never compete with the fonts and headline.
+  const [ready, setReady] = useState(false);
   const startX = useRef(null);
   const n = shots.length;
   useEffect(() => {
-    if (n < 2 || paused) return undefined;
+    let timer;
+    const go = () => {
+      timer = window.setTimeout(() => setReady(true), 300);
+    };
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go, { once: true });
+    return () => {
+      window.removeEventListener("load", go);
+      window.clearTimeout(timer);
+    };
+  }, []);
+  useEffect(() => {
+    if (n < 2 || paused || !ready) return undefined;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       return undefined;
     const t = window.setInterval(() => setI((v) => (v + 1) % n), interval);
     return () => window.clearInterval(t);
-  }, [n, paused, interval]);
+  }, [n, paused, interval, ready]);
   if (!n) return null;
   return (
     <div
@@ -225,16 +284,18 @@ function Slideshow({ shots, alt, interval = 4200, eager = false, sizes = "(max-w
           className={k === i ? "slide active" : "slide"}
           aria-hidden={k !== i}
         >
-          <img
-            src={s.large}
-            srcSet={`${s.small} 640w, ${s.large} 1200w`}
-            sizes={sizes}
-            width="1200"
-            height="750"
-            loading={eager && k === 0 ? "eager" : "lazy"}
-            decoding="async"
-            alt={k === 0 ? alt : ""}
-          />
+          {(k === 0 || ready) && (
+            <img
+              src={s.large}
+              srcSet={`${s.small} 640w, ${s.large} 1200w`}
+              sizes={sizes}
+              width="1200"
+              height="750"
+              loading={eager && k === 0 ? "eager" : "lazy"}
+              decoding="async"
+              alt={k === 0 ? alt : ""}
+            />
+          )}
         </div>
       ))}
       {n > 1 && (
@@ -371,6 +432,8 @@ function Backdrop() {
       <span className="cloud c2" />
       <span className="cloud c3" />
       <span className="cloud c4" />
+      <span className="cloud c5" aria-hidden="true" />
+      <span className="cloud c6" aria-hidden="true" />
       <span className="grid" />
     </div>
   );
@@ -503,7 +566,7 @@ function Footer() {
           <a className="footer-brand" href="/">
             <Wordmark />
           </a>
-          <p>Based in Accra. Building for people everywhere.</p>
+          <p>Based in Accra, Ghana. Working with clients in Ghana and abroad.</p>
         </div>
         <div className="footer-links">
           <Link href={`mailto:${email}`}>Email</Link>
@@ -515,7 +578,7 @@ function Footer() {
         </div>
         <div className="footer-bottom">
           <span>© 2026 Perkins_Creatives</span>
-          <span>Built with care. Made to be used.</span>
+          <span>Websites, online stores and business systems.</span>
         </div>
       </div>
     </footer>
@@ -525,9 +588,7 @@ function ContactBand({ engineer = false }) {
   return (
     <section className="contact-band wrap" data-reveal>
       <div className="contact-inner">
-        <span className="shape s1" aria-hidden="true" />
-        <span className="shape s2" aria-hidden="true" />
-        <span className="shape s3" aria-hidden="true" />
+        <GlassObjects set="contact" />
         <div>
           <p className="eyebrow">Let’s put it to work</p>
           <h2>
@@ -557,7 +618,7 @@ const letteropedia = {
   name: "Letteropedia",
   kind: "Delivered client work",
   summary:
-    "A quote-request website with an owner-managed CMS and fallback contact paths when integrations are unavailable.",
+    "A quote-request website the owner updates without a developer, with backup contact options if a connected service goes down.",
   role: "Solo developer",
   url: "https://letteropedia.online",
 };
@@ -627,6 +688,7 @@ function Home() {
   return (
     <>
       <section className="hero wrap">
+        <GlassObjects set="hero" />
         <div className="hero-copy">
           <p className="eyebrow rise" style={{ "--i": 0 }}>
             Independent developer · Accra, Ghana
@@ -642,8 +704,8 @@ function Home() {
             </span>
           </h1>
           <p className="hero-description rise" style={{ "--i": 3 }}>
-            The website people see. The system your team uses. Connected,
-            considered, and built for the real world.
+            The website your customers use and the system your staff run
+            behind it: bookings, payments, stock and records, all connected.
           </p>
           <div className="hero-actions rise" style={{ "--i": 4 }}>
             <Link className="button button-primary" href="/work-with-me">
@@ -704,7 +766,7 @@ function Home() {
       <section className="band wrap" aria-label="What I build">
         <div className="band-inner">
           <div className="principle" data-reveal>
-            <span>From the first click to the last receipt.</span>
+            <span>I build what customers see and what staff use.</span>
             <ul>
               <li>Web experiences</li>
               <li>Business operations</li>
@@ -726,12 +788,13 @@ function Home() {
         </div>
       </section>
 
-      <section id="work" className="selected wrap">
+      <section id="work" className="selected aura wrap">
+        <GlassObjects set="selected" />
         <div className="section-heading" data-reveal>
           <div>
             <p className="eyebrow">Selected work / 2026</p>
             <h2>
-              Built to do a job. <em>Built to keep doing it.</em>
+              Four projects. <em>All live today.</em>
             </h2>
           </div>
           <p>
@@ -752,7 +815,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="about wrap">
+      <section className="about aura wrap">
         <div ref={portrait} className="about-portrait glass tilt" data-reveal>
           <img
             src="/images/portrait-720.webp"
@@ -832,6 +895,7 @@ function Work() {
   return (
     <>
       <header className="page-intro wrap">
+        <GlassObjects set="intro" />
         <p className="eyebrow rise" style={{ "--i": 0 }}>More work</p>
         <h1>
           <span className="line">
@@ -853,7 +917,7 @@ function Work() {
           <a href="#films">Films</a>
         </nav>
       </header>
-      <section id="systems" className="work-group wrap">
+      <section id="systems" className="work-group aura wrap">
         <div className="section-heading" data-reveal>
           <div>
             <p className="eyebrow">Systems</p>
@@ -885,7 +949,7 @@ function Work() {
           ))}
         </div>
       </section>
-      <section id="films" className="work-group wrap">
+      <section id="films" className="work-group aura wrap">
         <div className="section-heading" data-reveal>
           <div>
             <p className="eyebrow">Films</p>
@@ -995,6 +1059,7 @@ function CaseStudy({ project }) {
   return (
     <article>
       <header className="page-intro wrap">
+        <GlassObjects set="intro" />
         <a className="back-link" href="/#work">
           ← Selected work
         </a>
@@ -1047,7 +1112,7 @@ function CaseStudy({ project }) {
             ))}
           </nav>
         </aside>
-        <div className="article-body">
+        <div className="article-body aura">
           <section id="context" data-reveal>
             <p className="eyebrow">01 / Context</p>
             <h2>{project.contextTitle}</h2>
@@ -1057,7 +1122,7 @@ function CaseStudy({ project }) {
           </section>
           <section id="constraints" data-reveal>
             <p className="eyebrow">02 / Constraints</p>
-            <h2>The conditions shaped the system.</h2>
+            <h2>What the system had to handle.</h2>
             <ul className="check-list">
               {project.constraints.map((p) => (
                 <li key={p}>
@@ -1069,7 +1134,7 @@ function CaseStudy({ project }) {
           </section>
           <section id="decisions">
             <p className="eyebrow">03 / Decisions & trade-offs</p>
-            <h2>What I chose, and what it costs.</h2>
+            <h2>Key decisions and their trade-offs.</h2>
             {project.decisions.map((d, i) => (
               <Glass className="decision" key={d.title} max={3} style={{ "--i": i }} data-reveal>
                 <span className="decision-number">0{i + 1}</span>
@@ -1097,8 +1162,8 @@ function CaseStudy({ project }) {
               <p>{project.limitation}</p>
             </div>
             <p className="small muted">
-              Project snapshot: 2 November 2026. Outcomes describe shipped
-              capability, not an inferred revenue uplift.
+              Project snapshot: 2 November 2026. Outcomes describe what was
+              built and launched, not a measured rise in revenue.
             </p>
           </section>
         </div>
@@ -1195,9 +1260,9 @@ function ProjectBrief() {
           Budget range
           <select name="budget" defaultValue="Let’s scope it together">
             <option>Let’s scope it together</option>
-            <option>GHS 2,000–3,500</option>
-            <option>GHS 5,000–8,000</option>
-            <option>GHS 10,000–15,000</option>
+            <option>GHS 2,000 to 3,500</option>
+            <option>GHS 5,000 to 8,000</option>
+            <option>GHS 10,000 to 15,000</option>
             <option>GHS 15,000+</option>
           </select>
         </label>
@@ -1216,23 +1281,24 @@ function ProjectBrief() {
   );
 }
 const plans = [
-  ["Starter website", "2,000–3,500", "A focused web presence.", ["Up to 4 pages", "Responsive design", "Basic search setup", "1 month support"], "Typical build: 1–2 weeks"],
-  ["Business website", "5,000–8,000", "Room for your business to grow.", ["Up to 10 pages", "Content management", "Forms & analytics", "3 months support"], "Typical build: 3–4 weeks"],
-  ["Custom web application", "10,000–15,000", "A tailored operational workflow.", ["Web app or e-commerce", "Reporting", "Agreed integrations", "6 months support"], "Typical build: 6–10 weeks"],
+  ["Starter website", "2,000 to 3,500", "A simple website that explains your business and brings in enquiries.", ["Up to 4 pages", "Responsive design", "Basic search setup", "1 month support"], "Usually ready in 1 to 2 weeks"],
+  ["Business website", "5,000 to 8,000", "A bigger website you can update yourself, with forms and visitor stats.", ["Up to 10 pages", "Content management", "Forms & analytics", "3 months support"], "Usually ready in 3 to 4 weeks"],
+  ["Custom web application", "10,000 to 15,000", "A custom system for your orders, stock, bookings or payments.", ["Web app or e-commerce", "Reporting", "Agreed integrations", "6 months support"], "Usually ready in 6 to 10 weeks"],
 ];
 const addons = [
-  ["Landing page", "GHS 1,500–4,000", "One focused page for a launch, offer or campaign."],
-  ["Website care", "GHS 300–1,200 per month", "Updates, checks and small changes after launch."],
-  ["AI chatbot & automation", "GHS 1,500–6,000", "Scoped to the integration it connects to."],
-  ["Social media management", "GHS 600–2,500 per month", "Planned, designed and published for you."],
-  ["Brand & flyer design", "GHS 80–600", "Flyers, posts and simple brand pieces."],
-  ["CV / SOP writing", "GHS 150–400", "Clear, tailored documents for applications."],
+  ["Landing page", "GHS 1,500 to 4,000", "One focused page for a launch, offer or campaign."],
+  ["Website care", "GHS 300 to 1,200 per month", "Updates, checks and small changes after launch."],
+  ["AI chatbot & automation", "GHS 1,500 to 6,000", "The price depends on which tools it connects to."],
+  ["Social media management", "GHS 600 to 2,500 per month", "Planned, designed and published for you."],
+  ["Brand & flyer design", "GHS 80 to 600", "Flyers, posts and simple brand pieces."],
+  ["CV / SOP writing", "GHS 150 to 400", "Clear, tailored documents for applications."],
   ["IT support", "Scoped on request", "Setup and troubleshooting, quoted per job."],
 ];
 function WorkWithMe() {
   return (
     <>
       <header className="page-intro split wrap">
+        <GlassObjects set="intro" />
         <div>
           <p className="eyebrow rise" style={{ "--i": 0 }}>For business owners & teams</p>
           <h1>
@@ -1265,7 +1331,7 @@ function WorkWithMe() {
           <ul>
             {[
               ["Projects from", "GHS 2,000"],
-              ["Typical build", "1–10 weeks"],
+              ["Typical build", "1 to 10 weeks"],
               ["Payments", "Card and Mobile Money"],
               ["Scope", "Agreed in writing before work begins"],
             ].map(([k, v]) => (
@@ -1280,10 +1346,10 @@ function WorkWithMe() {
           </ul>
         </Glass>
       </header>
-      <section className="offer-section wrap">
+      <section className="offer-section aura wrap">
         <div className="section-heading" data-reveal>
           <h2>
-            One connected system. <em>A scope that fits.</em>
+            Three parts. <em>One connected system.</em>
           </h2>
           <p>
             Your customers need a good experience. Your team needs a reliable
@@ -1294,7 +1360,7 @@ function WorkWithMe() {
           {[
             [I.web, "A public front", "Fast, clear websites and online stores that help people understand your business, book, buy, or get in touch."],
             [I.office, "The working back office", "Stock, tills, calendars, customer records, staff permissions, and reporting designed around the way your team works."],
-            [I.link, "The connections", "Card and Mobile Money payments, notifications, existing calendars, and a practical handover for the people using it."],
+            [I.link, "The connections", "Card and Mobile Money payments, notifications, existing calendars, and training for the people who will use it."],
           ].map(([ic, t, p], k) => (
             <Glass key={t} className="offer" style={{ "--i": k }} data-reveal>
               <span className="offer-icon">{ic}</span>
@@ -1316,13 +1382,14 @@ function WorkWithMe() {
           </Glass>
         ))}
       </section>
-      <section id="pricing" className="pricing-section">
+      <section id="pricing" className="pricing-section aura">
+        <GlassObjects set="pricing" />
         <div className="wrap">
           <div className="section-heading" data-reveal>
             <div>
-              <p className="eyebrow">Published project ranges / GHS</p>
+              <p className="eyebrow">Project prices / GHS</p>
               <h2>
-                A useful <em>starting point.</em>
+                Clear prices. <em>In Ghana cedis.</em>
               </h2>
             </div>
             <p>
@@ -1340,7 +1407,7 @@ function WorkWithMe() {
                 style={{ "--i": k }}
                 data-reveal
               >
-                {k === 1 && <span className="popular-tag">Most popular</span>}
+                {k === 1 && <span className="popular-tag">Recommended</span>}
                 <h3>{name}</h3>
                 <p className="price">
                   <small>GHS</small>
@@ -1362,7 +1429,7 @@ function WorkWithMe() {
               </Glass>
             ))}
           </div>
-          <h3 className="addons-title" data-reveal>Other services & published ranges</h3>
+          <h3 className="addons-title" data-reveal>Other services and prices</h3>
           <div className="addon-grid">
             {addons.map(([name, price, note], k) => (
               <Glass key={name} className="addon" style={{ "--i": k }} data-reveal>
@@ -1393,8 +1460,8 @@ function WorkWithMe() {
         <div className="process-grid" data-reveal>
           {[
             ["Understand", "We map the problem, the people using the system, and the tools you already rely on."],
-            ["Build & prove", "We agree the scope, then review working software against real tasks and edge cases."],
-            ["Launch & hand over", "Payments, access, recovery, and owner training are part of the handover. Ongoing care is agreed separately."],
+            ["Build and test", "We agree the scope in writing. You then test the working system on your real daily tasks before launch."],
+            ["Launch and hand over", "I set up payments, staff access and backups, then train your team. Ongoing care is agreed separately."],
           ].map(([t, p], i) => (
             <Glass key={t} className="step" style={{ "--i": i }}>
               <span className="step-number">0{i + 1}</span>
@@ -1435,7 +1502,7 @@ const engineering = [
   },
   {
     index: "03 / Live learning product",
-    title: "POLI 443 · Make the reasoning visible.",
+    title: "POLI 443 · A course that shows every step of the working.",
     body: [
       "I built an interactive statistics course with worked examples, guided attempts, saved notes, and practice scoring. Plain JavaScript modules keep the teaching experience independent of a UI framework.",
       "Personal-key access uses per-lesson AES-256-GCM keys derived with HMAC, signed tokens, timing-safe comparisons, and a Redis mutex around device slots. Rate limits account for campus Wi-Fi and carrier NAT, where many legitimate students share an IP.",
@@ -1452,7 +1519,7 @@ const wider = [
     alt: "Letteropedia public website",
     eyebrow: "Delivered client work · Solo developer",
     name: "Letteropedia",
-    text: "A quote-request website with an owner-managed CMS and fallback contact paths when integrations are unavailable.",
+    text: "A quote-request website the owner updates without a developer, with backup contact options if a connected service goes down.",
     cta: "Visit the live website",
   },
   {
@@ -1469,6 +1536,7 @@ function Engineering() {
   return (
     <>
       <header className="page-intro split wrap">
+        <GlassObjects set="intro" />
         <div>
           <p className="eyebrow rise" style={{ "--i": 0 }}>For engineering teams</p>
           <h1>
@@ -1483,8 +1551,8 @@ function Engineering() {
           </h1>
           <p className="lede rise" style={{ "--i": 3 }}>
             I build across the application: data models, APIs, payments,
-            permissions, and the interfaces people use. My strongest work lives
-            where a business rule has to survive real use.
+            permissions, and the interfaces people use. My strongest work is on
+            rules that must not break, like payments, stock and staff permissions.
           </p>
           <div className="hero-actions rise" style={{ "--i": 4 }}>
             <Link
@@ -1506,7 +1574,7 @@ function Engineering() {
           <p className="glance-note">Data models · APIs · payments · permissions · interfaces</p>
         </Glass>
       </header>
-      <section className="engineering-list wrap">
+      <section className="engineering-list aura wrap">
         <p className="eyebrow">Selected engineering decisions</p>
         <div className="eng-grid">
           {engineering.map((e, k) => (
@@ -1598,6 +1666,7 @@ function Note() {
   return (
     <article>
       <header className="page-intro wrap">
+        <GlassObjects set="intro" />
         <a className="back-link" href="/engineering">
           ← Engineering
         </a>
@@ -1617,7 +1686,7 @@ function Note() {
           the difference between protecting state and guaranteeing delivery.
         </p>
       </header>
-      <div className="note-body article-body glass wrap" data-reveal>
+      <div className="note-body article-body glass aura wrap" data-reveal>
         <p>
           Weave is still in development. This note describes the push-worker
           design, not a claim of production scale.
@@ -1702,6 +1771,10 @@ function Note() {
 
 /* -------------------------------------------------------------------- app */
 export default function App({ path = "/" }) {
+  useGlassParallax();
+  useEffect(() => {
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#f5f8fb");
+  }, []);
   useReveal();
   const normalized = path.replace(/\/$/, "") || "/";
   const project = projects.find((p) => normalized === `/work/${p.slug}`);

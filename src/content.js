@@ -21,18 +21,18 @@ export const projects = [
     url: "https://trendynormshub.com",
     stack: "Next.js · TypeScript · Supabase · Paystack",
     status: "Live retail system",
-    title: "A storefront is the beginning. Operations are the real test.",
+    title: "An online store connected to the shop’s stock, payments and staff.",
     summary:
       "An online storefront and retail back office, connecting sales, stock, payments, and the people running the shop.",
     visualLabel: "Retail / Connected commerce",
     wordmark: "Trendy Norms",
     visualSubtitle: "From storefront to stockroom.",
     flow: ["Browse & buy", "Record the sale", "Keep stock aligned"],
-    contextTitle: "The work continues after checkout.",
+    contextTitle: "Fixing a mistake after a sale is part of the job.",
     context: [
       "A duplicate cash sale was recorded against the wrong credit account. I used the return workflow to reverse it while correcting stock and the cash drawer. That recovery path is as important as the original checkout. I have left out transaction identifiers and customer details.",
       "I built a retail system with a public storefront and a staff back office in one application. The customer journey matters, but so does what happens when staff need to correct a sale or reconcile the day.",
-      "The engineering problem is consistency: a sale touches money, stock, and customer records. Those cannot become separate versions of the truth.",
+      "The main challenge: one sale changes money, stock, and customer records. All three must always agree.",
     ],
     constraints: [
       "The shop needs customer-facing commerce and staff operations on the same domain.",
@@ -81,7 +81,7 @@ export const projects = [
     url: "https://www.besiabeauty.com",
     stack: "JavaScript · Node.js · Supabase · Paystack",
     status: "Launched October 2026",
-    title: "A salon website. And the working studio behind it.",
+    title: "A salon website with the booking and studio system behind it.",
     summary:
       "Bookings, deposits, commerce, and a studio manager, with an editor that puts everyday website changes in the owner’s hands.",
     visualLabel: "Beauty / Studio operations",
@@ -126,7 +126,7 @@ export const projects = [
     ],
     outcomeTitle: "A connected studio, launched and handed over.",
     outcome:
-      "The system launched in October 2026 with live payments, the public experience, and Studio Manager. The owner can change website content herself. Subsequent updates came from actual studio needs, not speculative features.",
+      "The system launched in October 2026 with live payments, the public experience, and Studio Manager. The owner can change website content herself. Later updates came from real requests by the studio, not guesses.",
     limitation:
       "The calendar integration depends on an external service, so monitoring and recovery remain part of the work. I would measure owner task completion before claiming a quantified improvement in efficiency.",
   },
@@ -138,17 +138,17 @@ export const projects = [
     url: "https://perkos.app",
     stack: "Next.js · TypeScript · Supabase · Vitest",
     status: "Live · commercially unproven",
-    title: "A till should not stop at the first dropped connection.",
+    title: "A till that keeps selling when the internet drops.",
     summary:
       "My own business software product, exploring offline sale queues, stock controls, and the rules that keep a till trustworthy.",
     visualLabel: "Own product / Business software",
     wordmark: "PerkOS",
-    visualSubtitle: "Keep the work moving.",
+    visualSubtitle: "Sales keep going offline.",
     flow: ["Capture the sale", "Queue offline", "Replay on reconnect"],
-    contextTitle: "An unreliable network is a product requirement.",
+    contextTitle: "The internet will drop, so the till must keep working.",
     context: [
       "I built PerkOS as my own software product for business operations. A till cannot assume an uninterrupted connection just because its database lives in the cloud.",
-      "The offline sale queue lets work be captured when the connection drops. Reconnecting introduces the harder problem: local intent must be reconciled with the authoritative records.",
+      "The offline sale queue lets work be captured when the connection drops. The harder part comes when the connection returns: the sales saved on the device must be matched to the main records without duplicates.",
     ],
     constraints: [
       "A connection can disappear during a sale, rather than conveniently before it.",
@@ -249,62 +249,62 @@ export const moreSites = [
   build("cindys", "Cindy's Cake House", "Food · Pâtisserie with owner studio", "https://annorfrancis.github.io/cindys-cake-house/", "Sample build",
     "134 priced creations and a Cake Atelier that redraws and reprices a custom cake as you configure it, against a calendar gated by real kitchen capacity."),
   build("veloura", "Veloura Luxe Hub", "Fashion · Boutique storefront + back office", "https://annorfrancis.github.io/veloura-luxe-hub/", "Sample build",
-    "A 307-product boutique with a lookbook and journal, plus a 13-module back office that stays in step with the shop across tabs."),
+    "A 307-product boutique with a lookbook and journal, plus a 13-part back office that stays in sync with the shop."),
   build("kira", "Kira Forex", "Forex · Academy + HQ", "https://annorfrancis.github.io/kiraforex/", "Sample build",
     "A 3D hero that renders real gold sessions as glass candles, session clocks, a globe of bootcamp cities, a student portal and the Kira HQ dashboard."),
   build("king-ofori", "King Ofori Real Estate", "Real estate · Diaspora buyers", "https://annorfrancis.github.io/king-ofori-real-estate/", "Sample build",
     "A premium property platform for Ghana's luxury market, with verified-title signals, build-progress visuals and a portal for buyers returning from abroad."),
 ];
 export const films = [
-  { id: "perkos-hook", title: "PerkOS — eight seconds", kind: "Social hook · YouTube cut", portrait: false },
-  { id: "tcs-launch", title: "The Classic Sculpt — launch film", kind: "Excerpt from the 3:40 launch film", portrait: false },
-  { id: "zira-teaser", title: "Zira Forex — teaser", kind: "Vertical teaser · 1:01", portrait: true },
+  { id: "perkos-hook", title: "PerkOS social ad", kind: "8-second hook for YouTube and social", portrait: false },
+  { id: "tcs-launch", title: "The Classic Sculpt launch film", kind: "A clip from the full 3:40 film", portrait: false },
+  { id: "zira-teaser", title: "Zira Forex teaser", kind: "Vertical teaser for phones, 1:01", portrait: true },
 ];
 export const pages = [
   {
     path: "/",
-    title: "Perkins_Creatives — Software & systems by Francis Annor",
+    title: "Perkins_Creatives | Websites and business systems by Francis Annor",
     description:
       "I build the software businesses run on: websites, back-office systems, and payment integrations. Based in Accra, working locally and internationally.",
     image: "home",
   },
   {
     path: "/work",
-    title: "More work — Perkins_Creatives",
+    title: "More work | Perkins_Creatives",
     description:
-      "More systems, websites and product films by Perkins_Creatives. Every card opens the real, working build.",
+      "More systems, websites and product films by Perkins_Creatives. Every card opens the working build.",
     image: "home",
   },
   {
     path: "/work-with-me",
-    title: "Work with me — Perkins_Creatives",
+    title: "Work with me | Perkins_Creatives",
     description:
       "Websites, online stores, and connected business systems. See project ranges in GHS, the process, and how to discuss your project.",
     image: "home",
   },
   {
     path: "/engineering",
-    title: "Engineering — Perkins_Creatives",
+    title: "Engineering | Perkins_Creatives",
     description:
       "API contracts, data rules, payment workflows, and concurrency: engineering decisions from my client systems, team projects, and independent products.",
     image: "engineering",
   },
   ...projects.map((p) => ({
     path: `/work/${p.slug}`,
-    title: `${p.name} — A case study by Perkins_Creatives`,
+    title: `${p.name} case study | Perkins_Creatives`,
     description: p.summary,
     image: p.slug,
   })),
   {
     path: "/notes/lease-based-push",
-    title: "When two workers reach for one job — Perkins_Creatives",
+    title: "When two workers reach for one job | Perkins_Creatives",
     description:
       "A design note on lease ownership, retries, and why protecting database state does not guarantee exactly-once notification delivery.",
     image: "engineering",
   },
   {
     path: "/404",
-    title: "Page not found — Perkins_Creatives",
+    title: "Page not found | Perkins_Creatives",
     description:
       "Find your way back to the work of Francis Annor, software developer and systems builder.",
     image: "home",

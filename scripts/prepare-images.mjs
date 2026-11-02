@@ -25,38 +25,8 @@ for (const [name, input] of inputs) {
       .toFile(`public/images/projects/${name}-${width}.webp`);
   }
 }
-await sharp("public/favicon.svg")
-  .resize(180)
-  .png()
-  .toFile("public/apple-touch-icon.png");
-const cards = [
-  ["home", "Software businesses", "run on.", "Selected work / Francis Annor"],
-  [
-    "engineering",
-    "The interface is only",
-    "half the work.",
-    "Engineering / Francis Annor",
-  ],
-  [
-    "trendy-norms",
-    "Trendy Norms Hub",
-    "From sale to stockroom.",
-    "Case study / Francis Annor",
-  ],
-  [
-    "besia",
-    "Bēsia Beauty Studio",
-    "Behind the booking.",
-    "Case study / Francis Annor",
-  ],
-  ["perkos", "PerkOS", "Keep the work moving.", "Case study / Francis Annor"],
-];
-for (const [name, line1, line2, label] of cards) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#f7f7f2"/><path d="M70 90H1130M70 545H1130" stroke="#b8c4ab"/><text x="70" y="160" fill="#42583d" font-family="Arial" font-size="20">${label}</text><text x="65" y="310" fill="#23362e" font-family="Arial" font-size="76" letter-spacing="-3">${line1}</text><text x="65" y="405" fill="#375941" font-family="Georgia" font-style="italic" font-size="76" letter-spacing="-3">${line2}</text><text x="70" y="510" fill="#42583d" font-family="Arial" font-size="20">Software developer &amp; systems builder · Accra / Worldwide</text></svg>`;
-  await sharp(Buffer.from(svg))
-    .png({ compressionLevel: 9, palette: true })
-    .toFile(`public/images/og/${name}.png`);
-}
+// Social cards and the touch icon are made by og-cards.mjs.
+await import("./og-cards.mjs");
 console.log(
-  "Optimized portrait, project screenshots, social cards, and touch icon.",
+  "Optimized portrait and project screenshots.",
 );
