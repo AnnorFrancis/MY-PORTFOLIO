@@ -1372,3 +1372,31 @@ form > .small {
     margin-bottom: 18px;
   }
 }
+/* Keep intrinsic text widths from pushing narrow grid layouts off screen. */
+.hero > *,
+.project > *,
+.project-facts > *,
+.article-layout > *,
+.offer-grid > *,
+.price-grid > *,
+.brief-section > *,
+.form-row > *,
+.engineering-list article > *,
+.secondary-projects > * {
+  min-width: 0;
+}
+.page-intro h1,
+.hero h1,
+.diagram-brand,
+.project-facts dd {
+  overflow-wrap: break-word;
+}
+.project-links a,
+.more-work > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+#main:focus {
+  outline: none;
+}

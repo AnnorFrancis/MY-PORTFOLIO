@@ -72,7 +72,7 @@ ${page.path === "/404" ? '<meta name="robots" content="noindex" />' : ""}
         ? "dist/index.html"
         : page.path === "/404"
           ? "dist/404.html"
-          : `dist${page.path}/index.html`;
+          : `dist${page.path}.html`;
     await mkdir(dirname(output), { recursive: true });
     await writeFile(output, html);
     console.log(

@@ -8,7 +8,7 @@ for (const p of pages) {
       ? "dist/index.html"
       : p.path === "/404"
         ? "dist/404.html"
-        : `dist${p.path}/index.html`;
+        : `dist${p.path}.html`;
   const html = await readFile(file, "utf8");
   for (const [, url] of html.matchAll(/<a[^>]+href="(https:\/\/[^" ]+)"/g))
     urls.add(url.replaceAll("&amp;", "&"));

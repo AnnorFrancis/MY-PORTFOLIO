@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { projects, pages, credentials } from "./content";
 
@@ -13,8 +13,21 @@ function Link({ href, children, className = "" }) {
 }
 function Header({ path }) {
   const [open, setOpen] = useState(false);
+  const toggle = useRef(null);
+  function closeOnEscape(event) {
+    if (event.key === "Escape" && open) {
+      setOpen(false);
+      toggle.current?.focus();
+    }
+  }
   return (
-    <header className="site-header">
+    <header
+      className="site-header"
+      onKeyDown={closeOnEscape}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+    >
       <div className="header-inner">
         <a className="identity" href="/" aria-label="Francis Annor, home">
           <span className="monogram">
@@ -25,6 +38,7 @@ function Header({ path }) {
           </span>
         </a>
         <button
+          ref={toggle}
           className="menu-toggle"
           aria-expanded={open}
           aria-controls="site-nav"
@@ -37,13 +51,11 @@ function Header({ path }) {
           id="site-nav"
           className={open ? "nav open" : "nav"}
           aria-label="Main navigation"
+          onClick={(event) => {
+            if (event.target.closest("a")) setOpen(false);
+          }}
         >
-          <a
-            href="/#work"
-            aria-current={path.startsWith("/work/") ? "page" : undefined}
-          >
-            Selected work
-          </a>
+          <a href="/#work">Selected work</a>
           <a
             href="/engineering"
             aria-current={path === "/engineering" ? "page" : undefined}
@@ -404,7 +416,7 @@ function ProjectBrief() {
     const body = `Hello Francis,\n\nI'm ${data.get("name")}.\n\nWhat I need:\n${data.get("message")}\n\nBudget range: ${data.get("budget")}\n\nPreferred reply address: ${data.get("email")}`;
     window.location.href = `mailto:${email}?subject=${encodeURIComponent("A system for my business")}&body=${encodeURIComponent(body)}`;
     setStatus(
-      "Your email app should open with the brief filled in. Nothing is sent until you send it. If it did not open, use the email or WhatsApp link below.",
+      "Your email app should open with the brief filled in. Nothing is sent until you send it. If it did not open, use the direct email or WhatsApp link in this section.",
     );
   }
   return (
@@ -957,7 +969,9 @@ export default function App({ path = "/" }) {
         Skip to main content
       </a>
       <Header path={normalized} />
-      <main id="main">{content}</main>
+      <main id="main" tabIndex={-1}>
+        {content}
+      </main>
       <Footer />
     </>
   );

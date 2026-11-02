@@ -8,7 +8,7 @@ const readPage = (path) =>
       ? "dist/index.html"
       : path === "/404"
         ? "dist/404.html"
-        : `dist${path}/index.html`,
+        : `dist${path}.html`,
     "utf8",
   );
 describe("Published route contract", () => {
