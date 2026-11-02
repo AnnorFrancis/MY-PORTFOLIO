@@ -241,6 +241,17 @@ p + p {
   display: inline-flex;
   gap: 20px;
 }
+/* A standalone "keep reading" link at the end of an article. Sized as a real
+   target rather than a line of text (WCAG 2.2 / 2.5.8). */
+.more-link {
+  font-size: 12px;
+  border-bottom: 1px solid var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin-top: 8px;
+}
 .availability {
   font-size: 10px;
   color: var(--muted);
@@ -811,9 +822,16 @@ summary {
   font-size: 14px;
   color: var(--muted);
 }
+/* Standalone contact links. These are the primary actions on this page, so they
+   get a comfortable target rather than the height of a line of text
+   (WCAG 2.2 / 2.5.8 Target Size asks for at least 24x24). */
 .brief-section > div > p a {
   font-size: 12px;
   border-bottom: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
   padding-bottom: 5px;
   overflow-wrap: anywhere;
 }

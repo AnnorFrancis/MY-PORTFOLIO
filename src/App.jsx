@@ -29,8 +29,8 @@ function Header({ path }) {
       }}
     >
       <div className="header-inner">
-        <a className="identity" href="/" aria-label="Francis Annor, home">
-          <span className="monogram">
+        <a className="identity" href="/">
+          <span className="monogram" aria-hidden="true">
             fa<span>.</span>
           </span>
           <span>
@@ -143,7 +143,7 @@ function Project({ project, index }) {
   return (
     <article className={`project project-${index}`}>
       <div className={`project-visual screenshot-panel ${project.slug}`}>
-        <a href={project.url} aria-label={`Visit ${project.name} live website`}>
+        <a href={project.url}>
           <span className="screenshot-label">
             {project.visualLabel} <Arrow />
           </span>
@@ -934,7 +934,9 @@ function Note() {
           This is the standard I want in my systems: the failure path should
           have an explanation as clear as the successful one.
         </p>
-        <Link href="/engineering">More engineering work</Link>
+        <Link className="more-link" href="/engineering">
+          More engineering work
+        </Link>
       </div>
       <ContactBand engineer />
     </article>
