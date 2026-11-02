@@ -62,12 +62,13 @@ describe("Published route contract", () => {
   });
   it("does not ship private transaction details or unsupported portfolio claims", () => {
     const html = pages.map((p) => readPage(p.path)).join(" ");
+    // Sample builds (Kira Forex, The Classic Sculpt, …) are Francis's own work
+    // and are shown as samples by his decision. What must never ship are
+    // private transaction identifiers and claims the evidence does not support.
     for (const term of [
       "TN-03701",
       "TN-03238",
       "real subscribers",
-      "Kira Forex",
-      "Classic Sculpt",
       "10,000+ monthly",
     ])
       expect(html).not.toContain(term);

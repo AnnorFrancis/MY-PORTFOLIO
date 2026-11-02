@@ -1,72 +1,407 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { projects, pages, credentials } from "./content";
+import {
+  brand,
+  projects,
+  pages,
+  gallery,
+  films,
+  stats,
+  services,
+  pricing,
+  credentials,
+  categories,
+  shotsFor,
+  mobileShotFor,
+} from "./content";
 
-const email = "annorfrancis23@outlook.com";
-const Arrow = () => <span aria-hidden="true">↗</span>;
-function Link({ href, children, className = "" }) {
+/* ------------------------------------------------------------------ icons */
+const I = {
+  arrow: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M7 17 17 7M8 7h9v9" />
+    </svg>
+  ),
+  play: (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M8 5.5v13l11-6.5z" />
+    </svg>
+  ),
+  left: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m15 6-6 6 6 6" />
+    </svg>
+  ),
+  right: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  ),
+  mail: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="3" />
+      <path d="m4 7 8 6 8-6" />
+    </svg>
+  ),
+  chat: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 12a8 8 0 1 1 3.3 6.5L4 20l1.5-3.3A8 8 0 0 1 4 12Z" />
+    </svg>
+  ),
+  check: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m5 12 4 4L19 6" />
+    </svg>
+  ),
+  web: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="16" rx="3" />
+      <path d="M3 9h18M8 13h5" />
+    </svg>
+  ),
+  store: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 10 5.5 4h13L20 10M4 10v10h16V10M4 10h16M10 20v-6h4v6" />
+    </svg>
+  ),
+  system: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="7" height="7" rx="2" />
+      <rect x="14" y="3" width="7" height="7" rx="2" />
+      <rect x="3" y="14" width="7" height="7" rx="2" />
+      <path d="M17.5 14v7M14 17.5h7" />
+    </svg>
+  ),
+  ai: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3v3M12 18v3M3 12h3M18 12h3M6.5 6.5l2 2M15.5 15.5l2 2M6.5 17.5l2-2M15.5 8.5l2-2" />
+      <circle cx="12" cy="12" r="4" />
+    </svg>
+  ),
+  film: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="3" />
+      <path d="M3 9h18M3 15h18M8 5v14M16 5v14" />
+    </svg>
+  ),
+  brand: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m12 3 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.3 6.8 19l1-5.8L3.6 9.1l5.8-.8z" />
+    </svg>
+  ),
+};
+
+/* ------------------------------------------------------------------ hooks */
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll("[data-reveal]");
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((e) => e.classList.add("in"));
+      return undefined;
+    }
+    const io = new window.IntersectionObserver(
+      (entries) => {
+        for (const en of entries)
+          if (en.isIntersecting) {
+            en.target.classList.add("in");
+            io.unobserve(en.target);
+          }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
+    );
+    els.forEach((e) => io.observe(e));
+    // Safety net: nothing may stay hidden if the observer never fires
+    // (print, screenshot tools, unusual browsers). After a few seconds
+    // every block is shown regardless.
+    const t = window.setTimeout(() => els.forEach((e) => e.classList.add("in")), 3500);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(t);
+    };
+  }, []);
+}
+function useTilt(max = 6) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    if (!window.matchMedia("(pointer: fine)").matches) return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const move = (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      el.style.setProperty("--ry", `${((x - 0.5) * max * 2).toFixed(2)}deg`);
+      el.style.setProperty("--rx", `${((0.5 - y) * max * 2).toFixed(2)}deg`);
+      el.style.setProperty("--mx", `${(x * 100).toFixed(1)}%`);
+      el.style.setProperty("--my", `${(y * 100).toFixed(1)}%`);
+    };
+    const leave = () => {
+      el.style.removeProperty("--rx");
+      el.style.removeProperty("--ry");
+    };
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerleave", leave);
+    return () => {
+      el.removeEventListener("pointermove", move);
+      el.removeEventListener("pointerleave", leave);
+    };
+  }, [max]);
+  return ref;
+}
+
+/* ------------------------------------------------------------- primitives */
+function Link({ href, children, className = "", arrow = true }) {
+  const external = /^(https?:|mailto:|tel:)/.test(href);
+  const wrap = /text-link|btn-ghost/.test(className);
   return (
-    <a className={className} href={href}>
-      {children} <Arrow />
+    <a
+      className={className}
+      href={href}
+      target={external && !href.startsWith("mailto:") ? "_blank" : undefined}
+      rel={external && !href.startsWith("mailto:") ? "noopener noreferrer" : undefined}
+    >
+      {wrap ? <span>{children}</span> : children}
+      {arrow && I.arrow}
     </a>
   );
 }
+function Backdrop() {
+  return (
+    <div className="backdrop" aria-hidden="true">
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
+      <div className="orb orb-3" />
+      <div className="grain" />
+    </div>
+  );
+}
+function Availability() {
+  return (
+    <p className="availability">
+      <span className="dot" aria-hidden="true" />
+      <b>Available</b> for projects &amp; engineering roles · Updated November 2026
+    </p>
+  );
+}
+function Slideshow({ shots, alt, label, interval = 4800, eager = false, sizes = "(max-width: 760px) 92vw, 48vw" }) {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const startX = useRef(null);
+  const n = shots.length;
+  useEffect(() => {
+    if (n < 2 || paused) return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const t = window.setInterval(() => setI((v) => (v + 1) % n), interval);
+    return () => window.clearInterval(t);
+  }, [n, paused, interval]);
+  if (!n)
+    return (
+      <div className="slideshow">
+        <div className="placeholder">{label}</div>
+      </div>
+    );
+  return (
+    <div
+      className="slideshow"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onPointerDown={(e) => {
+        startX.current = e.clientX;
+      }}
+      onPointerUp={(e) => {
+        if (startX.current == null) return;
+        const dx = e.clientX - startX.current;
+        startX.current = null;
+        if (Math.abs(dx) > 40) setI((v) => (v + (dx < 0 ? 1 : -1) + n) % n);
+      }}
+    >
+      {shots.map((s, k) => (
+        <div key={s.key} className={k === i ? "slide active" : "slide"} aria-hidden={k !== i}>
+          <img
+            src={s.large}
+            srcSet={`${s.small} 640w, ${s.large} 1200w`}
+            sizes={sizes}
+            width="1200"
+            height="750"
+            loading={eager && k === 0 ? "eager" : "lazy"}
+            decoding="async"
+            alt={k === 0 ? alt : ""}
+          />
+        </div>
+      ))}
+      {n > 1 && (
+        <>
+          <button type="button" className="arrow prev" aria-label="Previous slide" onClick={() => setI((v) => (v - 1 + n) % n)}>
+            {I.left}
+          </button>
+          <button type="button" className="arrow next" aria-label="Next slide" onClick={() => setI((v) => (v + 1) % n)}>
+            {I.right}
+          </button>
+          <div className="dots">
+            {shots.map((s, k) => (
+              <button key={s.key} type="button" aria-current={k === i ? "true" : undefined} aria-label={`Slide ${k + 1} of ${n}`} onClick={() => setI(k)} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+function Badge({ item }) {
+  const map = {
+    launched: ["green", "Launched"],
+    product: ["blue", "Own product"],
+    forex: ["", "Forex system"],
+    sample: ["grey", item.status],
+  };
+  const [cls, text] = map[item.kind] || ["grey", item.status];
+  return <span className={`badge ${cls}`}>{text}</span>;
+}
+function GalleryCard({ item, eager = false }) {
+  const tilt = useTilt(5);
+  return (
+    <article ref={tilt} className="glass tilt card">
+      <Badge item={item} />
+      <Slideshow shots={shotsFor(item.slug)} alt={`${item.name} — screenshot of the live site`} label={item.wordmark} eager={eager} sizes="(max-width: 760px) 92vw, 33vw" />
+      <div className="card-body">
+        <span className="sector">{item.sector}</span>
+        <h3>{item.name}</h3>
+        <p>{item.blurb}</p>
+        <span className="proof-line">{item.proof}</span>
+        <div className="stack">
+          {item.stack.map((s) => (
+            <span key={s}>{s}</span>
+          ))}
+        </div>
+        <div className="card-links">
+          <Link className="text-link" href={item.url}>
+            Open live site
+          </Link>
+          {item.caseStudy && (
+            <Link className="text-link" href={item.caseStudy}>
+              Case study
+            </Link>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+function FilmCard({ film }) {
+  const video = useRef(null);
+  const tilt = useTilt(4);
+  const [playing, setPlaying] = useState(false);
+  const src = `/videos/${film.id}.mp4`;
+  const start = () => {
+    setPlaying(true);
+    const v = video.current;
+    if (!v) return;
+    v.muted = false;
+    v.controls = true;
+    v.loop = false;
+    v.play().catch(() => {});
+  };
+  const preview = (on) => {
+    const v = video.current;
+    if (!v || playing) return;
+    if (on) {
+      v.muted = true;
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+      v.currentTime = 0;
+    }
+  };
+  return (
+    <article
+      ref={tilt}
+      className={`glass tilt film ${film.orientation}${playing ? " playing" : ""}`}
+      onMouseEnter={() => preview(true)}
+      onMouseLeave={() => preview(false)}
+    >
+      <div className="film-media">
+        <video ref={video} src={src} poster={`/videos/${film.id}.webp`} preload="metadata" playsInline muted loop aria-label={film.title} />
+        {!playing && (
+          <button type="button" className="play" aria-label={`Play ${film.title}`} onClick={start}>
+            <span>{I.play}</span>
+          </button>
+        )}
+      </div>
+      <div className="film-body">
+        <h3>{film.title}</h3>
+        <p>{film.kind}</p>
+        <p className="made">Made with {film.made}</p>
+      </div>
+    </article>
+  );
+}
+function PhoneFrame({ src, alt }) {
+  if (!src) return null;
+  return (
+    <div className="device-phone" aria-hidden="true">
+      <div className="screen">
+        <img src={src} alt={alt} width="420" height="909" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  );
+}
+
+/* ----------------------------------------------------------------- chrome */
 function Header({ path }) {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const toggle = useRef(null);
-  function closeOnEscape(event) {
-    if (event.key === "Escape" && open) {
-      setOpen(false);
-      toggle.current?.focus();
-    }
-  }
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 24);
+    on();
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
+  const current = (p) => (path === p || (p === "/work" && path.startsWith("/work/")) ? "page" : undefined);
   return (
     <header
-      className="site-header"
-      onKeyDown={closeOnEscape}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      className={scrolled ? "site-header scrolled" : "site-header"}
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && open) {
+          setOpen(false);
+          toggle.current?.focus();
+        }
+      }}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setOpen(false);
       }}
     >
       <div className="header-inner">
         <a className="identity" href="/">
-          <span className="monogram" aria-hidden="true">
-            fa<span>.</span>
-          </span>
-          <span>
-            Francis Annor<small>Software developer & systems builder</small>
+          <img className="mark" src="/brand/monogram.svg" alt="" width="46" height="46" />
+          <span className="wordmark">
+            <b>{brand.name}</b>
+            <small>{brand.owner} · Software developer &amp; systems builder</small>
           </span>
         </a>
-        <button
-          ref={toggle}
-          className="menu-toggle"
-          aria-expanded={open}
-          aria-controls="site-nav"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? "Close" : "Menu"}{" "}
-          <span aria-hidden="true">{open ? "−" : "+"}</span>
+        <button ref={toggle} className="menu-toggle" aria-expanded={open} aria-controls="site-nav" onClick={() => setOpen(!open)}>
+          {open ? "Close" : "Menu"} <span aria-hidden="true">{open ? "−" : "+"}</span>
         </button>
         <nav
           id="site-nav"
           className={open ? "nav open" : "nav"}
           aria-label="Main navigation"
-          onClick={(event) => {
-            if (event.target.closest("a")) setOpen(false);
+          onClick={(e) => {
+            if (e.target.closest("a")) setOpen(false);
           }}
         >
-          <a href="/#work">Selected work</a>
-          <a
-            href="/engineering"
-            aria-current={path === "/engineering" ? "page" : undefined}
-          >
+          <a href="/work" aria-current={current("/work")}>
+            Work
+          </a>
+          <a href="/engineering" aria-current={current("/engineering")}>
             Engineering
           </a>
-          <a
-            href="/work-with-me"
-            aria-current={path === "/work-with-me" ? "page" : undefined}
-          >
-            Work with me <Arrow />
+          <a href="/work-with-me" aria-current={current("/work-with-me")}>
+            Work with me
+          </a>
+          <a className="btn btn-gold" href="/work-with-me#start">
+            Start a project {I.arrow}
           </a>
         </nav>
       </div>
@@ -75,281 +410,795 @@ function Header({ path }) {
 }
 function Footer() {
   return (
-    <footer className="footer wrap">
-      <div>
-        <a className="footer-name" href="/">
-          Francis Annor<span>.</span>
-        </a>
-        <p>Based in Accra. Building for people everywhere.</p>
-      </div>
-      <div className="footer-links">
-        <Link href={`mailto:${email}`}>Email</Link>
-        <Link href="https://github.com/AnnorFrancis">GitHub</Link>
-        <Link href="https://linkedin.com/in/francis-annor-649a0a26a">
-          LinkedIn
-        </Link>
-      </div>
-      <div className="footer-bottom">
-        <span>© 2026 Francis Annor · Perkins Creative</span>
-        <span>Built with care. Made to be used.</span>
+    <footer className="footer">
+      <div className="wrap">
+        <div className="footer-grid">
+          <div>
+            <a className="identity" href="/">
+              <img className="mark" src="/brand/monogram.svg" alt="" width="46" height="46" />
+              <span className="wordmark">
+                <b>{brand.name}</b>
+                <small>{brand.tagline}</small>
+              </span>
+            </a>
+            <p className="blurb">
+              {brand.owner}. Software developer and systems builder in Accra, building websites, stores and the systems behind them for clients locally and internationally.
+            </p>
+          </div>
+          <div>
+            <p className="footer-heading">Explore</p>
+            <ul>
+              <li><a href="/work">All work</a></li>
+              <li><a href="/engineering">Engineering</a></li>
+              <li><a href="/work-with-me">Work with me</a></li>
+              <li><a href="/work-with-me#pricing">Pricing</a></li>
+            </ul>
+          </div>
+          <div>
+            <p className="footer-heading">Case studies</p>
+            <ul>
+              {projects.map((p) => (
+                <li key={p.slug}>
+                  <a href={`/work/${p.slug}`}>{p.name}</a>
+                </li>
+              ))}
+              <li><a href="/notes/lease-based-push">Engineering note</a></li>
+            </ul>
+          </div>
+          <div>
+            <p className="footer-heading">Connect</p>
+            <ul>
+              <li><a href={`mailto:${brand.email}`}>{brand.email}</a></li>
+              <li><a href={brand.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp {brand.phone}</a></li>
+              <li><a href={brand.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
+              <li><a href={brand.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© 2026 {brand.owner} · {brand.name}</span>
+          <span>Built to be used. Based in Accra, building for people everywhere.</span>
+        </div>
       </div>
     </footer>
   );
 }
-function Availability() {
-  return (
-    <p className="availability">
-      <span aria-hidden="true" />
-      Available for projects & engineering roles{" "}
-      <span className="availability-date">· Updated November 2026</span>
-    </p>
-  );
-}
-function Diagram({ project }) {
-  return (
-    <div
-      className={`system-visual ${project.slug}`}
-      aria-label={`${project.name} system overview`}
-    >
-      <div className="diagram-top">
-        <span>{project.visualLabel}</span>
-        <span aria-hidden="true">↗</span>
-      </div>
-      <div className="diagram-brand">
-        {project.wordmark}
-        <span>{project.visualSubtitle}</span>
-      </div>
-      <div className="system-flow">
-        {project.flow.map((step, i) => (
-          <div key={step}>
-            <span className="flow-number">0{i + 1}</span>
-            <strong>{step}</strong>
-            {i < project.flow.length - 1 && (
-              <span className="flow-arrow" aria-hidden="true">
-                →
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="diagram-bottom">
-        <span>Public experience ↔ Business operations</span>
-        <span>System map</span>
-      </div>
-    </div>
-  );
-}
-function Project({ project, index }) {
-  return (
-    <article className={`project project-${index}`}>
-      <div className={`project-visual screenshot-panel ${project.slug}`}>
-        <a href={project.url}>
-          <span className="screenshot-label">
-            {project.visualLabel} <Arrow />
-          </span>
-          <img
-            src={`/images/projects/${project.slug}-640.webp`}
-            srcSet={`/images/projects/${project.slug}-640.webp 640w, /images/projects/${project.slug}-1200.webp 1200w`}
-            sizes="(max-width: 760px) 90vw, 50vw"
-            width="1200"
-            height="750"
-            loading="lazy"
-            alt={`${project.name} public website`}
-          />
-          <span className="screenshot-caption">
-            {project.name} <span>Live website / 2026</span>
-          </span>
-        </a>
-      </div>
-      <div className="project-copy">
-        <p className="eyebrow">
-          0{index + 1} / {project.kind}
-        </p>
-        <h3>{project.name}</h3>
-        <p>{project.summary}</p>
-        <p className="project-role">My role: {project.role}</p>
-        <div className="project-links">
-          <Link href={`/work/${project.slug}`}>Read the case study</Link>
-          <Link href={project.url}>Live site</Link>
-        </div>
-      </div>
-    </article>
-  );
-}
 function ContactBand({ engineer = false }) {
   return (
-    <section className="contact-band wrap">
-      <p className="eyebrow">Let’s put it to work</p>
-      <div>
-        <h2>
+    <section className="wrap section-tight" data-reveal>
+      <div className="glass cta-band">
+        <div className="glow" aria-hidden="true" />
+        <p className="eyebrow" style={{ justifyContent: "center" }}>Let’s put it to work</p>
+        <h2>{engineer ? "Have a hard problem worth solving?" : "What does your business need to do better?"}</h2>
+        <p>
           {engineer
-            ? "Have a hard problem worth solving?"
-            : "What does your business need to do better?"}
-        </h2>
-        <Link
-          className="button button-dark"
-          href={
-            engineer
-              ? `mailto:${email}?subject=Engineering%20opportunity`
-              : "/work-with-me#start"
-          }
-        >
-          {engineer ? "Discuss a role" : "Tell me about your project"}
-        </Link>
+            ? "I build across the application: data models, APIs, payments, permissions and the interfaces people use. Let’s talk about the role."
+            : "A few lines about your business, the problem, and your budget are enough to begin. I reply from Accra, and I work with teams anywhere."}
+        </p>
+        <div className="cta-row">
+          <Link className="btn btn-gold" href={engineer ? `mailto:${brand.email}?subject=Engineering%20opportunity` : "/work-with-me#start"}>
+            {engineer ? "Discuss a role" : "Tell me about your project"}
+          </Link>
+          <Link className="btn btn-glass" href={brand.whatsapp}>
+            Chat on WhatsApp
+          </Link>
+        </div>
       </div>
     </section>
   );
 }
+
+/* ------------------------------------------------------------------- home */
+const heroSlugs = ["besia", "trendy-norms", "perkos", "meridian", "tcs", "cindys", "zira", "poli443"];
 function Home() {
+  const stage = useTilt(9);
+  const heroShots = heroSlugs.flatMap((slug) => shotsFor(slug).slice(0, 1).map((s) => ({ ...s, key: slug })));
+  const phone = mobileShotFor("trendy-norms") || mobileShotFor("besia") || mobileShotFor("perkos");
+  const teaser = ["tcs", "cindys", "veloura", "zira", "meridian", "poli443"].map((s) => gallery.find((g) => g.slug === s)).filter(Boolean);
+  const featuredFilms = ["zira-teaser", "tcs-launch", "perkos-hook", "forex-systems"].map((id) => films.find((f) => f.id === id)).filter(Boolean);
+  const marquee = ["Business websites", "Online stores", "POS & stock systems", "Bookings & deposits", "Paystack", "Mobile Money", "AI chatbots", "Launch films", "Next.js", "React", "Supabase", "TypeScript", "Node.js", "Accra → Worldwide"];
   return (
     <>
       <section className="hero wrap">
         <div className="hero-copy">
-          <p className="eyebrow">Independent developer · Accra, Ghana</p>
+          <p className="eyebrow">{brand.name} · {brand.owner} · Accra, worldwide</p>
           <h1>
-            I build the software
-            <br />
-            businesses <em>run on.</em>
+            I build the software <em>businesses run on.</em>
           </h1>
           <p className="hero-description">
-            The website people see. The system your team uses.
-            <br className="desktop-break" /> Connected, considered, and built
-            for the real world.
+            The website people see, the system your team runs, and the payments in between — connected, built for real-world conditions, and handed over so you can run it yourself.
           </p>
-          <div className="hero-actions">
-            <Link className="button button-dark" href="/work-with-me">
+          <div className="cta-row hero-actions">
+            <Link className="btn btn-gold" href="/work-with-me">
               Work with me on a system
             </Link>
-            <Link className="text-link" href="/engineering">
+            <Link className="btn btn-glass" href="/engineering">
               Hire me as an engineer
             </Link>
           </div>
           <Availability />
         </div>
-        <figure className="portrait">
-          <picture>
-            <source srcSet="/images/francis-640.webp" type="image/webp" />
-            <img
-              src="/images/my-image.jpg"
-              alt="Francis Annor, software developer based in Accra"
-              width="640"
-              height="640"
-              loading="eager"
-              fetchpriority="high"
-            />
-          </picture>
-          <figcaption>
-            <span>Francis Annor</span>
-            <span>Developer. Builder. Operator.</span>
-          </figcaption>
-        </figure>
-      </section>
-      <section className="principle-strip wrap" aria-label="What I build">
-        <span>From the first click to the last receipt.</span>
-        <div>
-          <span>Web experiences</span>
-          <span>Business operations</span>
-          <span>Payments & integrations</span>
-        </div>
-      </section>
-      <section id="work" className="selected wrap">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">Selected work / 2026</p>
-            <h2>
-              Built to do a job.
-              <br />
-              <em>Built to keep doing it.</em>
-            </h2>
+        <div ref={stage} className="stage" aria-label="Screens from live systems I built">
+          <div className="stage-glow" aria-hidden="true" />
+          <div className="stage-float">
+            <div className="device-laptop">
+              <div className="screen">
+                <Slideshow shots={heroShots} alt="Screens from live systems built by Francis Annor" label={brand.name} eager interval={3800} sizes="(max-width: 1020px) 92vw, 46vw" />
+              </div>
+            </div>
+            <PhoneFrame src={phone} alt="" />
+            <span className="float-chip c1"><span className="dot" style={{ background: "var(--emerald)" }} />Paystack · live payments</span>
+            <span className="float-chip c2"><span className="dot" style={{ background: "var(--gold)" }} />Works offline · replays on reconnect</span>
+            <span className="float-chip c3"><span className="dot" style={{ background: "var(--indigo)" }} />Launched October 2026</span>
           </div>
-          <p>
-            Live client systems and an independent product. Here’s what I built,
-            why I built it that way, and what still needs work.
-          </p>
         </div>
-        <div className="projects">
-          {projects.map((p, i) => (
-            <Project key={p.slug} project={p} index={i} />
+      </section>
+
+      <section className="wrap" data-reveal>
+        <div className="stats">
+          {stats.map(([n, l], k) => (
+            <div key={l} className="glass stat" style={{ "--d": `${k * 0.08}s` }}>
+              <b>{n}</b>
+              <span>{l}</span>
+            </div>
           ))}
         </div>
       </section>
-      <section className="about-strip wrap">
-        <p className="eyebrow">The person behind the work</p>
-        <div>
-          <h2>
-            I care about what happens
-            <br />
-            after launch.
-          </h2>
-          <p>
-            I’m Francis, a software developer and systems builder working
-            locally and internationally. I connect customer-facing experiences
-            with the less visible work: stock, payments, bookings, permissions,
-            and the handover that lets someone else run it.
-          </p>
-          <p>
-            A good system should make sense to the person using it, even when
-            the network drops or a transaction needs correcting.
-          </p>
-          <Link href="/engineering">How I approach the engineering</Link>
+
+      <div className="marquee section-tight" aria-hidden="true">
+        <div className="marquee-track">
+          {[...marquee, ...marquee].map((m, k) => (
+            <span key={k}>{m}</span>
+          ))}
+        </div>
+      </div>
+
+      <section className="wrap section" id="systems">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">Launched systems / 2026</p>
+            <h2>
+              Built to do a job. <em>Built to keep doing it.</em>
+            </h2>
+          </div>
+          <p>Live client systems taking real payments, and my own product. What I built, why I built it that way, and what still needs work.</p>
+        </div>
+        {projects.map((p, i) => {
+          const g = gallery.find((x) => x.slug === p.slug);
+          return (
+            <FeatureRow key={p.slug} project={p} item={g} flip={i % 2 === 1} />
+          );
+        })}
+      </section>
+
+      <section className="wrap section" id="work">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">Twenty-plus live builds</p>
+            <h2>
+              Websites with real <em>back offices behind them.</em>
+            </h2>
+          </div>
+          <div className="cta-row">
+            <Link className="btn btn-glass" href="/work">
+              See all work
+            </Link>
+          </div>
+        </div>
+        <div className="cards">
+          {teaser.map((item) => (
+            <GalleryCard key={item.slug} item={item} />
+          ))}
         </div>
       </section>
+
+      <section className="wrap section" id="films-home">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">Films &amp; ads</p>
+            <h2>
+              Built from the real screens. <em>Not stock footage.</em>
+            </h2>
+          </div>
+          <p>Launch films, teasers and ad cuts produced as code, so a price change means a re-render, not a re-shoot. Hover to preview; click to play with sound.</p>
+        </div>
+        <div className="films">
+          {featuredFilms.map((f) => (
+            <FilmCard key={f.id} film={f} />
+          ))}
+        </div>
+        <p style={{ marginTop: 24 }}>
+          <Link className="text-link" href="/work#films">
+            All films
+          </Link>
+        </p>
+      </section>
+
+      <section className="wrap section" id="services">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">What I build</p>
+            <h2>
+              One builder. <em>The whole system.</em>
+            </h2>
+          </div>
+          <p>From the first click to the last receipt — and the back office in between.</p>
+        </div>
+        <div className="services">
+          {services.map((s, k) => (
+            <ServiceCard key={s.title} service={s} delay={k * 0.07} />
+          ))}
+        </div>
+      </section>
+
+      <section className="wrap section" id="pricing-home">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">Published ranges / GHS</p>
+            <h2>
+              Real numbers, <em>up front.</em>
+            </h2>
+          </div>
+          <p>My project ranges, not industry averages. Scope, dates and recurring costs are agreed in writing before work begins.</p>
+        </div>
+        <PriceCards />
+        <p style={{ marginTop: 24 }}>
+          <Link className="text-link" href="/work-with-me#pricing">
+            All packages and add-ons
+          </Link>
+        </p>
+      </section>
+
+      <section className="wrap section" id="about">
+        <About />
+      </section>
+
       <ContactBand />
     </>
   );
 }
+function FeatureRow({ project, item, flip }) {
+  const tilt = useTilt(4);
+  return (
+    <article ref={tilt} className={`glass tilt feature${flip ? " flip" : ""}`} data-reveal>
+      <div className="feature-media">
+        <Slideshow shots={shotsFor(project.slug)} alt={`${project.name} — screenshots`} label={project.wordmark} />
+      </div>
+      <div className="feature-copy">
+        <p className="eyebrow">{project.kind}</p>
+        <h3>{project.name}</h3>
+        <p>{project.summary}</p>
+        {item && <span className="proof-line">{item.proof}</span>}
+        <div className="badge-row">
+          {project.stack.split(" · ").map((s) => (
+            <span key={s} className="chip">{s}</span>
+          ))}
+          <span className="chip green">{project.role}</span>
+        </div>
+        <div className="cta-row">
+          <Link className="btn btn-gold" href={`/work/${project.slug}`}>
+            Read the case study
+          </Link>
+          <Link className="text-link" href={project.url}>
+            Live site
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+function ServiceCard({ service, delay = 0 }) {
+  const tilt = useTilt(5);
+  return (
+    <article ref={tilt} className="glass tilt service" data-reveal style={{ "--d": `${delay}s` }}>
+      <div className="icon">{I[service.icon]}</div>
+      <h3>{service.title}</h3>
+      <p>{service.text}</p>
+    </article>
+  );
+}
+function PriceCards() {
+  return (
+    <div className="price-grid">
+      {pricing.main.map((p, k) => (
+        <PriceCard key={p.name} plan={p} delay={k * 0.08} />
+      ))}
+    </div>
+  );
+}
+function PriceCard({ plan, delay = 0 }) {
+  const tilt = useTilt(4);
+  return (
+    <article ref={tilt} className={`glass tilt price${plan.popular ? " popular" : ""}`} data-reveal style={{ "--d": `${delay}s` }}>
+      {plan.popular && <span className="tag">Most popular</span>}
+      <h3>{plan.name}</h3>
+      <p className="amount">
+        <small>GHS</small>
+        <b>{plan.from}</b>
+        <i>– {plan.to}</i>
+      </p>
+      <p className="tagline">{plan.tagline}</p>
+      <ul>
+        {plan.features.map((f) => (
+          <li key={f}>{f}</li>
+        ))}
+      </ul>
+      <p className="time">{plan.time}</p>
+      <Link className={`btn ${plan.popular ? "btn-gold" : "btn-glass"}`} href="/work-with-me#start">
+        Discuss this scope
+      </Link>
+    </article>
+  );
+}
+function About() {
+  const tilt = useTilt(6);
+  const caps = ["React & Next.js", "TypeScript", "Node.js", "Supabase / Postgres", "Paystack & Mobile Money", "Offline-first PWAs", "AI agents & chatbots", "Remotion & HyperFrames"];
+  return (
+    <div className="about">
+      <figure ref={tilt} className="glass tilt portrait" data-reveal>
+        <picture>
+          <source srcSet="/images/francis-640.webp" type="image/webp" />
+          <img src="/images/my-image.jpg" alt="Francis Annor, software developer based in Accra" width="640" height="640" loading="lazy" decoding="async" />
+        </picture>
+        <figcaption className="ribbon">
+          <span>
+            <b>{brand.owner}</b>
+            <span>Founder, {brand.name}</span>
+          </span>
+          <span>Accra · worldwide</span>
+        </figcaption>
+      </figure>
+      <div className="about-copy" data-reveal style={{ "--d": "0.1s" }}>
+        <p className="eyebrow">The person behind the work</p>
+        <h2>
+          I care about what happens <em>after launch.</em>
+        </h2>
+        <p>
+          I’m Francis — a software developer and systems builder working with clients locally and internationally. I connect the customer-facing experience with the less visible work: stock, payments, bookings, permissions, and the handover that lets someone else run it.
+        </p>
+        <p>
+          Most software assumes a good network, a card-only economy and a technical operator. Mine doesn’t. A till that keeps selling when the internet drops is a universal virtue; having shipped it for a live salon and a live shop in Accra is the proof it’s real.
+        </p>
+        <div className="caps">
+          {caps.map((c) => (
+            <span key={c} className="chip">{c}</span>
+          ))}
+        </div>
+        <div className="cta-row">
+          <Link className="btn btn-glass" href="/engineering">
+            How I approach the engineering
+          </Link>
+          <Link className="text-link" href={brand.github}>
+            GitHub
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------- work page */
+function Work() {
+  const [filter, setFilter] = useState("all");
+  const shown = filter === "all" ? gallery : filter === "film" ? [] : gallery.filter((g) => g.kind === filter || (g.tags || []).includes(filter));
+  const showFilms = filter === "all" || filter === "film";
+  return (
+    <>
+      <header className="page-intro wrap">
+        <p className="eyebrow">All work</p>
+        <h1>
+          Twenty-plus live builds. <em>Open any of them.</em>
+        </h1>
+        <p className="lede">
+          Launched client systems, my own products, sample websites with real back offices, forex systems, and the films that launched them. Every card opens the live build.
+        </p>
+      </header>
+      <section className="wrap">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Browse</p>
+            <h2>
+              Every build, <em>filtered your way.</em>
+            </h2>
+          </div>
+          <p>Launched systems take real payments. Own products are mine. Sample builds are complete front-ends with working back offices, built to show what a business would get.</p>
+        </div>
+        <div className="filters" role="group" aria-label="Filter work">
+          {categories.map(([key, label]) => (
+            <button key={key} type="button" aria-pressed={filter === key} onClick={() => setFilter(key)}>
+              {label}
+            </button>
+          ))}
+        </div>
+        {shown.length > 0 && (
+          <div className="cards">
+            {shown.map((item, k) => (
+              <GalleryCard key={`${filter}-${item.slug}`} item={item} eager={k < 3} />
+            ))}
+          </div>
+        )}
+      </section>
+      {showFilms && (
+        <section className="wrap section" id="films">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Films &amp; ads</p>
+              <h2>
+                Produced as code, <em>from the real product.</em>
+              </h2>
+            </div>
+            <p>Hover to preview, click to play with sound. Excerpts are cut from the full films; narration is AI-voiced where noted.</p>
+          </div>
+          <div className="films">
+            {films.map((f) => (
+              <FilmCard key={f.id} film={f} />
+            ))}
+          </div>
+        </section>
+      )}
+      <ContactBand />
+    </>
+  );
+}
+
+/* --------------------------------------------------------- work with me */
+function ProjectBrief() {
+  const [status, setStatus] = useState("");
+  function submit(event) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const body = `Hello Francis,\n\nI'm ${data.get("name")}.\n\nWhat I need:\n${data.get("message")}\n\nBudget range: ${data.get("budget")}\n\nPreferred reply address: ${data.get("email")}`;
+    window.location.href = `mailto:${brand.email}?subject=${encodeURIComponent("A system for my business")}&body=${encodeURIComponent(body)}`;
+    setStatus("Your email app should open with the brief filled in. Nothing is sent until you send it. If it did not open, use the direct email or WhatsApp link.");
+  }
+  return (
+    <section id="start" className="brief-section wrap section">
+      <div data-reveal>
+        <p className="eyebrow">Start a conversation</p>
+        <h2>
+          Tell me what <em>isn’t working yet.</em>
+        </h2>
+        <p className="lede">A few lines about your business, the problem, and your budget are enough to begin.</p>
+        <div className="contact-direct">
+          <a className="glass" href={`mailto:${brand.email}`}>
+            {I.mail} {brand.email}
+          </a>
+          <a className="glass" href={brand.whatsapp} target="_blank" rel="noopener noreferrer">
+            {I.chat} Chat on WhatsApp · {brand.phone}
+          </a>
+        </div>
+      </div>
+      <form className="glass" onSubmit={submit} data-reveal style={{ "--d": "0.1s" }}>
+        <div className="form-row">
+          <label>
+            Your name
+            <input name="name" autoComplete="name" required maxLength="100" />
+          </label>
+          <label>
+            Your email
+            <input name="email" autoComplete="email" type="email" required maxLength="200" />
+          </label>
+        </div>
+        <label>
+          What should the system help you do?
+          <textarea name="message" rows="5" maxLength="2500" required placeholder="We currently manage… and we need a better way to…" />
+        </label>
+        <label>
+          Budget range
+          <select name="budget" defaultValue="Let’s scope it together">
+            <option>Let’s scope it together</option>
+            <option>GHS 2,000–3,500</option>
+            <option>GHS 5,000–8,000</option>
+            <option>GHS 10,000–15,000</option>
+            <option>GHS 15,000+</option>
+          </select>
+        </label>
+        <button className="btn btn-gold" type="submit">
+          Prepare email brief {I.arrow}
+        </button>
+        <p className="small muted" style={{ margin: 0 }}>
+          Opens your email app. This form does not upload or store your information.
+        </p>
+        <p role="status" className="form-status">
+          {status}
+        </p>
+      </form>
+    </section>
+  );
+}
+function WorkWithMe() {
+  const offers = [
+    ["01", "A public front", "Fast, clear websites and online stores that help people understand your business, book, buy, or get in touch."],
+    ["02", "The working back office", "Stock, tills, calendars, customer records, staff permissions and reporting designed around the way your team works."],
+    ["03", "The connections", "Card and Mobile Money payments, notifications, existing calendars, and a practical handover for the people using it."],
+  ];
+  const process = [
+    ["Understand", "We map the problem, the people using the system, and the tools you already rely on."],
+    ["Build & prove", "We agree the scope, then review working software against real tasks and edge cases."],
+    ["Launch & hand over", "Payments, access, recovery and owner training are part of the handover. Ongoing care is agreed separately."],
+  ];
+  return (
+    <>
+      <header className="page-intro wrap">
+        <p className="eyebrow">For business owners &amp; teams</p>
+        <h1>
+          A better way to run <em>your day-to-day.</em>
+        </h1>
+        <p className="lede">
+          I build websites, stores and the systems behind them. Start with the bottleneck: the booking that gets missed, the stock that doesn’t add up, or the tools that don’t talk to each other.
+        </p>
+        <div className="cta-row">
+          <Link className="btn btn-gold" href="#start">
+            Discuss your project
+          </Link>
+          <Link className="btn btn-glass" href="#pricing">
+            See the ranges
+          </Link>
+        </div>
+        <div style={{ marginTop: 22 }}>
+          <Availability />
+        </div>
+      </header>
+      <section className="wrap section-tight">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">What you get</p>
+            <h2>
+              One connected system. <em>A scope that fits.</em>
+            </h2>
+          </div>
+          <p>Your customers need a good experience. Your team needs a reliable way to deliver it. I build both halves and the connections between them.</p>
+        </div>
+        <div className="offer-grid">
+          {offers.map(([n, t, p], k) => (
+            <OfferCard key={n} num={n} title={t} text={p} delay={k * 0.08} />
+          ))}
+        </div>
+      </section>
+      <section className="wrap section-tight">
+        <p className="eyebrow">See it in practice</p>
+        <div className="proof-links">
+          {projects.map((p) => (
+            <a key={p.slug} className="glass lift" href={`/work/${p.slug}`}>
+              <b>{p.name}</b>
+              <span>{p.summary}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+      <section id="pricing" className="wrap section">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">Published project ranges / GHS</p>
+            <h2>
+              A useful <em>starting point.</em>
+            </h2>
+          </div>
+          <p>These are my project ranges, not industry averages. The final scope, delivery dates, integrations and recurring costs are agreed in writing before work begins.</p>
+        </div>
+        <PriceCards />
+        <div className="addons">
+          {pricing.addons.map(([name, amt, desc], k) => (
+            <div key={name} className="glass lift addon" data-reveal style={{ "--d": `${k * 0.05}s` }}>
+              <b>{name}</b>
+              <span className="amt">
+                <small>GHS</small>
+                {amt}
+              </span>
+              <p>{desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="glass systems-note" data-reveal>
+          <b>Business systems.</b> {pricing.systems.replace("Business systems — ", "")} Hosting, payment-provider fees and paid tools are quoted separately.
+        </div>
+      </section>
+      <section className="wrap section-tight">
+        <p className="eyebrow">How we work together</p>
+        <div className="offer-grid">
+          {process.map(([t, p], k) => (
+            <OfferCard key={t} num={`0${k + 1}`} title={t} text={p} delay={k * 0.08} />
+          ))}
+        </div>
+      </section>
+      <ProjectBrief />
+    </>
+  );
+}
+function OfferCard({ num, title, text, delay = 0 }) {
+  const tilt = useTilt(4);
+  return (
+    <article ref={tilt} className="glass tilt offer" data-reveal style={{ "--d": `${delay}s` }}>
+      <span className="num">{num}</span>
+      <h3>{title}</h3>
+      <p>{text}</p>
+    </article>
+  );
+}
+
+/* ------------------------------------------------------------ engineering */
+function Engineering() {
+  const wider = ["letteropedia", "meridian", "poli443", "builders-book"].map((s) => gallery.find((g) => g.slug === s)).filter(Boolean);
+  const entries = [
+    {
+      idx: "01 / Team project",
+      title: "SAMTEC · Contract before implementation.",
+      body: [
+        "I own the API and database; Samuel owns the dashboard. An OpenAPI contract and generated-type drift checks let us develop the two halves against the same agreement.",
+        "CI checks lint, contracts, types, tests and builds. Actions are pinned to commit SHAs with read-only default permissions. A dependency policy checks publishing age and trust changes before accepting new packages — and it has already stopped one suspicious package version.",
+      ],
+      tradeoff: "The trade-off: a contract needs maintaining. The benefit is catching a broken agreement before it reaches the other developer.",
+      link: ["https://github.com/TEAM-DEVV/samtec-security-system", "Explore the public repository"],
+    },
+    {
+      idx: "02 / In development",
+      title: "Weave · A worker must know when it no longer owns the work.",
+      body: [
+        "My Flutter and Supabase app includes a push sender with lease-token batch claiming, renewal during processing, and a conditional finish. If another run takes over a row, the old worker cannot mark it complete.",
+        "A fake-clock test runs two workers concurrently. Retryable provider errors and a bounded execution time are part of the design, rather than happy-path assumptions.",
+      ],
+      tradeoff: "The trade-off: retries can duplicate delivery. Lease ownership protects state; it does not create an exactly-once guarantee at an external provider.",
+      link: ["/notes/lease-based-push", "Read the engineering note"],
+    },
+    {
+      idx: "03 / Live learning product",
+      title: "POLI 443 · Make the reasoning visible.",
+      body: [
+        "I built an interactive statistics course with worked examples, guided attempts, saved notes and practice scoring. Plain JavaScript modules keep the teaching experience independent of a UI framework.",
+        "Personal-key access uses per-lesson AES-256-GCM keys derived with HMAC, signed tokens, timing-safe comparisons, and a Redis mutex around device slots. Rate limits account for campus Wi-Fi and carrier NAT, where many legitimate students share an IP.",
+      ],
+      tradeoff: "The trade-off: custom access control keeps dependencies low but increases review responsibility. Encryption alone does not prevent an authorized reader from copying content; device limits also need a humane recovery path.",
+      link: ["https://poli443.perkos.app", "Explore the live course"],
+    },
+  ];
+  return (
+    <>
+      <header className="page-intro wrap">
+        <p className="eyebrow">For engineering teams</p>
+        <h1>
+          The interface is only <em>half the work.</em>
+        </h1>
+        <p className="lede">
+          I build across the application: data models, APIs, payments, permissions, and the interfaces people use. My strongest work lives where a business rule has to survive real use.
+        </p>
+        <div className="cta-row">
+          <Link className="btn btn-gold" href={`mailto:${brand.email}?subject=Engineering%20opportunity`}>
+            Discuss an engineering role
+          </Link>
+          <Link className="btn btn-glass" href={brand.github}>
+            GitHub
+          </Link>
+        </div>
+        <div style={{ marginTop: 22 }}>
+          <Availability />
+        </div>
+      </header>
+      <section className="wrap section-tight">
+        <p className="eyebrow">Selected engineering decisions</p>
+        <div className="eng-list">
+          {entries.map((e, k) => (
+            <EngCard key={e.idx} entry={e} delay={k * 0.08} />
+          ))}
+        </div>
+      </section>
+      <section className="wrap section-tight">
+        <p className="eyebrow">Production systems, with the decisions behind them</p>
+        <div className="proof-links">
+          {projects.map((p) => (
+            <a key={p.slug} className="glass lift" href={`/work/${p.slug}`}>
+              <b>{p.name}</b>
+              <span>{p.stack}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+      <section className="wrap section">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">A wider view</p>
+            <h2>
+              Different problems. <em>The same care.</em>
+            </h2>
+          </div>
+          <div className="cta-row">
+            <Link className="btn btn-glass" href="/work">
+              All work
+            </Link>
+          </div>
+        </div>
+        <div className="cards">
+          {wider.map((item) => (
+            <GalleryCard key={item.slug} item={item} />
+          ))}
+        </div>
+      </section>
+      <section className="wrap section-tight" data-reveal>
+        <p className="eyebrow">Verified learning</p>
+        <h2 style={{ marginBottom: 22 }}>
+          A foundation in <em>systems &amp; support.</em>
+        </h2>
+        <div className="creds">
+          {credentials.map(([name, url]) => (
+            <a key={url} className="glass" href={url} target="_blank" rel="noopener noreferrer">
+              {I.check} {name} {I.arrow}
+            </a>
+          ))}
+        </div>
+        <p className="small muted" style={{ marginTop: 14 }}>Every badge opens its official verification page.</p>
+      </section>
+      <ContactBand engineer />
+    </>
+  );
+}
+function EngCard({ entry, delay = 0 }) {
+  const tilt = useTilt(3);
+  return (
+    <article ref={tilt} className="glass tilt eng" data-reveal style={{ "--d": `${delay}s` }}>
+      <span className="idx">{entry.idx}</span>
+      <div>
+        <h2>{entry.title}</h2>
+        {entry.body.map((p) => (
+          <p key={p}>{p}</p>
+        ))}
+        <p className="tradeoff">{entry.tradeoff}</p>
+        <Link className="text-link" href={entry.link[0]}>
+          {entry.link[1]}
+        </Link>
+      </div>
+    </article>
+  );
+}
+
+/* ------------------------------------------------------------ case study */
 function CaseStudy({ project }) {
+  const stage = useTilt(5);
+  const item = gallery.find((g) => g.slug === project.slug);
   return (
     <article>
       <header className="page-intro wrap">
-        <a className="back-link" href="/#work">
-          ← Selected work
+        <a className="back-link" href="/work">
+          {I.left} All work
         </a>
         <p className="eyebrow">{project.kind} / Case study</p>
         <h1>{project.title}</h1>
         <p className="lede">{project.summary}</p>
-        <dl className="project-facts">
-          <div>
-            <dt>Project</dt>
-            <dd>{project.name}</dd>
-          </div>
-          <div>
-            <dt>My role</dt>
-            <dd>{project.role}</dd>
-          </div>
-          <div>
-            <dt>Stack</dt>
-            <dd>{project.stack}</dd>
-          </div>
-          <div>
-            <dt>Status</dt>
-            <dd>{project.status}</dd>
-          </div>
+        <dl className="facts">
+          {[["Project", project.name], ["My role", project.role], ["Stack", project.stack], ["Status", project.status]].map(([t, d]) => (
+            <div key={t} className="glass">
+              <dt>{t}</dt>
+              <dd>{d}</dd>
+            </div>
+          ))}
         </dl>
-        <Link className="text-link" href={project.url}>
-          Visit the live site
-        </Link>
+        <div className="cta-row">
+          <Link className="btn btn-gold" href={project.url}>
+            Visit the live site
+          </Link>
+        </div>
       </header>
-      <div className="case-visual wrap">
-        <Diagram project={project} />
+      <div className="wrap">
+        <div ref={stage} className="glass tilt case-stage" data-reveal>
+          <Slideshow shots={shotsFor(project.slug)} alt={`${project.name} — screenshots of the live system`} label={project.wordmark} eager sizes="(max-width: 860px) 92vw, 70vw" />
+          <PhoneFrame src={mobileShotFor(project.slug)} alt="" />
+        </div>
       </div>
       <div className="article-layout wrap">
-        <aside>
+        <aside className="glass">
           <p className="eyebrow">In this case study</p>
           <a href="#context">01 Context</a>
           <a href="#constraints">02 Constraints</a>
-          <a href="#decisions">03 Decisions & trade-offs</a>
-          <a href="#outcome">04 Outcome & limits</a>
+          <a href="#decisions">03 Decisions &amp; trade-offs</a>
+          <a href="#outcome">04 Outcome &amp; limits</a>
         </aside>
         <div className="article-body">
-          <section id="context">
+          <section id="context" data-reveal>
             <p className="eyebrow">01 / Context</p>
             <h2>{project.contextTitle}</h2>
             {project.context.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </section>
-          <section id="constraints">
+          <section id="constraints" data-reveal>
             <p className="eyebrow">02 / Constraints</p>
             <h2>The conditions shaped the system.</h2>
             <ul>
@@ -359,11 +1208,11 @@ function CaseStudy({ project }) {
             </ul>
           </section>
           <section id="decisions">
-            <p className="eyebrow">03 / Decisions & trade-offs</p>
+            <p className="eyebrow">03 / Decisions &amp; trade-offs</p>
             <h2>What I chose, and what it costs.</h2>
             {project.decisions.map((d, i) => (
-              <div className="decision" key={d.title}>
-                <span className="decision-number">0{i + 1}</span>
+              <div className="glass decision" key={d.title} data-reveal style={{ "--d": `${i * 0.08}s` }}>
+                <span className="num">0{i + 1}</span>
                 <h3>{d.title}</h3>
                 <p>{d.choice}</p>
                 <dl>
@@ -379,574 +1228,101 @@ function CaseStudy({ project }) {
               </div>
             ))}
           </section>
-          <section id="outcome">
+          <section id="outcome" data-reveal>
             <p className="eyebrow">04 / Outcome</p>
             <h2>{project.outcomeTitle}</h2>
             <p>{project.outcome}</p>
-            <div className="limitation">
+            {item && <span className="proof-line">{item.proof}</span>}
+            <div className="glass limitation">
               <h3>What I’d improve next</h3>
               <p>{project.limitation}</p>
             </div>
-            <p className="small muted">
-              Project snapshot: 2 November 2026. Outcomes describe shipped
-              capability, not an inferred revenue uplift.
-            </p>
+            <p className="small muted">Project snapshot: 2 November 2026. Outcomes describe shipped capability, not an inferred revenue uplift.</p>
           </section>
         </div>
       </div>
-      <section className="more-work wrap">
+      <section className="wrap section-tight">
         <p className="eyebrow">Continue exploring</p>
-        {projects
-          .filter((p) => p.slug !== project.slug)
-          .map((p) => (
-            <Link key={p.slug} href={`/work/${p.slug}`}>
-              {p.name}
-            </Link>
-          ))}
+        <div className="related">
+          {projects
+            .filter((p) => p.slug !== project.slug)
+            .map((p) => (
+              <Link key={p.slug} className="glass lift" href={`/work/${p.slug}`}>
+                {p.name}
+              </Link>
+            ))}
+          <Link className="glass lift" href="/work">
+            All work
+          </Link>
+        </div>
       </section>
       <ContactBand />
     </article>
   );
 }
-function ProjectBrief() {
-  const [status, setStatus] = useState("");
-  function submit(event) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = `Hello Francis,\n\nI'm ${data.get("name")}.\n\nWhat I need:\n${data.get("message")}\n\nBudget range: ${data.get("budget")}\n\nPreferred reply address: ${data.get("email")}`;
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent("A system for my business")}&body=${encodeURIComponent(body)}`;
-    setStatus(
-      "Your email app should open with the brief filled in. Nothing is sent until you send it. If it did not open, use the direct email or WhatsApp link in this section.",
-    );
-  }
-  return (
-    <section id="start" className="brief-section wrap">
-      <div>
-        <p className="eyebrow">Start a conversation</p>
-        <h2>
-          Tell me what
-          <br />
-          <em>isn’t working yet.</em>
-        </h2>
-        <p>
-          A few lines about your business, the problem, and your budget are
-          enough to begin.
-        </p>
-        <p>
-          <Link href={`mailto:${email}`}>{email}</Link>
-        </p>
-        <p>
-          <Link href="https://wa.me/233538713916">Chat on WhatsApp</Link>
-        </p>
-      </div>
-      <form onSubmit={submit}>
-        <div className="form-row">
-          <label>
-            Your name
-            <input name="name" autoComplete="name" required maxLength="100" />
-          </label>
-          <label>
-            Your email
-            <input
-              name="email"
-              autoComplete="email"
-              type="email"
-              required
-              maxLength="200"
-            />
-          </label>
-        </div>
-        <label>
-          What should the system help you do?
-          <textarea
-            name="message"
-            rows="5"
-            maxLength="2500"
-            required
-            placeholder="We currently manage… and we need a better way to…"
-          />
-        </label>
-        <label>
-          Budget range
-          <select name="budget" defaultValue="Let’s scope it together">
-            <option>Let’s scope it together</option>
-            <option>GHS 2,000–3,500</option>
-            <option>GHS 5,000–8,000</option>
-            <option>GHS 10,000–15,000</option>
-            <option>GHS 15,000+</option>
-          </select>
-        </label>
-        <button className="button button-dark" type="submit">
-          Prepare email brief <Arrow />
-        </button>
-        <p className="small muted">
-          Opens your email app. This form does not upload or store your
-          information.
-        </p>
-        <p role="status" className="form-status">
-          {status}
-        </p>
-      </form>
-    </section>
-  );
-}
-function WorkWithMe() {
-  return (
-    <>
-      <header className="page-intro wrap">
-        <p className="eyebrow">For business owners & teams</p>
-        <h1>
-          A better way to run
-          <br />
-          <em>your day-to-day.</em>
-        </h1>
-        <p className="lede">
-          I build websites, stores, and the systems behind them. Start with the
-          bottleneck: the booking that gets missed, the stock that doesn’t add
-          up, or the tools that don’t talk to each other.
-        </p>
-        <Link className="button button-dark" href="#start">
-          Discuss your project
-        </Link>
-        <Availability />
-      </header>
-      <section className="offer-section wrap">
-        <div className="section-heading">
-          <h2>
-            One connected system.
-            <br />A scope that fits.
-          </h2>
-          <p>
-            Your customers need a good experience. Your team needs a reliable
-            way to deliver it.
-          </p>
-        </div>
-        <div className="offer-grid">
-          {[
-            [
-              "01",
-              "A public front",
-              "Fast, clear websites and online stores that help people understand your business, book, buy, or get in touch.",
-            ],
-            [
-              "02",
-              "The working back office",
-              "Stock, tills, calendars, customer records, staff permissions, and reporting designed around the way your team works.",
-            ],
-            [
-              "03",
-              "The connections",
-              "Card and Mobile Money payments, notifications, existing calendars, and a practical handover for the people using it.",
-            ],
-          ].map(([n, t, p]) => (
-            <div key={n}>
-              <span className="eyebrow">{n}</span>
-              <h3>{t}</h3>
-              <p>{p}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="proof-links wrap">
-        <p className="eyebrow">See it in practice</p>
-        {projects.slice(0, 2).map((p) => (
-          <Link key={p.slug} href={`/work/${p.slug}`}>
-            {p.name}
-            <span className="proof-description">{p.summary}</span>
-          </Link>
-        ))}
-      </section>
-      <section id="pricing" className="pricing-section wrap">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">Published project ranges / GHS</p>
-            <h2>A useful starting point.</h2>
-          </div>
-          <p>
-            These are my project ranges, not industry averages. The final scope,
-            delivery dates, integrations, and recurring costs are agreed in
-            writing before work begins.
-          </p>
-        </div>
-        <div className="price-grid">
-          {[
-            [
-              "Starter website",
-              "2,000–3,500",
-              "A focused web presence.",
-              "Up to 4 pages · responsive design · basic search setup · 1 month support",
-              "Typical build: 1–2 weeks",
-            ],
-            [
-              "Business website",
-              "5,000–8,000",
-              "Room for your business to grow.",
-              "Up to 10 pages · content management · forms · analytics · 3 months support",
-              "Typical build: 3–4 weeks",
-            ],
-            [
-              "Custom web application",
-              "10,000–15,000",
-              "A tailored operational workflow.",
-              "Web app or e-commerce · reporting · agreed integrations · 6 months support",
-              "Typical build: 6–10 weeks",
-            ],
-          ].map(([name, price, desc, features, time]) => (
-            <article key={name}>
-              <h3>{name}</h3>
-              <p className="price">
-                <small>GHS</small>
-                {price}
-              </p>
-              <p>{desc}</p>
-              <p className="price-features">{features}</p>
-              <p className="small muted">{time}</p>
-              <a href="#start">
-                Discuss this scope <Arrow />
-              </a>
-            </article>
-          ))}
-        </div>
-        <p className="pricing-note">
-          Large systems are scoped individually. Hosting, payment-provider fees,
-          paid tools, and ongoing care are quoted separately. Website care: GHS
-          300–1,200/month. Landing pages: GHS 1,500–4,000.
-        </p>
-        <details>
-          <summary>Other services & published ranges</summary>
-          <ul className="service-list">
-            <li>
-              AI chatbot & automation: GHS 1,500–6,000, scoped to the
-              integration.
-            </li>
-            <li>Social media management: GHS 600–2,500/month.</li>
-            <li>Brand & flyer design: GHS 80–600.</li>
-            <li>CV / SOP writing: GHS 150–400.</li>
-            <li>IT support: scoped on request.</li>
-          </ul>
-        </details>
-      </section>
-      <section className="process wrap">
-        <p className="eyebrow">How we work together</p>
-        <div className="offer-grid">
-          {[
-            [
-              "Understand",
-              "We map the problem, the people using the system, and the tools you already rely on.",
-            ],
-            [
-              "Build & prove",
-              "We agree the scope, then review working software against real tasks and edge cases.",
-            ],
-            [
-              "Launch & hand over",
-              "Payments, access, recovery, and owner training are part of the handover. Ongoing care is agreed separately.",
-            ],
-          ].map(([t, p], i) => (
-            <div key={t}>
-              <span className="eyebrow">0{i + 1}</span>
-              <h3>{t}</h3>
-              <p>{p}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      <ProjectBrief />
-    </>
-  );
-}
-function Engineering() {
-  return (
-    <>
-      <header className="page-intro wrap">
-        <p className="eyebrow">For engineering teams</p>
-        <h1>
-          The interface is only
-          <br />
-          <em>half the work.</em>
-        </h1>
-        <p className="lede">
-          I build across the application: data models, APIs, payments,
-          permissions, and the interfaces people use. My strongest work lives
-          where a business rule has to survive real use.
-        </p>
-        <Link
-          className="button button-dark"
-          href={`mailto:${email}?subject=Engineering%20opportunity`}
-        >
-          Discuss an engineering role
-        </Link>
-        <Availability />
-      </header>
-      <section className="engineering-list wrap">
-        <p className="eyebrow">Selected engineering decisions</p>
-        <article>
-          <span className="engineering-index">01 / Team project</span>
-          <div>
-            <h2>SAMTEC · Contract before implementation.</h2>
-            <p>
-              I own the API and database; Samuel owns the dashboard. An OpenAPI
-              contract and generated-type drift checks let us develop the two
-              halves against the same agreement.
-            </p>
-            <p>
-              CI checks lint, contracts, types, tests, and builds. Actions are
-              pinned to commit SHAs with read-only default permissions. A
-              dependency policy checks publishing age and trust changes before
-              accepting new packages.
-            </p>
-            <p className="engineering-tradeoff">
-              The trade-off: a contract needs maintaining. The benefit is
-              catching a broken agreement before it reaches the other developer.
-            </p>
-            <Link href="https://github.com/TEAM-DEVV/samtec-security-system">
-              Explore the public repository
-            </Link>
-          </div>
-        </article>
-        <article>
-          <span className="engineering-index">02 / In development</span>
-          <div>
-            <h2>Weave · A worker must know when it no longer owns the work.</h2>
-            <p>
-              My Flutter and Supabase app includes a push sender with
-              lease-token batch claiming, renewal during processing, and a
-              conditional finish. If another run takes over a row, the old
-              worker cannot mark it complete.
-            </p>
-            <p>
-              A fake-clock test runs two workers concurrently. Retryable
-              provider errors and a bounded execution time are part of the
-              design, rather than happy-path assumptions.
-            </p>
-            <p className="engineering-tradeoff">
-              The trade-off: retries can duplicate delivery. Lease ownership
-              protects state; it does not create an exactly-once guarantee at an
-              external provider.
-            </p>
-            <Link href="/notes/lease-based-push">
-              Read the engineering note
-            </Link>
-          </div>
-        </article>
-        <article>
-          <span className="engineering-index">03 / Live learning product</span>
-          <div>
-            <h2>POLI 443 · Make the reasoning visible.</h2>
-            <p>
-              I built an interactive statistics course with worked examples,
-              guided attempts, saved notes, and practice scoring. Plain
-              JavaScript modules keep the teaching experience independent of a
-              UI framework.
-            </p>
-            <p>
-              Personal-key access uses per-lesson AES-256-GCM keys derived with
-              HMAC, signed tokens, timing-safe comparisons, and a Redis mutex
-              around device slots. Rate limits account for campus Wi-Fi and
-              carrier NAT, where many legitimate students share an IP.
-            </p>
-            <p className="engineering-tradeoff">
-              The trade-off: custom access control keeps dependencies low but
-              increases review responsibility. Encryption alone does not prevent
-              an authorized reader from copying content; device limits also need
-              a humane recovery path.
-            </p>
-            <Link href="https://poli443.perkos.app">
-              Explore the live course
-            </Link>
-          </div>
-        </article>
-      </section>
-      <section className="proof-links wrap">
-        <p className="eyebrow">
-          Production systems, with the decisions behind them
-        </p>
-        {projects.map((p) => (
-          <Link key={p.slug} href={`/work/${p.slug}`}>
-            {p.name}
-            <span className="proof-description">{p.stack}</span>
-          </Link>
-        ))}
-      </section>
-      <section className="other-work wrap">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">A wider view</p>
-            <h2>
-              Different problems.
-              <br />
-              The same care.
-            </h2>
-          </div>
-        </div>
-        <div className="secondary-projects">
-          <article>
-            <a href="https://letteropedia.online">
-              <img
-                src="/images/projects/letteropedia-640.webp"
-                srcSet="/images/projects/letteropedia-640.webp 640w, /images/projects/letteropedia-1200.webp 1200w"
-                sizes="(max-width: 700px) 90vw, 45vw"
-                width="800"
-                height="500"
-                loading="lazy"
-                alt="Letteropedia public website"
-              />
-            </a>
-            <p className="eyebrow">Delivered client work · Solo developer</p>
-            <h3>Letteropedia</h3>
-            <p>
-              A quote-request website with an owner-managed CMS and fallback
-              contact paths when integrations are unavailable.
-            </p>
-            <Link href="https://letteropedia.online">
-              Visit the live website
-            </Link>
-          </article>
-          <article>
-            <a href="https://meridian-trading-desk.vercel.app">
-              <img
-                src="/images/projects/meridian-640.webp"
-                srcSet="/images/projects/meridian-640.webp 640w, /images/projects/meridian-1200.webp 1200w"
-                sizes="(max-width: 700px) 90vw, 45vw"
-                width="1200"
-                height="750"
-                loading="lazy"
-                alt="MERIDIAN trading journal interface with demonstration data"
-              />
-            </a>
-            <p className="eyebrow">Independent product · Solo developer</p>
-            <h3>MERIDIAN</h3>
-            <p>
-              A browser-local trading journal and analytics tool. Market prices
-              and calendar entries are demo data; live feeds and account sync
-              are not built.
-            </p>
-            <Link href="https://meridian-trading-desk.vercel.app">
-              Explore the product
-            </Link>
-          </article>
-        </div>
-      </section>
-      <section className="credentials wrap">
-        <p className="eyebrow">Verified learning</p>
-        <h2>A foundation in systems & support.</h2>
-        <div>
-          {credentials.map(([name, url]) => (
-            <Link key={url} href={url}>
-              {name}
-            </Link>
-          ))}
-        </div>
-      </section>
-      <ContactBand engineer />
-    </>
-  );
-}
+
+/* ------------------------------------------------------------------ note */
 function Note() {
   return (
     <article>
       <header className="page-intro wrap">
         <a className="back-link" href="/engineering">
-          ← Engineering
+          {I.left} Engineering
         </a>
         <p className="eyebrow">Engineering notes / 2 November 2026</p>
         <h1>
-          When two workers
-          <br />
-          <em>reach for one job.</em>
+          When two workers <em>reach for one job.</em>
         </h1>
-        <p className="lede">
-          A design note from Weave’s push sender: lease ownership, retries, and
-          the difference between protecting state and guaranteeing delivery.
-        </p>
+        <p className="lede">A design note from Weave’s push sender: lease ownership, retries, and the difference between protecting state and guaranteeing delivery.</p>
       </header>
-      <div className="note-body article-body wrap">
-        <p>
-          Weave is still in development. This note describes the push-worker
-          design, not a claim of production scale.
-        </p>
-        <h2>The race</h2>
-        <p>
-          A worker claims a notification and sends it to a provider. Before it
-          records success, the request times out. Another run can eventually
-          pick up that notification. Did the provider deliver the first attempt?
-          The database cannot know just from a lost response.
-        </p>
-        <p>
-          I separate two questions: who may update the job, and whether a user
-          has already received the message. Solving the first does not
-          automatically solve the second.
-        </p>
-        <h2>A lease is temporary ownership</h2>
-        <ol className="note-steps">
-          <li>
-            <strong>Claim.</strong> A batch is associated with a lease token and
-            an expiry.
-          </li>
-          <li>
-            <strong>Renew.</strong> While processing, keep ownership alive
-            within the run’s time budget.
-          </li>
-          <li>
-            <strong>Check.</strong> Skip work if its lease is no longer ours.
-          </li>
-          <li>
-            <strong>Finish conditionally.</strong> Update the row only if the
-            current lease token still matches.
-          </li>
-        </ol>
-        <p>
-          The conditional finish is the important boundary. A slow worker cannot
-          overwrite the result of the worker that took over. A final update
-          without that ownership condition would reintroduce the race.
-        </p>
-        <div className="limitation">
-          <h3>Ownership is not exactly-once delivery</h3>
-          <p>
-            A provider can accept a message before its response is lost.
-            Retrying may deliver it again. A collapse identifier can help
-            coalesce pending notifications under provider-specific rules, but it
-            is not a universal deduplication guarantee. The receiving
-            application still needs to tolerate repeat events.
-          </p>
+      <div className="wrap">
+        <div className="article-body" style={{ maxWidth: "76ch" }}>
+          <section data-reveal>
+            <p>Weave is still in development. This note describes the push-worker design, not a claim of production scale.</p>
+            <h2>The race</h2>
+            <p>A worker claims a notification and sends it to a provider. Before it records success, the request times out. Another run can eventually pick up that notification. Did the provider deliver the first attempt? The database cannot know just from a lost response.</p>
+            <p>I separate two questions: who may update the job, and whether a user has already received the message. Solving the first does not automatically solve the second.</p>
+          </section>
+          <section data-reveal>
+            <h2>A lease is temporary ownership</h2>
+            <ol className="note-steps">
+              <li className="glass"><strong>Claim.</strong> A batch is associated with a lease token and an expiry.</li>
+              <li className="glass"><strong>Renew.</strong> While processing, keep ownership alive within the run’s time budget.</li>
+              <li className="glass"><strong>Check.</strong> Skip work if its lease is no longer ours.</li>
+              <li className="glass"><strong>Finish conditionally.</strong> Update the row only if the current lease token still matches.</li>
+            </ol>
+            <p>The conditional finish is the important boundary. A slow worker cannot overwrite the result of the worker that took over. A final update without that ownership condition would reintroduce the race.</p>
+            <div className="glass limitation">
+              <h3>Ownership is not exactly-once delivery</h3>
+              <p>A provider can accept a message before its response is lost. Retrying may deliver it again. A collapse identifier can help coalesce pending notifications under provider-specific rules, but it is not a universal deduplication guarantee. The receiving application still needs to tolerate repeat events.</p>
+            </div>
+          </section>
+          <section data-reveal>
+            <h2>Test the overlap, not just each worker</h2>
+            <p>The useful test runs two workers on a fake clock. Advance time beyond a lease boundary, let another run take ownership, then allow the first run to finish. Its final write must leave the second worker’s state untouched.</p>
+            <p>I also classify 429 and server errors as temporary and stop starting new rows when the execution budget is spent. These choices make retries and interrupted runs explicit parts of the lifecycle.</p>
+            <h2>The cost of this design</h2>
+            <p>Lease renewal adds database work. Short leases make recovery faster but increase the chance of overlapping runs; long leases delay recovery after a crash. The right duration depends on measured provider latency and runtime limits, so I would tune it with telemetry rather than treat a constant as a guarantee.</p>
+            <p>This is the standard I want in my systems: the failure path should have an explanation as clear as the successful one.</p>
+            <Link className="text-link" href="/engineering">
+              More engineering work
+            </Link>
+          </section>
         </div>
-        <h2>Test the overlap, not just each worker</h2>
-        <p>
-          The useful test runs two workers on a fake clock. Advance time beyond
-          a lease boundary, let another run take ownership, then allow the first
-          run to finish. Its final write must leave the second worker’s state
-          untouched.
-        </p>
-        <p>
-          I also classify 429 and server errors as temporary and stop starting
-          new rows when the execution budget is spent. These choices make
-          retries and interrupted runs explicit parts of the lifecycle.
-        </p>
-        <h2>The cost of this design</h2>
-        <p>
-          Lease renewal adds database work. Short leases make recovery faster
-          but increase the chance of overlapping runs; long leases delay
-          recovery after a crash. The right duration depends on measured
-          provider latency and runtime limits, so I would tune it with telemetry
-          rather than treat a constant as a guarantee.
-        </p>
-        <p>
-          This is the standard I want in my systems: the failure path should
-          have an explanation as clear as the successful one.
-        </p>
-        <Link className="more-link" href="/engineering">
-          More engineering work
-        </Link>
       </div>
       <ContactBand engineer />
     </article>
   );
 }
+
+/* ------------------------------------------------------------------- app */
 export default function App({ path = "/" }) {
   const normalized = path.replace(/\/$/, "") || "/";
   const project = projects.find((p) => normalized === `/work/${p.slug}`);
+  useReveal();
   let content;
   if (normalized === "/") content = <Home />;
+  else if (normalized === "/work") content = <Work />;
   else if (normalized === "/work-with-me") content = <WorkWithMe />;
   else if (normalized === "/engineering") content = <Engineering />;
   else if (normalized === "/notes/lease-based-push") content = <Note />;
@@ -956,13 +1332,17 @@ export default function App({ path = "/" }) {
       <section className="page-intro wrap">
         <p className="eyebrow">404 / Page not found</p>
         <h1>
-          Let’s get you
-          <br />
-          <em>back on track.</em>
+          Let’s get you <em>back on track.</em>
         </h1>
-        <Link className="button button-dark" href="/">
-          Return home
-        </Link>
+        <p className="lede">That page isn’t here. The work, the engineering notes and the ways to get in touch all are.</p>
+        <div className="cta-row">
+          <Link className="btn btn-gold" href="/">
+            Return home
+          </Link>
+          <Link className="btn btn-glass" href="/work">
+            See all work
+          </Link>
+        </div>
       </section>
     );
   return (
@@ -970,6 +1350,7 @@ export default function App({ path = "/" }) {
       <a className="skip-link" href="#main">
         Skip to main content
       </a>
+      <Backdrop />
       <Header path={normalized} />
       <main id="main" tabIndex={-1}>
         {content}
@@ -980,6 +1361,22 @@ export default function App({ path = "/" }) {
 }
 export { pages };
 
+/* -------------------------------------------------------------- propTypes */
+const shotType = PropTypes.shape({ key: PropTypes.string, small: PropTypes.string, large: PropTypes.string });
+const itemType = PropTypes.shape({
+  slug: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  kind: PropTypes.string.isRequired,
+  status: PropTypes.string,
+  sector: PropTypes.string,
+  url: PropTypes.string.isRequired,
+  caseStudy: PropTypes.string,
+  stack: PropTypes.arrayOf(PropTypes.string).isRequired,
+  blurb: PropTypes.string,
+  proof: PropTypes.string,
+  wordmark: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.string),
+});
 const projectType = PropTypes.shape({
   slug: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -990,36 +1387,29 @@ const projectType = PropTypes.shape({
   status: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   summary: PropTypes.string.isRequired,
-  visualLabel: PropTypes.string.isRequired,
   wordmark: PropTypes.string.isRequired,
-  visualSubtitle: PropTypes.string.isRequired,
-  flow: PropTypes.arrayOf(PropTypes.string).isRequired,
   contextTitle: PropTypes.string.isRequired,
   context: PropTypes.arrayOf(PropTypes.string).isRequired,
   constraints: PropTypes.arrayOf(PropTypes.string).isRequired,
   decisions: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      choice: PropTypes.string,
-      alternative: PropTypes.string,
-      tradeoff: PropTypes.string,
-    }),
+    PropTypes.shape({ title: PropTypes.string, choice: PropTypes.string, alternative: PropTypes.string, tradeoff: PropTypes.string }),
   ).isRequired,
   outcomeTitle: PropTypes.string.isRequired,
   outcome: PropTypes.string.isRequired,
   limitation: PropTypes.string.isRequired,
 });
-Link.propTypes = {
-  href: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-};
+Link.propTypes = { href: PropTypes.string.isRequired, children: PropTypes.node.isRequired, className: PropTypes.string, arrow: PropTypes.bool };
+Slideshow.propTypes = { shots: PropTypes.arrayOf(shotType).isRequired, alt: PropTypes.string.isRequired, label: PropTypes.string, interval: PropTypes.number, eager: PropTypes.bool, sizes: PropTypes.string };
+Badge.propTypes = { item: itemType.isRequired };
+GalleryCard.propTypes = { item: itemType.isRequired, eager: PropTypes.bool };
+FilmCard.propTypes = { film: PropTypes.shape({ id: PropTypes.string.isRequired, title: PropTypes.string.isRequired, kind: PropTypes.string, made: PropTypes.string, orientation: PropTypes.string }).isRequired };
+PhoneFrame.propTypes = { src: PropTypes.string, alt: PropTypes.string };
 Header.propTypes = { path: PropTypes.string.isRequired };
-Diagram.propTypes = { project: projectType.isRequired };
-Project.propTypes = {
-  project: projectType.isRequired,
-  index: PropTypes.number.isRequired,
-};
-CaseStudy.propTypes = { project: projectType.isRequired };
 ContactBand.propTypes = { engineer: PropTypes.bool };
+FeatureRow.propTypes = { project: projectType.isRequired, item: itemType, flip: PropTypes.bool };
+ServiceCard.propTypes = { service: PropTypes.shape({ title: PropTypes.string, text: PropTypes.string, icon: PropTypes.string }).isRequired, delay: PropTypes.number };
+PriceCard.propTypes = { plan: PropTypes.shape({ name: PropTypes.string, from: PropTypes.string, to: PropTypes.string, tagline: PropTypes.string, features: PropTypes.arrayOf(PropTypes.string), time: PropTypes.string, popular: PropTypes.bool }).isRequired, delay: PropTypes.number };
+OfferCard.propTypes = { num: PropTypes.string.isRequired, title: PropTypes.string.isRequired, text: PropTypes.string.isRequired, delay: PropTypes.number };
+EngCard.propTypes = { entry: PropTypes.shape({ idx: PropTypes.string, title: PropTypes.string, body: PropTypes.arrayOf(PropTypes.string), tradeoff: PropTypes.string, link: PropTypes.arrayOf(PropTypes.string) }).isRequired, delay: PropTypes.number };
+CaseStudy.propTypes = { project: projectType.isRequired };
 App.propTypes = { path: PropTypes.string };
