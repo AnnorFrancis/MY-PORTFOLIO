@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { Award, Clock, RefreshCw, DollarSign } from 'react-feather'
+import { Award, Clock, RefreshCw, DollarSign, ExternalLink } from 'react-feather'
 
 export default function Proof() {
   const reduce = useReducedMotion()
@@ -13,15 +13,35 @@ export default function Proof() {
     { group: 'Business systems', items: ['POS & inventory', 'CRM & bookings', 'Reporting & dashboards'] },
   ]
 
+  // Only credentials that can actually be checked. Every Coursera URL below was read out of the
+  // certificate PDF's own link annotation, so it resolves to the real verification page.
   const certifications = [
-    'Google IT Support Professional',
-    'Google IT Security',
-    'Meta React Developer',
-    'Google Project Management',
-    'AWS Cloud Practitioner',
-    'AI Automation (Coursera)',
-    'Claude & Claude Code',
-    'Customer Service Excellence',
+    {
+      name: 'Google IT Support Professional Certificate',
+      note: '6-course program',
+      url: 'https://coursera.org/verify/professional-cert/FXMG07PLCDO8',
+    },
+    {
+      name: 'IT Security: Defense Against the Digital Dark Arts',
+      url: 'https://coursera.org/verify/KMS6IPUVUY8O',
+    },
+    {
+      name: 'System Administration & IT Infrastructure Services',
+      url: 'https://coursera.org/verify/MBQ0OUWN6VAG',
+    },
+    {
+      name: 'The Bits and Bytes of Computer Networking',
+      url: 'https://coursera.org/verify/MDUFSCZPF722',
+    },
+    {
+      name: 'Operating Systems and You',
+      url: 'https://coursera.org/verify/UJPYIS00FPAP',
+    },
+    {
+      name: 'Technical Support Fundamentals',
+      url: 'https://coursera.org/verify/LJ04O7F4EOIF',
+    },
+    { name: 'Claude 101 · Claude Code 101', note: 'Anthropic' },
   ]
 
   const guarantees = [
@@ -152,15 +172,37 @@ export default function Proof() {
             </h3>
           </div>
           <div className="flex flex-wrap justify-center gap-2">
-            {certifications.map((cert) => (
-              <span
-                key={cert}
-                className="px-3 py-1.5 rounded-full bg-primary/5 border border-primary/25 text-xs sm:text-sm text-primary-light"
-              >
-                {cert}
-              </span>
-            ))}
+            {certifications.map((cert) => {
+              const body = (
+                <>
+                  {cert.name}
+                  {cert.note && <span className="text-text-tertiary"> · {cert.note}</span>}
+                  {cert.url && <ExternalLink size={12} className="inline-block ml-1.5 -mt-0.5" />}
+                </>
+              )
+              const className =
+                'px-3 py-1.5 rounded-full bg-primary/5 border border-primary/25 text-xs sm:text-sm text-primary-light'
+              return cert.url ? (
+                <a
+                  key={cert.name}
+                  href={cert.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${className} hover:border-primary hover:bg-primary/10 transition-colors`}
+                  title={`Verify ${cert.name} on Coursera`}
+                >
+                  {body}
+                </a>
+              ) : (
+                <span key={cert.name} className={className}>
+                  {body}
+                </span>
+              )
+            })}
           </div>
+          <p className="text-center text-text-tertiary text-xs mt-5">
+            Every linked badge opens its official verification page.
+          </p>
         </motion.div>
       </div>
     </section>
