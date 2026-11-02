@@ -1,3 +1,17 @@
+import manifest from "./gallery-manifest.json";
+
+// Screenshots for each build live in public/images/gallery; the manifest lists
+// only files that exist, so a card never points at a missing image.
+const entry = (slug) => manifest[slug] || { shots: [], mobile: false };
+export const shotsFor = (slug) =>
+  entry(slug).shots.map((k) => ({
+    key: k,
+    small: `/images/gallery/${slug}-${k}-640.webp`,
+    large: `/images/gallery/${slug}-${k}-1200.webp`,
+  }));
+export const mobileShotFor = (slug) =>
+  entry(slug).mobile ? `/images/gallery/${slug}-m.webp` : null;
+
 export const projects = [
   {
     slug: "trendy-norms",
@@ -198,44 +212,99 @@ export const credentials = [
     "https://coursera.org/verify/LJ04O7F4EOIF",
   ],
 ];
+
+export const stats = [
+  [20, "+", "Live builds shipped"],
+  [3, "", "Systems taking live payments"],
+  [480, "+", "Database migrations shipped"],
+  [30, "+", "Product films produced"],
+];
+export const marquee = [
+  "Business websites",
+  "Online stores",
+  "POS & stock systems",
+  "Bookings & deposits",
+  "Paystack",
+  "Mobile Money",
+  "AI chatbots",
+  "Launch films",
+  "Next.js",
+  "React",
+  "Supabase",
+  "TypeScript",
+];
+export const heroSlugs = ["besia", "trendy-norms", "perkos", "meridian", "tcs", "cindys", "zira", "poli443"];
+const build = (slug, name, sector, url, status, blurb) => ({ slug, name, sector, url, status, blurb });
+export const moreSystems = [
+  build("meridian", "MERIDIAN Trading Desk", "Forex · Trading desk OS", "https://meridian-trading-desk.vercel.app", "Live product · demo data",
+    "A desk for traders, mentors and signal providers: journal, analytics, playbook, risk suite, signals desk and calendar, with equity curves from a hand-built charting engine."),
+  build("poli443", "POLI 443", "Education · Paid course platform", "https://poli443.perkos.app", "Live product",
+    "An interactive statistics course for University of Ghana students, sold per seat. Encrypted lessons, signed tokens, a device-licence model and rate limits tuned for campus Wi-Fi."),
+  build("torq", "TORQ · Damian Autoparts", "Auto parts · Offline-first stock & sales", "https://annorfrancis.github.io/torq-system/", "Sample build",
+    "A 15-screen system for an importer with shops in Accra and Kumasi: till, sales book, stock, debtors, containers and landed cost, with credit limits enforced at the sale."),
+  build("xclusive-bms", "Xclusivehairdeals · Business Manager", "Beauty · Site + integrated back office", "https://annorfrancis.github.io/xclusivehairdeals-bms/", "Sample build",
+    "The website and a PIN-protected Business Manager on one database: a booking on the site appears on the dashboard instantly, and a shop order takes stock down."),
+];
+export const moreSites = [
+  build("cindys", "Cindy's Cake House", "Food · Pâtisserie with owner studio", "https://annorfrancis.github.io/cindys-cake-house/", "Sample build",
+    "134 priced creations and a Cake Atelier that redraws and reprices a custom cake as you configure it, against a calendar gated by real kitchen capacity."),
+  build("veloura", "Veloura Luxe Hub", "Fashion · Boutique storefront + back office", "https://annorfrancis.github.io/veloura-luxe-hub/", "Sample build",
+    "A 307-product boutique with a lookbook and journal, plus a 13-module back office that stays in step with the shop across tabs."),
+  build("kira", "Kira Forex", "Forex · Academy + HQ", "https://annorfrancis.github.io/kiraforex/", "Sample build",
+    "A 3D hero that renders real gold sessions as glass candles, session clocks, a globe of bootcamp cities, a student portal and the Kira HQ dashboard."),
+  build("king-ofori", "King Ofori Real Estate", "Real estate · Diaspora buyers", "https://annorfrancis.github.io/king-ofori-real-estate/", "Sample build",
+    "A premium property platform for Ghana's luxury market, with verified-title signals, build-progress visuals and a portal for buyers returning from abroad."),
+];
+export const films = [
+  { id: "perkos-hook", title: "PerkOS — eight seconds", kind: "Social hook · YouTube cut", portrait: false },
+  { id: "tcs-launch", title: "The Classic Sculpt — launch film", kind: "Excerpt from the 3:40 launch film", portrait: false },
+  { id: "zira-teaser", title: "Zira Forex — teaser", kind: "Vertical teaser · 1:01", portrait: true },
+];
 export const pages = [
   {
     path: "/",
-    title: "Francis Annor — Software Developer & Systems Builder",
+    title: "Perkins_Creatives — Software & systems by Francis Annor",
     description:
       "I build the software businesses run on: websites, back-office systems, and payment integrations. Based in Accra, working locally and internationally.",
     image: "home",
   },
   {
+    path: "/work",
+    title: "More work — Perkins_Creatives",
+    description:
+      "More systems, websites and product films by Perkins_Creatives. Every card opens the real, working build.",
+    image: "home",
+  },
+  {
     path: "/work-with-me",
-    title: "Work with me — Francis Annor",
+    title: "Work with me — Perkins_Creatives",
     description:
       "Websites, online stores, and connected business systems. See project ranges in GHS, the process, and how to discuss your project.",
     image: "home",
   },
   {
     path: "/engineering",
-    title: "Engineering — Francis Annor",
+    title: "Engineering — Perkins_Creatives",
     description:
       "API contracts, data rules, payment workflows, and concurrency: engineering decisions from my client systems, team projects, and independent products.",
     image: "engineering",
   },
   ...projects.map((p) => ({
     path: `/work/${p.slug}`,
-    title: `${p.name} — A case study by Francis Annor`,
+    title: `${p.name} — A case study by Perkins_Creatives`,
     description: p.summary,
     image: p.slug,
   })),
   {
     path: "/notes/lease-based-push",
-    title: "When two workers reach for one job — Francis Annor",
+    title: "When two workers reach for one job — Perkins_Creatives",
     description:
       "A design note on lease ownership, retries, and why protecting database state does not guarantee exactly-once notification delivery.",
     image: "engineering",
   },
   {
     path: "/404",
-    title: "Page not found — Francis Annor",
+    title: "Page not found — Perkins_Creatives",
     description:
       "Find your way back to the work of Francis Annor, software developer and systems builder.",
     image: "home",

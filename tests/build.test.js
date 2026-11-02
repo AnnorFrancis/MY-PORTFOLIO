@@ -66,8 +66,6 @@ describe("Published route contract", () => {
       "TN-03701",
       "TN-03238",
       "real subscribers",
-      "Kira Forex",
-      "Classic Sculpt",
       "10,000+ monthly",
     ])
       expect(html).not.toContain(term);

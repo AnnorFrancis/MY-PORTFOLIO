@@ -17,7 +17,13 @@ const server = await createServer({
 });
 try {
   const { default: App, pages } = await server.ssrLoadModule("/src/App.jsx");
-  const template = await readFile("dist/index.html", "utf8");
+  let template = await readFile("dist/index.html", "utf8");
+  // Inline the stylesheet: it removes a render-blocking request from every route.
+  const cssLink = template.match(/<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/);
+  if (cssLink) {
+    const css = await readFile(`dist${cssLink[1]}`, "utf8");
+    template = template.replace(cssLink[0], `<style>${css}</style>`);
+  }
   for (const page of pages) {
     const url = `${origin}${page.path === "/" ? "/" : page.path}`;
     const image = `${origin}/images/og/${page.image}.png`;
@@ -31,7 +37,7 @@ try {
               name: "Francis Annor",
               jobTitle: "Software Developer and Systems Builder",
               url: origin,
-              image: `${origin}/images/francis-640.webp`,
+              image: `${origin}/images/portrait-720.webp`,
               sameAs: [
                 "https://github.com/AnnorFrancis",
                 "https://linkedin.com/in/francis-annor-649a0a26a",
@@ -59,7 +65,6 @@ try {
 <meta name="twitter:title" content="${escape(page.title)}" />
 <meta name="twitter:description" content="${escape(page.description)}" />
 <meta name="twitter:image" content="${image}" />
-${page.path === "/" ? '<link rel="preload" as="image" href="/images/francis-640.webp" type="image/webp" fetchpriority="high" />' : ""}
 ${page.path === "/404" ? '<meta name="robots" content="noindex" />' : ""}
 <script type="application/ld+json">${JSON.stringify(schema).replaceAll("<", "\\u003c")}</script>`;
     const body = renderToString(React.createElement(App, { path: page.path }));
