@@ -77,7 +77,11 @@ export default function CaseStudies() {
     },
   ]
 
-  const perkosPoints = ['Live product, real subscribers', 'Keeps selling when the internet drops', 'Retail · Salon · Restaurant · Field service']
+  const perkosPoints = [
+    '44,000 lines · 186 migrations · 442 passing tests',
+    'Keeps selling when the internet drops',
+    'Retail · Salon · Restaurant · Field service',
+  ]
 
   const containerVariants = {
     hidden: { opacity: 0 },
