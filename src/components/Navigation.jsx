@@ -88,6 +88,9 @@ export default function Navigation() {
           <motion.button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 rounded-lg border border-border-dark hover:border-primary transition-colors"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -98,6 +101,7 @@ export default function Navigation() {
 
       {/* Mobile Menu */}
       <motion.div
+        id="mobile-menu"
         className="md:hidden bg-dark-card border-t border-border-dark"
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: isMobileMenuOpen ? 1 : 0, height: isMobileMenuOpen ? 'auto' : 0 }}
