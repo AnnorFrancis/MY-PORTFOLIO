@@ -27,13 +27,15 @@ describe("Published route contract", () => {
         .split("<body>")[1]
         .replace(/<script[^>]*>[\s\S]*?<\/script>/g, "")
         .replace(/<[^>]*>/g, "");
-      expect(body.length).toBeGreaterThan(page.path === "/404" ? 250 : 1800);
+      expect(body.length).toBeGreaterThan(page.path === "/404" ? 250 : page.path === "/contact" ? 850 : page.path === "/about" ? 1400 : 1800);
     });
     it(`${page.path} has no broken local images, links or fragment targets`, () => {
       const html = readPage(page.path);
       for (const [, url] of html.matchAll(/(?:href|src)="([^" ]+)"/g)) {
         if (!url.startsWith("/") && !url.startsWith("#")) continue;
-        const [pathname, hash] = url.split("#");
+        const parsed = new URL(url, "https://example.test" + page.path);
+        const pathname = parsed.pathname;
+        const hash = parsed.hash.slice(1);
         const target = pathname || page.path;
         if (target.includes(".")) {
           expect(existsSync(`dist${target}`), url).toBe(true);
@@ -50,7 +52,7 @@ describe("Published route contract", () => {
   it("sitemap contains each indexable route and excludes the error page", () => {
     const sitemap = readFileSync("dist/sitemap.xml", "utf8");
     for (const page of pages.filter((p) => p.path !== "/404"))
-      expect(sitemap).toContain(`https://perkins-swart.vercel.app${page.path}`);
+      expect(sitemap).toContain(`${new URL(process.env.SITE_URL || "https://perkins-swart.vercel.app").origin}${page.path}`);
     expect(sitemap).not.toContain("/404");
   });
   it("featured projects lead to hosted products, not repositories", () => {

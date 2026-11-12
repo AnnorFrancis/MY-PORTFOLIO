@@ -233,7 +233,7 @@ export const marquee = [
   "Supabase",
   "TypeScript",
 ];
-export const heroSlugs = ["besia", "trendy-norms", "perkos", "meridian", "tcs", "cindys", "zira", "poli443"];
+export const heroSlugs = ["besia", "trendy-norms", "perkos", "meridian", "cindys", "zira", "poli443"];
 const build = (slug, name, sector, url, status, blurb) => ({ slug, name, sector, url, status, blurb });
 export const moreSystems = [
   build("meridian", "MERIDIAN Trading Desk", "Forex · Trading desk OS", "https://meridian-trading-desk.vercel.app", "Live product · demo data",
@@ -250,63 +250,86 @@ export const moreSites = [
     "134 priced creations and a Cake Atelier that redraws and reprices a custom cake as you configure it, against a calendar gated by real kitchen capacity."),
   build("veloura", "Veloura Luxe Hub", "Fashion · Boutique storefront + back office", "https://annorfrancis.github.io/veloura-luxe-hub/", "Sample build",
     "A 307-product boutique with a lookbook and journal, plus a 13-part back office that stays in sync with the shop."),
-  build("kira", "Kira Forex", "Forex · Academy + HQ", "https://annorfrancis.github.io/kiraforex/", "Sample build",
-    "A 3D hero that renders real gold sessions as glass candles, session clocks, a globe of bootcamp cities, a student portal and the Kira HQ dashboard."),
   build("king-ofori", "King Ofori Real Estate", "Real estate · Diaspora buyers", "https://annorfrancis.github.io/king-ofori-real-estate/", "Sample build",
     "A premium property platform for Ghana's luxury market, with verified-title signals, build-progress visuals and a portal for buyers returning from abroad."),
 ];
 export const films = [
   { id: "perkos-hook", title: "PerkOS social ad", kind: "8-second hook for YouTube and social", portrait: false },
-  { id: "tcs-launch", title: "The Classic Sculpt launch film", kind: "A clip from the full 3:40 film", portrait: false },
   { id: "zira-teaser", title: "Zira Forex teaser", kind: "Vertical teaser for phones, 1:01", portrait: true },
 ];
+export const company = {
+  name: "Perkins_Creatives Tech",
+  email: "annorfrancis23@outlook.com",
+  location: "Accra, Ghana",
+};
 export const pages = [
   {
     path: "/",
-    title: "Perkins_Creatives | Websites and business systems by Francis Annor",
+    title: "Perkins_Creatives Tech | AI, software and business systems",
     description:
-      "I build the software businesses run on: websites, back-office systems, and payment integrations. Based in Accra, working locally and internationally.",
+      "Custom software, practical AI integrations and connected business systems for businesses and brands. Based in Accra, working locally and internationally.",
     image: "home",
   },
   {
-    path: "/work",
-    title: "More work | Perkins_Creatives",
+    path: "/services",
+    title: "Software development and AI services | Perkins_Creatives Tech",
     description:
-      "More systems, websites and product films by Perkins_Creatives. Every card opens the working build.",
+      "Explore custom software, business management systems, AI automation and web commerce services. Start with a defined business problem and a practical delivery plan.",
+    image: "services",
+  },
+  {
+    path: "/about",
+    title: "Our company and team | Perkins_Creatives Tech",
+    description:
+      "Meet the team behind Perkins_Creatives Tech, covering full-stack development, AI engineering, backend systems, user experience and marketing.",
+    image: "about",
+  },
+  {
+    path: "/contact",
+    title: "Discuss your project | Perkins_Creatives Tech",
+    description:
+      "Tell Perkins_Creatives Tech about your business, software needs and budget. Discuss a new system, AI integration, website or existing product improvement.",
+    image: "contact",
+  },
+  {
+    path: "/work",
+    title: "Selected work and case studies | Perkins_Creatives Tech",
+    description:
+      "Explore delivered systems, independent products and clearly labelled concepts. See the work, technical decisions and outcomes behind our capabilities.",
     image: "home",
   },
   {
     path: "/work-with-me",
-    title: "Work with me | Perkins_Creatives",
+    title: "Project scope and pricing | Perkins_Creatives Tech",
     description:
-      "Websites, online stores, and connected business systems. See project ranges in GHS, the process, and how to discuss your project.",
-    image: "home",
+      "Published GHS project ranges, delivery process and project enquiries for websites, commerce and custom business software.",
+    image: "contact",
   },
   {
     path: "/engineering",
-    title: "Engineering | Perkins_Creatives",
+    title: "Engineering approach | Perkins_Creatives Tech",
     description:
-      "API contracts, data rules, payment workflows, and concurrency: engineering decisions from my client systems, team projects, and independent products.",
+      "Explore API contracts, data integrity, payments, permissions and concurrency through practical engineering decisions from our founder’s work.",
     image: "engineering",
   },
   ...projects.map((p) => ({
     path: `/work/${p.slug}`,
-    title: `${p.name} case study | Perkins_Creatives`,
+    title: `${p.name} case study | Perkins_Creatives Tech`,
     description: p.summary,
     image: p.slug,
   })),
   {
     path: "/notes/lease-based-push",
-    title: "When two workers reach for one job | Perkins_Creatives",
+    title: "Lease-based push workers | Perkins_Creatives Tech",
     description:
-      "A design note on lease ownership, retries, and why protecting database state does not guarantee exactly-once notification delivery.",
+      "A technical note by Francis Annor on lease ownership, retries and the limits of exactly-once notification delivery.",
     image: "engineering",
   },
   {
     path: "/404",
-    title: "Page not found | Perkins_Creatives",
+    title: "Page not found | Perkins_Creatives Tech",
     description:
-      "Find your way back to the work of Francis Annor, software developer and systems builder.",
+      "Find services, selected work and contact details for Perkins_Creatives Tech.",
     image: "home",
   },
 ];

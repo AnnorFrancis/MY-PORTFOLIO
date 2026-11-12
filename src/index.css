@@ -3582,3 +3582,10 @@ em {
     transform: none;
   }
 }
+.company-intro,.company-section{padding-block:clamp(42px,6vw,82px)}.company-intro h1{max-width:19ch;font-size:clamp(2.55rem,6vw,5.5rem);line-height:1.05}.company-intro p:not(.eyebrow){max-width:70ch;margin-block:1.5rem}.company-grid,.company-team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:1.25rem;margin-top:2rem}.company-card{padding:clamp(22px,3vw,36px);border-radius:24px}.company-card h3{margin:0 0 .5rem}.company-card p{color:var(--ink-2);margin-block:1rem}.company-card a,.company-intro>a:not(.button){color:var(--sea-deep);text-decoration:underline;text-underline-offset:4px}.initials,.founder-photo{width:100px;height:120px;display:grid;place-items:center;border-radius:16px;margin-bottom:20px;object-fit:cover;background:linear-gradient(140deg,var(--sky),white);color:var(--sea-deep);font-size:2rem;font-weight:700}
+
+@media (min-width: 900px) {
+  .company-team { grid-template-columns: 1.05fr 1fr 1fr; }
+  .company-team > :first-child { grid-row: span 2; }
+  .founder-photo { width: 100%; height: auto; max-height: 340px; object-position: center 32%; }
+}

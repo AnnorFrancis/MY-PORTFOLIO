@@ -4,8 +4,6 @@ import {
   projects,
   pages,
   credentials,
-  stats,
-  marquee,
   heroSlugs,
   moreSystems,
   moreSites,
@@ -191,7 +189,7 @@ function Wordmark() {
       <span className="us">
         <span className="sr-only">_</span>
       </span>
-      <span>Creatives</span>
+      <span>Creatives Tech</span>
     </span>
   );
 }
@@ -199,7 +197,7 @@ function Availability() {
   return (
     <p className="availability">
       <span className="pulse" aria-hidden="true" />
-      Available for projects & engineering roles{" "}
+      Project enquiries open{" "}
       <span className="availability-date">· Updated November 2026</span>
     </p>
   );
@@ -342,45 +340,6 @@ function PhoneFrame({ src }) {
     </div>
   );
 }
-function Stat({ value, suffix, label, index }) {
-  const num = useRef(null);
-  // The real number is rendered on the server; the count-up only rewrites the
-  // text once the card scrolls into view.
-  useEffect(() => {
-    const el = num.current;
-    if (!el || !("IntersectionObserver" in window)) return undefined;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      return undefined;
-    el.textContent = "0";
-    let raf = 0;
-    const io = new window.IntersectionObserver(([en]) => {
-      if (!en.isIntersecting) return;
-      io.disconnect();
-      const start = window.performance.now();
-      const tick = (now) => {
-        const p = Math.min(1, (now - start) / 1400);
-        el.textContent = String(Math.round(value * (1 - Math.pow(1 - p, 3))));
-        if (p < 1) raf = window.requestAnimationFrame(tick);
-      };
-      raf = window.requestAnimationFrame(tick);
-    });
-    io.observe(el);
-    return () => {
-      io.disconnect();
-      window.cancelAnimationFrame(raf);
-      el.textContent = String(value);
-    };
-  }, [value]);
-  return (
-    <Glass className="dark stat" style={{ "--i": index }} data-reveal>
-      <b>
-        <span ref={num}>{value}</span>
-        {suffix}
-      </b>
-      <span>{label}</span>
-    </Glass>
-  );
-}
 function FilmCard({ film, index }) {
   const video = useRef(null);
   const [playing, setPlaying] = useState(false);
@@ -461,8 +420,8 @@ function ScrollProgress() {
 }
 const navItems = [
   ["/work", "Work"],
-  ["/engineering", "Engineering"],
-  ["/work-with-me", "Work with me"],
+  ["/services", "Services"],
+  ["/about", "Team"],
 ];
 function Header({ path }) {
   const [open, setOpen] = useState(false);
@@ -550,7 +509,7 @@ function Header({ path }) {
               {label}
             </a>
           ))}
-          <a className="button button-primary nav-cta" href="/work-with-me#start">
+          <a className="button button-primary nav-cta" href="/contact#start">
             <span>Start a project</span> <Arrow />
           </a>
         </nav>
@@ -571,47 +530,34 @@ function Footer() {
         <div className="footer-links">
           <Link href={`mailto:${email}`}>Email</Link>
           <Link href={whatsapp}>WhatsApp</Link>
-          <Link href="https://github.com/AnnorFrancis">GitHub</Link>
+          <Link href="https://github.com/AnnorFrancis">Founder’s GitHub</Link>
           <Link href="https://linkedin.com/in/francis-annor-649a0a26a">
-            LinkedIn
+            Founder’s LinkedIn
           </Link>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 Perkins_Creatives</span>
+          <span>© 2026 Perkins_Creatives Tech</span>
           <span>Websites, online stores and business systems.</span>
         </div>
       </div>
     </footer>
   );
 }
-function ContactBand({ engineer = false }) {
+function ContactBand() {
   return (
-    <section className="contact-band wrap" data-reveal>
+    <section className="contact-band wrap">
       <div className="contact-inner">
-        <GlassObjects set="contact" />
         <div>
-          <p className="eyebrow">Let’s put it to work</p>
-          <h2>
-            {engineer
-              ? "Have a hard problem worth solving?"
-              : "What does your business need to do better?"}
-          </h2>
+          <p className="eyebrow">Plan a project</p>
+          <h2>Which part of your business needs better software?</h2>
         </div>
-        <Link
-          className="button button-light"
-          href={
-            engineer
-              ? `mailto:${email}?subject=Engineering%20opportunity`
-              : "/work-with-me#start"
-          }
-        >
-          {engineer ? "Discuss a role" : "Tell me about your project"}
+        <Link className="button button-light" href="/contact">
+          Talk to our team
         </Link>
       </div>
     </section>
   );
 }
-
 /* ------------------------------------------------------------------- home */
 const letteropedia = {
   slug: "letteropedia",
@@ -656,7 +602,7 @@ function Feature({ project, index, layout }) {
             ))}
           </ul>
         )}
-        <p className="project-role">My role: {project.role}</p>
+        <p className="project-role">Francis Annor · {project.role}</p>
         <div className="project-links">
           {caseStudy ? (
             <>
@@ -677,10 +623,201 @@ function Feature({ project, index, layout }) {
     </article>
   );
 }
+const capabilities = [
+  [
+    "AI & workflow automation",
+    "Triage incoming requests, search internal documents or draft replies for a colleague to approve.",
+    "We map the manual task, agree on representative examples and test accuracy, cost and exceptions before connecting the workflow to live tools.",
+  ],
+  [
+    "Business systems",
+    "Connect the sale at the counter to stock, cash, staff permissions and end-of-day reporting.",
+    "We trace a transaction through the business, including returns and corrections. Your team reviews a working flow against its own operating rules.",
+  ],
+  [
+    "Websites & commerce",
+    "Help customers find the right service, book a slot or pay for an order online.",
+    "We connect the public experience to fulfilment, content editing and payment confirmation so staff can manage what happens after checkout.",
+  ],
+  [
+    "Custom software",
+    "Replace a spreadsheet handoff or disconnected tools with a shared application.",
+    "We identify the people, records and decisions involved, then scope a first release around one complete task. Handover covers access, maintenance and recovery.",
+  ],
+];
+function Capabilities({ detailed = false }) {
+  return (
+    <section className="company-section wrap">
+      <p className="eyebrow">Capabilities</p>
+      <h2>What we can build for you</h2>
+      <div className="company-grid">
+        {capabilities.map(([title, summary, detail], i) => (
+          <article
+            key={title}
+            className="company-card glass"
+            id={detailed ? "service-" + i : undefined}
+          >
+            <h3>{title}</h3>
+            <p>{summary}</p>
+            {detailed && <p>{detail}</p>}
+            <Link
+              href={
+                detailed
+                  ? "/contact?service=" + encodeURIComponent(title)
+                  : "/services#service-" + i
+              }
+            >
+              {detailed ? "Discuss this service" : "Explore this service"}
+            </Link>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+Capabilities.propTypes = { detailed: PropTypes.bool };
+function Services() {
+  return (
+    <>
+      <header className="company-intro wrap">
+        <p className="eyebrow">Services</p>
+        <h1>
+          Software built around <em>your workflow.</em>
+        </h1>
+        <p>
+          Bring us the task that slows your team down. We’ll work through who
+          uses it, what tools it touches and what a successful first release
+          should do.
+        </p>
+        <Link className="button button-glass" href="/work-with-me#pricing">
+          View project ranges in GHS
+        </Link>
+      </header>
+      <Capabilities detailed />
+      <section className="company-intro wrap">
+        <h2>From discovery to handover</h2>
+        <p>
+          First we map the current process together. You review the scope, price
+          and delivery stages before development begins. We demonstrate each
+          agreed workflow, test it against real operating conditions, and walk
+          your team through running the finished system.
+        </p>
+        <Link href="/work">Explore project examples</Link>
+      </section>
+      <ContactBand />
+    </>
+  );
+}
+const team = [
+  [
+    "Francis Annor",
+    "CEO & Full-stack Developer",
+    "FA",
+    "Leads technical delivery and connects the customer experience to the software behind it.",
+  ],
+  [
+    "Yaw Sarkodie Mensah",
+    "AI Engineer",
+    "YSM",
+    "Designs AI integrations and evaluates how they perform on the tasks they are built to handle.",
+  ],
+  [
+    "Ivy Mensah",
+    "Backend Developer",
+    "IM",
+    "Builds the APIs, data models and business rules that support everyday operations.",
+  ],
+  [
+    "Megaleovis",
+    "UI/UX & Front-end Developer",
+    "M",
+    "Designs user journeys and turns them into responsive interfaces.",
+  ],
+  [
+    "Lizel",
+    "Marketing Officer",
+    "L",
+    "Shapes how the company communicates its services and brings products to market.",
+  ],
+];
+function About() {
+  return (
+    <>
+      <header className="company-intro wrap">
+        <p className="eyebrow">About Perkins_Creatives Tech</p>
+        <h1>
+          The team behind <em>your system.</em>
+        </h1>
+        <p>
+          We are an AI and software development company based in Accra, working
+          with businesses and brands locally and internationally. Our team
+          brings design, engineering and marketing into the same project
+          conversation.
+        </p>
+      </header>
+      <section className="company-section wrap">
+        <h2>Meet the team</h2>
+        <div className="company-team">
+          {team.map(([name, role, initials, focus], i) => (
+            <article className="company-card glass" key={name}>
+              {i === 0 ? (
+                <img
+                  className="founder-photo"
+                  src="/images/portrait-360.webp"
+                  width="360"
+                  height="463"
+                  alt="Francis Annor"
+                />
+              ) : (
+                <span className="initials" aria-hidden="true">
+                  {initials}
+                </span>
+              )}
+              <h3>{name}</h3>
+              <strong>{role}</strong>
+              <p>{focus}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="company-intro wrap">
+        <h2>Where our approach comes from</h2>
+        <p>
+          Our founder’s work in retail and salon operations shaped how we think
+          about delivery. Booking deposits, stock corrections and owner-managed
+          content are part of the work from the first design conversation.
+        </p>
+        <Link href="/engineering">Read Francis’s engineering notes</Link>
+      </section>
+      <ContactBand />
+    </>
+  );
+}
+function Contact() {
+  return (
+    <>
+      <header className="company-intro wrap">
+        <p className="eyebrow">Project enquiries</p>
+        <h1>
+          Let’s scope <em>your project.</em>
+        </h1>
+        <p>
+          Tell us who will use the system, how the work happens today and what
+          needs to improve. Include any tools we should connect and a target
+          launch date if you have one.
+        </p>
+        <Link href="/work-with-me#pricing">
+          Compare project budgets and timelines
+        </Link>
+      </header>
+      <ProjectBrief />
+    </>
+  );
+}
 function Home() {
   const stage = useTilt(7);
-  const idCard = useTilt(6);
-  const portrait = useTilt(6);
+
+
   const heroShots = heroSlugs.flatMap((slug) =>
     shotsFor(slug).slice(0, 1).map((s) => ({ ...s, key: slug })),
   );
@@ -691,57 +828,43 @@ function Home() {
         <GlassObjects set="hero" />
         <div className="hero-copy">
           <p className="eyebrow rise" style={{ "--i": 0 }}>
-            Independent developer · Accra, Ghana
+            Perkins_Creatives Tech · Accra, Ghana
           </p>
           <h1>
             <span className="line">
-              <span style={{ "--i": 1 }}>I build the software</span>
+              <span style={{ "--i": 1 }}>Custom software for</span>
             </span>{" "}
             <span className="line">
               <span style={{ "--i": 2 }}>
-                businesses <em>run on.</em>
+                business <em>operations.</em>
               </span>
             </span>
           </h1>
           <p className="hero-description rise" style={{ "--i": 3 }}>
-            The website your customers use and the system your staff run
-            behind it: bookings, payments, stock and records, all connected.
+            We build websites, AI workflows and the systems your staff run
+            behind them. Connect bookings, payments, stock and records in one place.
           </p>
           <div className="hero-actions rise" style={{ "--i": 4 }}>
-            <Link className="button button-primary" href="/work-with-me">
-              Work with me on a system
+            <Link className="button button-primary" href="/contact">
+              Discuss your project
             </Link>
-            <Link className="button button-glass" href="/engineering">
-              Hire me as an engineer
+            <Link className="button button-glass" href="/services">
+              Explore services
             </Link>
-          </div>
-          <div ref={idCard} className="id-card glass tilt rise" style={{ "--i": 5 }}>
-            <img
-              src="/images/portrait-360.webp"
-              alt="Francis Annor, founder of Perkins_Creatives"
-              width="360"
-              height="463"
-              fetchpriority="high"
-            />
-            <div>
-              <Wordmark />
-              <p className="id-role">Software developer & systems builder</p>
-              <Availability />
-            </div>
           </div>
         </div>
         <div
           ref={stage}
           className="stage tilt"
           role="img"
-          aria-label="Screens from live systems built by Perkins_Creatives"
+          aria-label="Software projects built by Francis Annor"
         >
           <div className="stage-float">
             <div className="device-laptop">
               <div className="laptop-screen">
                 <Slideshow
                   shots={heroShots}
-                  alt="Screens from live systems built by Perkins_Creatives"
+                  alt="Software projects built by Francis Annor"
                   eager
                   interval={3800}
                   sizes="(max-width: 1020px) 92vw, 46vw"
@@ -763,31 +886,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="band wrap" aria-label="What I build">
-        <div className="band-inner">
-          <div className="principle" data-reveal>
-            <span>I build what customers see and what staff use.</span>
-            <ul>
-              <li>Web experiences</li>
-              <li>Business operations</li>
-              <li>Payments & integrations</li>
-            </ul>
-          </div>
-          <div className="stats">
-            {stats.map(([value, suffix, label], k) => (
-              <Stat key={label} value={value} suffix={suffix} label={label} index={k} />
-            ))}
-          </div>
-          <div className="marquee" aria-hidden="true">
-            <div className="marquee-track">
-              {[...marquee, ...marquee].map((m, k) => (
-                <span key={k}>{m}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <Capabilities />
       <section id="work" className="selected aura wrap">
         <GlassObjects set="selected" />
         <div className="section-heading" data-reveal>
@@ -798,8 +897,7 @@ function Home() {
             </h2>
           </div>
           <p>
-            Live client systems and an independent product. Here’s what I built,
-            why I built it that way, and what still needs work.
+            Selected work by our founder, Francis Annor. Explore the live products and the decisions behind each build.
           </p>
         </div>
         <div className="features">
@@ -815,40 +913,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="about aura wrap">
-        <div ref={portrait} className="about-portrait glass tilt" data-reveal>
-          <img
-            src="/images/portrait-720.webp"
-            alt="Portrait of Francis Annor"
-            width="720"
-            height="925"
-            loading="lazy"
-            decoding="async"
-          />
-          <span className="about-tag glass">
-            <span className="pulse" aria-hidden="true" /> Francis Annor · Founder
-          </span>
-        </div>
-        <div className="about-copy" data-reveal>
-          <p className="eyebrow">The person behind the work</p>
-          <h2>
-            I care about what happens <em>after launch.</em>
-          </h2>
-          <p>
-            I’m Francis, a software developer and systems builder working
-            locally and internationally. I connect customer-facing experiences
-            with the less visible work: stock, payments, bookings, permissions,
-            and the handover that lets someone else run it.
-          </p>
-          <p>
-            A good system should make sense to the person using it, even when
-            the network drops or a transaction needs correcting.
-          </p>
-          <Link className="button button-glass" href="/engineering">
-            How I approach the engineering
-          </Link>
-        </div>
-      </section>
+      <section className="company-intro wrap"><p className="eyebrow">Our company</p><h2>Five people across design, engineering and marketing.</h2><Link className="button button-glass" href="/about">Meet the team</Link></section>
       <ContactBand />
     </>
   );
@@ -1052,7 +1117,7 @@ function CaseStudy({ project }) {
   const active = useActiveSection(caseIds);
   const facts = [
     ["Project", project.name],
-    ["My role", project.role],
+    ["Francis Annor’s role", project.role],
     ["Stack", project.stack],
     ["Status", project.status],
   ];
@@ -1200,10 +1265,18 @@ function CaseStudy({ project }) {
 /* ----------------------------------------------------------- work with me */
 function ProjectBrief() {
   const [status, setStatus] = useState("");
+  const serviceField = useRef(null);
+  useEffect(() => {
+    const requested = new window.URLSearchParams(window.location.search).get(
+      "service",
+    );
+    if (capabilities.some(([name]) => name === requested))
+      serviceField.current.value = requested;
+  }, []);
   function submit(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const body = `Hello Francis,\n\nI'm ${data.get("name")}.\n\nWhat I need:\n${data.get("message")}\n\nBudget range: ${data.get("budget")}\n\nPreferred reply address: ${data.get("email")}`;
+    const body = `Hello Perkins_Creatives Tech,\n\nI'm ${data.get("name")}.\n\nWhat I need:\n${data.get("message")}\n\nService: ${data.get("service")}\n\nBudget range: ${data.get("budget")}\n\nPreferred reply address: ${data.get("email")}`;
     window.location.href = `mailto:${email}?subject=${encodeURIComponent("A system for my business")}&body=${encodeURIComponent(body)}`;
     setStatus(
       "Your email app should open with the brief filled in. Nothing is sent until you send it. If it did not open, use the direct email or WhatsApp link in this section.",
@@ -1214,7 +1287,7 @@ function ProjectBrief() {
       <div className="brief-copy" data-reveal>
         <p className="eyebrow">Start a conversation</p>
         <h2>
-          Tell me what <em>isn’t working yet.</em>
+          Tell us what <em>isn’t working yet.</em>
         </h2>
         <p>
           A few lines about your business, the problem, and your budget are
@@ -1230,6 +1303,15 @@ function ProjectBrief() {
         </div>
       </div>
       <form className="glass brief-form" onSubmit={submit} data-reveal>
+        <label>
+          Area of interest
+          <select name="service" ref={serviceField}>
+            <option>Help me scope it</option>
+            {capabilities.map(([name]) => (
+              <option key={name}>{name}</option>
+            ))}
+          </select>
+        </label>
         <div className="form-row">
           <label>
             Your name
@@ -1312,7 +1394,7 @@ function WorkWithMe() {
             </span>
           </h1>
           <p className="lede rise" style={{ "--i": 3 }}>
-            I build websites, stores, and the systems behind them. Start with the
+            We build websites, stores, and the systems behind them. Start with the
             bottleneck: the booking that gets missed, the stock that doesn’t add
             up, or the tools that don’t talk to each other.
           </p>
@@ -1393,7 +1475,7 @@ function WorkWithMe() {
               </h2>
             </div>
             <p>
-              These are my project ranges, not industry averages. The final scope,
+              Use these ranges to plan your budget. The final scope,
               delivery dates, integrations, and recurring costs are agreed in
               writing before work begins.
             </p>
@@ -1461,7 +1543,7 @@ function WorkWithMe() {
           {[
             ["Understand", "We map the problem, the people using the system, and the tools you already rely on."],
             ["Build and test", "We agree the scope in writing. You then test the working system on your real daily tasks before launch."],
-            ["Launch and hand over", "I set up payments, staff access and backups, then train your team. Ongoing care is agreed separately."],
+            ["Launch and hand over", "We set up payments, staff access and backups, then train your team. Ongoing care is agreed separately."],
           ].map(([t, p], i) => (
             <Glass key={t} className="step" style={{ "--i": i }}>
               <span className="step-number">0{i + 1}</span>
@@ -1538,7 +1620,7 @@ function Engineering() {
       <header className="page-intro split wrap">
         <GlassObjects set="intro" />
         <div>
-          <p className="eyebrow rise" style={{ "--i": 0 }}>For engineering teams</p>
+          <p className="eyebrow rise" style={{ "--i": 0 }}>Founder’s engineering notes · Francis Annor</p>
           <h1>
             <span className="line">
               <span style={{ "--i": 1 }}>The interface is only</span>
@@ -1557,9 +1639,9 @@ function Engineering() {
           <div className="hero-actions rise" style={{ "--i": 4 }}>
             <Link
               className="button button-primary"
-              href={`mailto:${email}?subject=Engineering%20opportunity`}
+              href="/contact"
             >
-              Discuss an engineering role
+              Discuss a technical project
             </Link>
           </div>
           <Availability />
@@ -1656,7 +1738,7 @@ function Engineering() {
           ))}
         </div>
       </section>
-      <ContactBand engineer />
+      <ContactBand />
     </>
   );
 }
@@ -1764,7 +1846,7 @@ function Note() {
           More engineering work
         </Link>
       </div>
-      <ContactBand engineer />
+      <ContactBand />
     </article>
   );
 }
@@ -1780,6 +1862,9 @@ export default function App({ path = "/" }) {
   const project = projects.find((p) => normalized === `/work/${p.slug}`);
   let content;
   if (normalized === "/") content = <Home />;
+  else if (normalized === "/about") content = <About />;
+  else if (normalized === "/services") content = <Services />;
+  else if (normalized === "/contact") content = <Contact />;
   else if (normalized === "/work") content = <Work />;
   else if (normalized === "/work-with-me") content = <WorkWithMe />;
   else if (normalized === "/engineering") content = <Engineering />;
@@ -1898,12 +1983,6 @@ Slideshow.propTypes = {
   sizes: PropTypes.string,
 };
 PhoneFrame.propTypes = { src: PropTypes.string };
-Stat.propTypes = {
-  value: PropTypes.number.isRequired,
-  suffix: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-};
 FilmCard.propTypes = {
   film: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -1914,7 +1993,7 @@ FilmCard.propTypes = {
   index: PropTypes.number.isRequired,
 };
 Header.propTypes = { path: PropTypes.string.isRequired };
-ContactBand.propTypes = { engineer: PropTypes.bool };
+
 Feature.propTypes = {
   project: projectType.isRequired,
   index: PropTypes.number.isRequired,

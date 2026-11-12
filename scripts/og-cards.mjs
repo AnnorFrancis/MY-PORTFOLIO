@@ -5,7 +5,10 @@ import { mkdir } from "node:fs/promises";
 
 await mkdir("public/images/og", { recursive: true });
 const cards = [
-  ["home", "Websites and business", "systems, built in Accra."],
+  ["home", "Software. Systems.", "Practical AI."],
+  ["services", "Built around", "your business."],
+  ["about", "Meet the people", "behind the systems."],
+  ["contact", "Your next project", "starts here."],
   ["engineering", "The interface is only", "half the work."],
   ["trendy-norms", "Trendy Norms Hub", "From storefront to stockroom."],
   ["besia", "Bēsia Beauty Studio", "Bookings, deposits, studio."],
@@ -27,7 +30,7 @@ for (const [name, line1, line2] of cards) {
 <rect x="60" y="60" width="1080" height="510" rx="40" fill="url(#glass)" stroke="url(#rim)" stroke-width="2.5"/>
 <text x="120" y="160" fill="#1e2731" font-family="${font}" font-size="30" font-weight="800">Perkins</text>
 <rect x="235" y="156" width="30" height="6" rx="3" fill="#0a6f96"/>
-<text x="269" y="160" fill="#1e2731" font-family="${font}" font-size="30" font-weight="800">Creatives</text>
+<text x="269" y="160" fill="#1e2731" font-family="${font}" font-size="30" font-weight="800">Creatives Tech</text>
 <text x="116" y="320" fill="#1e2731" font-family="${font}" font-size="70" font-weight="800" letter-spacing="-2">${line1}</text>
 <text x="116" y="408" fill="#0a6f96" font-family="${font}" font-size="70" font-weight="800" letter-spacing="-2">${line2}</text>
 <text x="120" y="510" fill="#4b5866" font-family="${font}" font-size="24" font-weight="600">Websites · Online stores · Business systems · Accra, Ghana</text>

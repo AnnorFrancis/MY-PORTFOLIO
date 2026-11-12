@@ -4,7 +4,10 @@ import React from "react";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
-const origin = "https://perkins-swart.vercel.app";
+const configuredOrigin = process.env.SITE_URL || "https://perkins-swart.vercel.app";
+const parsedOrigin = new URL(configuredOrigin);
+if (parsedOrigin.protocol !== "https:" || parsedOrigin.pathname !== "/" || parsedOrigin.search || parsedOrigin.hash) throw new Error("SITE_URL must be an HTTPS origin without a path, query or fragment");
+const origin = parsedOrigin.origin;
 const escape = (value) =>
   value
     .replaceAll("&", "&amp;")
@@ -27,34 +30,11 @@ try {
   for (const page of pages) {
     const url = `${origin}${page.path === "/" ? "/" : page.path}`;
     const image = `${origin}/images/og/${page.image}.png`;
-    const schema =
-      page.path === "/"
-        ? {
-            "@context": "https://schema.org",
-            "@type": "ProfilePage",
-            mainEntity: {
-              "@type": "Person",
-              name: "Francis Annor",
-              jobTitle: "Software Developer and Systems Builder",
-              url: origin,
-              image: `${origin}/images/portrait-720.webp`,
-              sameAs: [
-                "https://github.com/AnnorFrancis",
-                "https://linkedin.com/in/francis-annor-649a0a26a",
-              ],
-            },
-          }
-        : {
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: page.title,
-            description: page.description,
-            url,
-            author: { "@type": "Person", name: "Francis Annor", url: origin },
-          };
+    const organization = { "@type": "Organization", "@id": `${origin}/#organization`, name: "Perkins_Creatives Tech", url: origin, email: "annorfrancis23@outlook.com", founder: {"@type":"Person",name:"Francis Annor"} };
+    const schema = { "@context":"https://schema.org", "@graph": [organization, { "@type": page.path === "/about" ? "AboutPage" : page.path === "/contact" ? "ContactPage" : "WebPage", "@id": `${url}#webpage`, name:page.title, description:page.description, url, publisher:{"@id":`${origin}/#organization`}, ...(page.path.startsWith("/notes/") ? {author:{"@type":"Person",name:"Francis Annor"}} : {}) }] };
     const head = `<meta name="description" content="${escape(page.description)}" />
 <link rel="canonical" href="${url}" />
-<meta property="og:type" content="${page.path === "/" ? "website" : "article"}" />
+<meta property="og:type" content="${page.path.startsWith("/notes/") ? "article" : "website"}" />
 <meta property="og:title" content="${escape(page.title)}" />
 <meta property="og:description" content="${escape(page.description)}" />
 <meta property="og:url" content="${url}" />
@@ -84,6 +64,7 @@ ${page.path === "/404" ? '<meta name="robots" content="noindex" />' : ""}
       `Prerendered ${page.path}: ${body.replace(/<[^>]*>/g, "").length} text characters`,
     );
   }
+  await writeFile("dist/robots.txt", `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);
   await writeFile(
     "dist/sitemap.xml",
     `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages

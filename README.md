@@ -1,6 +1,6 @@
-# Francis Annor — portfolio
+# Perkins_Creatives Tech
 
-A React portfolio for a software developer and systems builder. Vite builds the client bundle; a build-time React render writes complete HTML for every route. The browser hydrates that HTML for navigation and the email-brief composer.
+A company website for AI integrations, custom software and business operations. Vite builds the client bundle; a build-time React render writes complete HTML for every route. The browser hydrates that HTML for navigation and the email-brief composer.
 
 ## Run
 
@@ -19,7 +19,9 @@ Tests inspect generated `dist/` output, so build before running them. CI perform
 
 ## Routes
 
-- `/`: identity, selected work, and client/employer entry points.
+- `/`: company positioning, services, founder projects and enquiries.
+- `/services`, `/about`, `/contact`: service catalogue, confirmed team and project enquiries.
+- `/work`: projects, products and sample builds.
 - `/work-with-me`: scope, GHS price ranges, process, and contact.
 - `/engineering`: engineering decisions, other work, and verified credentials.
 - `/work/trendy-norms`, `/work/besia`, `/work/perkos`: shared case-study pool.
@@ -39,7 +41,7 @@ The project form prepares a message in the visitor's email app; it does not send
 
 ## Deployment
 
-Build command: `npm run build`. Output: `dist`. Vercel configuration preserves static route files rather than rewriting every path to the home page. The existing production project deploys from `main`; a push there can publish immediately.
+Build command: `npm run build`. Output: `dist`. Set the build environment variable `SITE_URL` to the final HTTPS origin and rebuild to update canonicals, social URLs, robots and sitemap. Vercel configuration preserves static route files rather than rewriting every path to the home page. The existing production project deploys from `main`; a push there can publish immediately.
 
 Before publishing, check desktop and mobile layouts, keyboard navigation, the menu and contact composer, deep links, unknown-page HTTP status, browser console, and Lighthouse. Automated route tests do not establish full WCAG conformance or real-user Core Web Vitals.
 
