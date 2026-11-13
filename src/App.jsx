@@ -791,7 +791,7 @@ function About() {
               Read Francis’s engineering notes
             </Link>
           </div>
-          <ul className="stat-grid" data-reveal>
+          <ul className="stat-grid">
             {[
               [20, "+", "Live builds shipped"],
               [3, "", "Systems taking live payments"],
@@ -911,7 +911,7 @@ function Home() {
             [5, "", "Specialists on the team"],
             [30, "+", "Product films produced"],
           ].map(([v, s, l], i) => (
-            <li key={l} style={{ "--i": i }} data-reveal>
+            <li key={l}>
               <strong><CountUp value={v} suffix={s} /></strong>
               <span>{l}</span>
             </li>
