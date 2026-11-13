@@ -910,7 +910,7 @@ function Home() {
             [3, "", "Systems taking live payments"],
             [5, "", "Specialists on the team"],
             [30, "+", "Product films produced"],
-          ].map(([v, s, l], i) => (
+          ].map(([v, s, l]) => (
             <li key={l}>
               <strong><CountUp value={v} suffix={s} /></strong>
               <span>{l}</span>
