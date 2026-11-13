@@ -730,10 +730,10 @@ function Services() {
 }
 const team = [
   ["Francis Annor", "CEO & Full-stack Developer", "FA", "Leads technical delivery and connects the customer experience to the software behind it.", "/images/portrait-360.webp"],
-  ["Yaw Sarkodie Mensah", "AI Engineer", "YSM", "Designs AI integrations and evaluates how they perform on the tasks they are built to handle.", null],
-  ["Ivy Mensah", "Backend Developer", "IM", "Builds the APIs, data models and business rules that support everyday operations.", null],
-  ["Megaleovis", "UI/UX & Front-end Developer", "M", "Designs user journeys and turns them into responsive interfaces.", null],
-  ["Lizel", "Marketing Officer", "L", "Shapes how the company communicates its services and brings products to market.", null],
+  ["Yaw Sarkodie Mensah", "AI Engineer", "YSM", "Designs AI integrations and evaluates how they perform on the tasks they are built to handle.", "/images/team/yaw-sarkodie-mensah.webp"],
+  ["Ivy Mensah", "Backend Developer", "IM", "Builds the APIs, data models and business rules that support everyday operations.", "/images/team/ivy-mensah.webp"],
+  ["Megaleovis", "UI/UX & Front-end Developer", "M", "Designs user journeys and turns them into responsive interfaces.", "/images/team/megaleovis.webp"],
+  ["Lizel", "Marketing Officer", "L", "Shapes how the company communicates its services and brings products to market.", "/images/team/lizel.webp"],
 ];
 function TeamCard({ member, index }) {
   const [name, role, initials, focus, image] = member;

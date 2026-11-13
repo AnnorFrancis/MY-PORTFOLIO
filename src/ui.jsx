@@ -351,7 +351,7 @@ export function CountUp({ value, suffix = "" }) {
 CountUp.propTypes = { value: PropTypes.number.isRequired, suffix: PropTypes.string };
 
 // Full-width photo call-to-action that closes most pages.
-export function CtaBand({ title = "Which part of your business needs better software?", topic, image = "accra-city" }) {
+export function CtaBand({ title = "Which part of your business needs better software?", topic, image = "accra-glass" }) {
   const ph = photo(image);
   return (
     <section className="cta-v2" aria-label="Start a project">
