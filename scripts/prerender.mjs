@@ -32,6 +32,18 @@ try {
     const image = `${origin}/images/og/${page.image}.png`;
     const organization = { "@type": "Organization", "@id": `${origin}/#organization`, name: "Perkins_Creatives Tech", url: origin, email: "annorfrancis23@outlook.com", founder: {"@type":"Person",name:"Francis Annor"} };
     const schema = { "@context":"https://schema.org", "@graph": [organization, { "@type": page.path === "/about" ? "AboutPage" : page.path === "/contact" ? "ContactPage" : "WebPage", "@id": `${url}#webpage`, name:page.title, description:page.description, url, publisher:{"@id":`${origin}/#organization`}, ...(page.path.startsWith("/notes/") ? {author:{"@type":"Person",name:"Francis Annor"}} : {}) }] };
+    if (page.path.startsWith("/services/")) {
+      const serviceId = url + "#service";
+      schema["@graph"][1].mainEntity = { "@id": serviceId };
+      schema["@graph"].push({
+        "@type": "Service",
+        "@id": serviceId,
+        name: page.title.split(" | ")[0],
+        description: page.description,
+        url,
+        provider: { "@id": organization["@id"] },
+      });
+    }
     const head = `<meta name="description" content="${escape(page.description)}" />
 <link rel="canonical" href="${url}" />
 <meta property="og:type" content="${page.path.startsWith("/notes/") ? "article" : "website"}" />

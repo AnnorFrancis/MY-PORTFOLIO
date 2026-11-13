@@ -5,6 +5,10 @@ import { mkdir } from "node:fs/promises";
 
 await mkdir("public/images/og", { recursive: true });
 const cards = [
+  ["ai-workflow-automation", "AI workflow", "automation."],
+  ["business-management-systems", "Stock, sales and", "business systems."],
+  ["websites-and-ecommerce", "Websites, stores", "and bookings."],
+  ["custom-software-development", "Custom software", "for your operations."],
   ["home", "Software. Systems.", "Practical AI."],
   ["services", "Built around", "your business."],
   ["about", "Meet the people", "behind the systems."],

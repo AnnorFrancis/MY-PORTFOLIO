@@ -3582,10 +3582,180 @@ em {
     transform: none;
   }
 }
-.company-intro,.company-section{padding-block:clamp(42px,6vw,82px)}.company-intro h1{max-width:19ch;font-size:clamp(2.55rem,6vw,5.5rem);line-height:1.05}.company-intro p:not(.eyebrow){max-width:70ch;margin-block:1.5rem}.company-grid,.company-team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:1.25rem;margin-top:2rem}.company-card{padding:clamp(22px,3vw,36px);border-radius:24px}.company-card h3{margin:0 0 .5rem}.company-card p{color:var(--ink-2);margin-block:1rem}.company-card a,.company-intro>a:not(.button){color:var(--sea-deep);text-decoration:underline;text-underline-offset:4px}.initials,.founder-photo{width:100px;height:120px;display:grid;place-items:center;border-radius:16px;margin-bottom:20px;object-fit:cover;background:linear-gradient(140deg,var(--sky),white);color:var(--sea-deep);font-size:2rem;font-weight:700}
+.company-intro,
+.company-section {
+  padding-block: clamp(42px, 6vw, 82px);
+}
+.company-intro h1 {
+  max-width: 19ch;
+  font-size: clamp(2.55rem, 6vw, 5.5rem);
+  line-height: 1.05;
+}
+.company-intro p:not(.eyebrow) {
+  max-width: 70ch;
+  margin-block: 1.5rem;
+}
+.company-grid,
+.company-team {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.company-card {
+  padding: clamp(22px, 3vw, 36px);
+  border-radius: 24px;
+}
+.company-card h3 {
+  margin: 0 0 0.5rem;
+}
+.company-card p {
+  color: var(--ink-2);
+  margin-block: 1rem;
+}
+.company-card a,
+.company-intro > a:not(.button) {
+  color: var(--sea-deep);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.initials,
+.founder-photo {
+  width: 100px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  object-fit: cover;
+  background: linear-gradient(140deg, var(--sky), white);
+  color: var(--sea-deep);
+  font-size: 2rem;
+  font-weight: 700;
+}
 
 @media (min-width: 900px) {
-  .company-team { grid-template-columns: 1.05fr 1fr 1fr; }
-  .company-team > :first-child { grid-row: span 2; }
-  .founder-photo { width: 100%; height: auto; max-height: 340px; object-position: center 32%; }
+  .company-team {
+    grid-template-columns: 1.05fr 1fr 1fr;
+  }
+  .company-team > :first-child {
+    grid-row: span 2;
+  }
+  .founder-photo {
+    width: 100%;
+    height: auto;
+    max-height: 340px;
+    object-position: center 32%;
+  }
+}
+
+.direct-contact {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-block: 1.15rem;
+}
+.direct-email,
+.service-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  color: var(--sea-deep);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.contact-inner .direct-email {
+  color: white;
+}
+.service-jump {
+  font-size: 0.9rem;
+}
+.service-intro h1 {
+  margin-top: 1.25rem;
+}
+.service-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(28px, 6vw, 90px);
+  padding-bottom: clamp(40px, 7vw, 90px);
+}
+.service-detail h2 {
+  font-size: clamp(1.55rem, 3vw, 2.4rem);
+}
+.service-detail p,
+.service-detail li {
+  margin-block: 1rem;
+  line-height: 1.65;
+}
+.service-detail article h2:not(:first-child),
+.service-detail aside h3 {
+  margin-top: 2rem;
+}
+.service-detail ul {
+  list-style: disc;
+  padding-left: 1.35rem;
+}
+.service-detail a {
+  color: var(--sea-deep);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .service-detail {
+    grid-template-columns: 1fr;
+  }
+}
+.service-proof {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  align-self: center;
+}
+.service-proof img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.service-proof figcaption {
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+}
+.related-service {
+  padding-block: 1rem;
+}
+@media (min-width: 901px) {
+  .service-intro:has(.service-proof) {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 4vw;
+    align-items: center;
+  }
+  .service-intro:has(.service-proof) h1 {
+    font-size: clamp(3rem, 4.7vw, 5rem);
+  }
+}
+@media (max-width: 480px) {
+  .hero-copy .direct-contact {
+    gap: 0.65rem;
+    margin-block: 0.75rem 0.25rem;
+  }
+  .hero-copy .direct-contact .button {
+    padding-inline: 1rem;
+    width: auto;
+    min-width: 0;
+  }
+  .hero-copy .direct-email {
+    font-size: 0.9rem;
+  }
+  .hero-copy h1 .line,
+  .hero-copy h1 .line > span {
+    display: inline;
+  }
+  .hero-copy h1 {
+    text-wrap: balance;
+  }
 }

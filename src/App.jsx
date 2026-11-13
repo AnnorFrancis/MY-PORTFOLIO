@@ -1,3 +1,4 @@
+import { services } from "./services";
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import {
@@ -419,8 +420,8 @@ function ScrollProgress() {
   return <div ref={bar} className="progress" aria-hidden="true" />;
 }
 const navItems = [
-  ["/work", "Work"],
   ["/services", "Services"],
+  ["/work", "Work"],
   ["/about", "Team"],
 ];
 function Header({ path }) {
@@ -503,14 +504,14 @@ function Header({ path }) {
             <a
               key={href}
               href={href}
-              aria-current={path === href ? "page" : undefined}
+              aria-current={path === href ? "page" : path.startsWith(href + "/") ? "location" : undefined}
               onMouseEnter={(e) => place(e.currentTarget)}
             >
               {label}
             </a>
           ))}
-          <a className="button button-primary nav-cta" href="/contact#start">
-            <span>Start a project</span> <Arrow />
+          <a className="button button-primary nav-cta" href="/contact">
+            <span>Contact us</span> <Arrow />
           </a>
         </nav>
       </div>
@@ -551,9 +552,7 @@ function ContactBand() {
           <p className="eyebrow">Plan a project</p>
           <h2>Which part of your business needs better software?</h2>
         </div>
-        <Link className="button button-light" href="/contact">
-          Talk to our team
-        </Link>
+        <DirectContact />
       </div>
     </section>
   );
@@ -623,54 +622,129 @@ function Feature({ project, index, layout }) {
     </article>
   );
 }
-const capabilities = [
-  [
-    "AI & workflow automation",
-    "Triage incoming requests, search internal documents or draft replies for a colleague to approve.",
-    "We map the manual task, agree on representative examples and test accuracy, cost and exceptions before connecting the workflow to live tools.",
-  ],
-  [
-    "Business systems",
-    "Connect the sale at the counter to stock, cash, staff permissions and end-of-day reporting.",
-    "We trace a transaction through the business, including returns and corrections. Your team reviews a working flow against its own operating rules.",
-  ],
-  [
-    "Websites & commerce",
-    "Help customers find the right service, book a slot or pay for an order online.",
-    "We connect the public experience to fulfilment, content editing and payment confirmation so staff can manage what happens after checkout.",
-  ],
-  [
-    "Custom software",
-    "Replace a spreadsheet handoff or disconnected tools with a shared application.",
-    "We identify the people, records and decisions involved, then scope a first release around one complete task. Handover covers access, maintenance and recovery.",
-  ],
-];
+function DirectContact({ topic }) {
+  const intro = topic
+    ? "Hello Perkins_Creatives Tech, I’d like to discuss " + topic + "."
+    : "Hello Perkins_Creatives Tech, I’d like to discuss a project.";
+  return (
+    <div className="direct-contact">
+      <a
+        className="button button-primary"
+        href={whatsapp + "?text=" + encodeURIComponent(intro)}
+      >
+        Chat on WhatsApp <Arrow />
+      </a>
+      <a
+        className="direct-email"
+        href={
+          "mailto:" +
+          email +
+          "?subject=" +
+          encodeURIComponent(topic || "Project enquiry")
+        }
+      >
+        Email our team <Arrow />
+      </a>
+    </div>
+  );
+}
+DirectContact.propTypes = { topic: PropTypes.string };
+
+function ServicePage({ service }) {
+  const project = projects.find((item) => item.slug === service.projectSlug);
+  return (
+    <>
+      <header className="company-intro wrap service-intro">
+        <div>
+          <a className="direct-email" href="/services">
+            All services
+          </a>
+          <h1>{service.title}</h1>
+          <p>{service.summary}</p>
+          <DirectContact topic={service.name} />
+        </div>
+        {project && (
+          <figure className="service-proof glass">
+            <a href={service.proof}>
+              <Shot
+                base={"/images/projects/" + project.slug}
+                alt={project.name + " public website"}
+                sizes="(max-width: 900px) 90vw, 38vw"
+              />
+            </a>
+            <figcaption>{project.name} · Founder project</figcaption>
+          </figure>
+        )}
+      </header>
+      <section className="service-detail wrap">
+        <article>
+          <h2>{service.heading}</h2>
+          <p>{service.example}</p>
+          <h2>What you receive</h2>
+          <ul>
+            {service.deliverables.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <Link href={service.proof}>{service.proofLabel}</Link>
+        </article>
+        <aside className="company-card glass">
+          <h2>Planning your budget</h2>
+          <p>{service.budget}</p>
+          <Link href="/work-with-me#pricing">Compare project ranges</Link>
+          <h3>Where to begin</h3>
+          <p>{service.prepare}</p>
+          <Link
+            href={
+              "/contact?service=" + encodeURIComponent(service.name) + "#start"
+            }
+          >
+            Write a project brief
+          </Link>
+        </aside>
+      </section>
+    </>
+  );
+}
+ServicePage.propTypes = {
+  service: PropTypes.shape({
+    projectSlug: PropTypes.string,
+    title: PropTypes.string,
+    summary: PropTypes.string,
+    name: PropTypes.string,
+    heading: PropTypes.string,
+    example: PropTypes.string,
+    deliverables: PropTypes.arrayOf(PropTypes.string),
+    proof: PropTypes.string,
+    proofLabel: PropTypes.string,
+    budget: PropTypes.string,
+    prepare: PropTypes.string,
+  }).isRequired,
+};
 function Capabilities({ detailed = false }) {
   return (
-    <section className="company-section wrap">
+    <section id="services" className="company-section wrap">
       <p className="eyebrow">Capabilities</p>
       <h2>What we can build for you</h2>
       <div className="company-grid">
-        {capabilities.map(([title, summary, detail], i) => (
-          <article
-            key={title}
-            className="company-card glass"
-            id={detailed ? "service-" + i : undefined}
-          >
-            <h3>{title}</h3>
-            <p>{summary}</p>
-            {detailed && <p>{detail}</p>}
-            <Link
-              href={
-                detailed
-                  ? "/contact?service=" + encodeURIComponent(title)
-                  : "/services#service-" + i
-              }
+        {services.map(
+          ({ name: title, summary, slug, proof, proofLabel }, i) => (
+            <article
+              key={title}
+              className="company-card glass"
+              id={detailed ? "service-" + i : undefined}
             >
-              {detailed ? "Discuss this service" : "Explore this service"}
-            </Link>
-          </article>
-        ))}
+              <h3>{title}</h3>
+              <p>{summary}</p>
+              <Link href={"/services/" + slug}>{title} details</Link>
+              {detailed && (
+                <p>
+                  <Link href={proof}>{proofLabel}</Link>
+                </p>
+              )}
+            </article>
+          ),
+        )}
       </div>
     </section>
   );
@@ -802,10 +876,9 @@ function Contact() {
           Let’s scope <em>your project.</em>
         </h1>
         <p>
-          Tell us who will use the system, how the work happens today and what
-          needs to improve. Include any tools we should connect and a target
-          launch date if you have one.
+          Send us a message about what you want to build. A sentence is enough to start.
         </p>
+        <DirectContact />
         <Link href="/work-with-me#pricing">
           Compare project budgets and timelines
         </Link>
@@ -828,7 +901,7 @@ function Home() {
         <GlassObjects set="hero" />
         <div className="hero-copy">
           <p className="eyebrow rise" style={{ "--i": 0 }}>
-            Perkins_Creatives Tech · Accra, Ghana
+            Software development · Accra, Ghana
           </p>
           <h1>
             <span className="line">
@@ -841,17 +914,10 @@ function Home() {
             </span>
           </h1>
           <p className="hero-description rise" style={{ "--i": 3 }}>
-            We build websites, AI workflows and the systems your staff run
-            behind them. Connect bookings, payments, stock and records in one place.
+            We build websites, AI workflows and software for bookings, payments and stock.
           </p>
-          <div className="hero-actions rise" style={{ "--i": 4 }}>
-            <Link className="button button-primary" href="/contact">
-              Discuss your project
-            </Link>
-            <Link className="button button-glass" href="/services">
-              Explore services
-            </Link>
-          </div>
+          <DirectContact />
+          <a className="service-jump" href="#services">Explore our services ↓</a>
         </div>
         <div
           ref={stage}
@@ -874,13 +940,13 @@ function Home() {
             </div>
             <PhoneFrame src={mobileShotFor("trendy-norms")} />
             <span className="float-chip glass c1">
-              <span className="dot" /> Paystack · live payments
+              <span className="dot" /> Paystack integrations
             </span>
             <span className="float-chip glass c2">
-              <span className="dot" /> Works offline · replays on reconnect
+              <span className="dot" /> PerkOS · offline sales
             </span>
             <span className="float-chip glass c3">
-              <span className="dot" /> Launched October 2026
+              <span className="dot" /> Bēsia · booking deposits
             </span>
           </div>
         </div>
@@ -1114,6 +1180,7 @@ function useActiveSection(ids) {
 }
 const caseIds = caseSections.map(([id]) => id);
 function CaseStudy({ project }) {
+  const relatedService = services.find(service => service.projectSlug === project.slug);
   const active = useActiveSection(caseIds);
   const facts = [
     ["Project", project.name],
@@ -1257,6 +1324,7 @@ function CaseStudy({ project }) {
             ))}
         </div>
       </section>
+      {relatedService && <div className="wrap related-service"><Link className="button button-glass" href={"/services/" + relatedService.slug}>Explore {relatedService.name.toLowerCase()} for your business</Link></div>}
       <ContactBand />
     </article>
   );
@@ -1270,13 +1338,13 @@ function ProjectBrief() {
     const requested = new window.URLSearchParams(window.location.search).get(
       "service",
     );
-    if (capabilities.some(([name]) => name === requested))
+    if (services.some(({name}) => name === requested))
       serviceField.current.value = requested;
   }, []);
   function submit(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const body = `Hello Perkins_Creatives Tech,\n\nI'm ${data.get("name")}.\n\nWhat I need:\n${data.get("message")}\n\nService: ${data.get("service")}\n\nBudget range: ${data.get("budget")}\n\nPreferred reply address: ${data.get("email")}`;
+    const body = `Hello Perkins_Creatives Tech,\n\n${data.get("message")}\n\nService: ${data.get("service")}\nBudget: ${data.get("budget")}`;
     window.location.href = `mailto:${email}?subject=${encodeURIComponent("A system for my business")}&body=${encodeURIComponent(body)}`;
     setStatus(
       "Your email app should open with the brief filled in. Nothing is sent until you send it. If it did not open, use the direct email or WhatsApp link in this section.",
@@ -1290,8 +1358,7 @@ function ProjectBrief() {
           Tell us what <em>isn’t working yet.</em>
         </h2>
         <p>
-          A few lines about your business, the problem, and your budget are
-          enough to begin.
+          For an email brief, describe one task you want to improve. Service and budget are optional.
         </p>
         <div className="contact-chips">
           <Link className="button button-glass" href={`mailto:${email}`}>
@@ -1304,30 +1371,14 @@ function ProjectBrief() {
       </div>
       <form className="glass brief-form" onSubmit={submit} data-reveal>
         <label>
-          Area of interest
+          Area of interest (optional)
           <select name="service" ref={serviceField}>
             <option>Help me scope it</option>
-            {capabilities.map(([name]) => (
+            {services.map(({name}) => (
               <option key={name}>{name}</option>
             ))}
           </select>
         </label>
-        <div className="form-row">
-          <label>
-            Your name
-            <input name="name" autoComplete="name" required maxLength="100" />
-          </label>
-          <label>
-            Your email
-            <input
-              name="email"
-              autoComplete="email"
-              type="email"
-              required
-              maxLength="200"
-            />
-          </label>
-        </div>
         <label>
           What should the system help you do?
           <textarea
@@ -1339,7 +1390,7 @@ function ProjectBrief() {
           />
         </label>
         <label>
-          Budget range
+          Budget range (optional)
           <select name="budget" defaultValue="Let’s scope it together">
             <option>Let’s scope it together</option>
             <option>GHS 2,000 to 3,500</option>
@@ -1860,6 +1911,7 @@ export default function App({ path = "/" }) {
   useReveal();
   const normalized = path.replace(/\/$/, "") || "/";
   const project = projects.find((p) => normalized === `/work/${p.slug}`);
+  const service = services.find(item => normalized === "/services/" + item.slug);
   let content;
   if (normalized === "/") content = <Home />;
   else if (normalized === "/about") content = <About />;
@@ -1869,6 +1921,7 @@ export default function App({ path = "/" }) {
   else if (normalized === "/work-with-me") content = <WorkWithMe />;
   else if (normalized === "/engineering") content = <Engineering />;
   else if (normalized === "/notes/lease-based-push") content = <Note />;
+  else if (service) content = <ServicePage service={service} />;
   else if (project) content = <CaseStudy project={project} />;
   else
     content = (

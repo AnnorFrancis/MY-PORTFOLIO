@@ -27,7 +27,7 @@ describe("Published route contract", () => {
         .split("<body>")[1]
         .replace(/<script[^>]*>[\s\S]*?<\/script>/g, "")
         .replace(/<[^>]*>/g, "");
-      expect(body.length).toBeGreaterThan(page.path === "/404" ? 250 : page.path === "/contact" ? 850 : page.path === "/about" ? 1400 : 1800);
+      expect(body.length).toBeGreaterThan(page.path === "/404" ? 250 : page.path === "/contact" ? 850 : page.path.startsWith("/services/") ? 1200 : page.path === "/about" ? 1400 : 1800);
     });
     it(`${page.path} has no broken local images, links or fragment targets`, () => {
       const html = readPage(page.path);

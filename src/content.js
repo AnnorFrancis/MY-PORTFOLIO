@@ -1,3 +1,4 @@
+import { services } from "./services";
 import manifest from "./gallery-manifest.json";
 
 // Screenshots for each build live in public/images/gallery; the manifest lists
@@ -263,6 +264,9 @@ export const company = {
   location: "Accra, Ghana",
 };
 export const pages = [
+  ...services.map(({slug, title, summary}) => ({
+    path: "/services/" + slug, title: title + " | Perkins_Creatives Tech", description: summary, image: slug,
+  })),
   {
     path: "/",
     title: "Perkins_Creatives Tech | AI, software and business systems",

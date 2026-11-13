@@ -20,6 +20,7 @@ Tests inspect generated `dist/` output, so build before running them. CI perform
 ## Routes
 
 - `/`: company positioning, services, founder projects and enquiries.
+- `/services/ai-workflow-automation`, `/services/business-management-systems`, `/services/websites-and-ecommerce`, `/services/custom-software-development`: dedicated service pages with project examples, budget guidance and direct chat.
 - `/services`, `/about`, `/contact`: service catalogue, confirmed team and project enquiries.
 - `/work`: projects, products and sample builds.
 - `/work-with-me`: scope, GHS price ranges, process, and contact.
@@ -31,6 +32,7 @@ Tests inspect generated `dist/` output, so build before running them. CI perform
 ## Edit
 
 - `src/content.js`: projects, case-study text, credential links, metadata.
+- `src/services.js`: service descriptions, budgets and relevant founder projects.
 - `src/App.jsx`: page templates and shared components.
 - `src/index.css`: responsive design and accessibility styles.
 - `scripts/prerender.mjs`: static HTML, canonical metadata, schema, sitemap.
