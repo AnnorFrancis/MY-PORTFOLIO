@@ -91,11 +91,17 @@ function useReveal() {
       { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
     );
     els.forEach((e) => io.observe(e));
-    // Safety net: nothing may stay hidden if the observer never fires.
-    // The same net covers the load-in animations, for browsers that pause them.
+    // Safety net: anything already on screen that the observer missed appears
+    // instantly (no half-faded text). Sections further down still animate as
+    // the visitor scrolls to them.
     const t = window.setTimeout(() => {
-      els.forEach((e) => e.classList.add("in"));
       document.documentElement.classList.add("settled");
+      els.forEach((e) => {
+        if (!e.classList.contains("in") && e.getBoundingClientRect().top < window.innerHeight) {
+          e.classList.add("in", "instant");
+          io.unobserve(e);
+        }
+      });
     }, 3500);
     return () => {
       io.disconnect();

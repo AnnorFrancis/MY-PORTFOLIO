@@ -1732,3 +1732,8 @@ main > article > .note-body {
     padding: 16px 18px;
   }
 }
+
+/* Revealed by the safety net: show at once, never half-faded. */
+[data-reveal].instant {
+  transition: none !important;
+}
