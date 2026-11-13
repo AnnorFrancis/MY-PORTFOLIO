@@ -10,8 +10,21 @@ import {
   moreSites,
   films,
   shotsFor,
-  mobileShotFor,
 } from "./content";
+import {
+  PageHero,
+  Band,
+  Heading,
+  DirectContact,
+  ServiceTiles,
+  ProjectCard,
+  CountUp,
+  CtaBand,
+  Faq,
+  SiteFooter,
+  servicePhoto,
+  whatsappDisplay,
+} from "./ui";
 
 const email = "annorfrancis23@outlook.com";
 const whatsapp = "https://wa.me/233538713916";
@@ -125,49 +138,6 @@ function useTilt(max = 5) {
 
 /* ------------------------------------------------------------- primitives */
 // One frame-throttled pointer listener shared by all decorative glass sets.
-function useGlassParallax() {
-  useEffect(() => {
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const fine = window.matchMedia("(pointer: fine)");
-    let raf = 0;
-    const root = document.documentElement;
-    const reset = () => {
-      window.cancelAnimationFrame(raf);
-      raf = 0;
-      root.style.removeProperty("--px");
-      root.style.removeProperty("--py");
-    };
-    const move = (event) => {
-      if (motion.matches || !fine.matches || raf) return;
-      raf = window.requestAnimationFrame(() => {
-        raf = 0;
-        root.style.setProperty("--px", String(Math.max(-1, Math.min(1, event.clientX / window.innerWidth * 2 - 1))));
-        root.style.setProperty("--py", String(Math.max(-1, Math.min(1, event.clientY / window.innerHeight * 2 - 1))));
-      });
-    };
-    window.addEventListener("pointermove", move, { passive: true });
-    window.addEventListener("blur", reset);
-    motion.addEventListener("change", reset);
-    return () => {
-      reset();
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("blur", reset);
-      motion.removeEventListener("change", reset);
-    };
-  }, []);
-}
-function GlassObjects({ set = "intro" }) {
-  const count = set === "hero" ? 4 : ["selected", "pricing"].includes(set) ? 2 : 3;
-  return (
-    <span className={`glass-objects objects-${set}`} aria-hidden="true">
-      {["sphere", "ring", "pill", "cube"].slice(0, count).map((shape) => (
-        <span key={shape} className={`glass-object object-${shape}`} aria-hidden="true" />
-      ))}
-    </span>
-  );
-}
-GlassObjects.propTypes = { set: PropTypes.string };
-
 function Link({ href, children, className = "" }) {
   return (
     <a className={className} href={href}>
@@ -192,15 +162,6 @@ function Wordmark() {
       </span>
       <span>Creatives Tech</span>
     </span>
-  );
-}
-function Availability() {
-  return (
-    <p className="availability">
-      <span className="pulse" aria-hidden="true" />
-      Project enquiries open{" "}
-      <span className="availability-date">· Updated November 2026</span>
-    </p>
   );
 }
 function BrowserFrame({ url, children }) {
@@ -333,16 +294,6 @@ function Slideshow({ shots, alt, interval = 4200, eager = false, sizes = "(max-w
     </div>
   );
 }
-function PhoneFrame({ src }) {
-  if (!src) return null;
-  return (
-    <div className="device-phone" aria-hidden="true">
-      <div className="phone-screen">
-        <img src={src} alt="" width="420" height="909" loading="lazy" decoding="async" />
-      </div>
-    </div>
-  );
-}
 function FilmCard({ film, index }) {
   const video = useRef(null);
   const [playing, setPlaying] = useState(false);
@@ -387,19 +338,6 @@ function FilmCard({ film, index }) {
 }
 
 /* ----------------------------------------------------------------- chrome */
-function Backdrop() {
-  return (
-    <div className="backdrop" aria-hidden="true">
-      <span className="cloud c1" />
-      <span className="cloud c2" />
-      <span className="cloud c3" />
-      <span className="cloud c4" />
-      <span className="cloud c5" aria-hidden="true" />
-      <span className="cloud c6" aria-hidden="true" />
-      <span className="grid" />
-    </div>
-  );
-}
 function ScrollProgress() {
   const bar = useRef(null);
   useEffect(() => {
@@ -425,6 +363,7 @@ const navItems = [
   ["/services", "Services"],
   ["/work", "Work"],
   ["/about", "Team"],
+  ["/work-with-me", "Prices"],
 ];
 function Header({ path }) {
   const [open, setOpen] = useState(false);
@@ -446,7 +385,7 @@ function Header({ path }) {
     const b = nav.current.getBoundingClientRect();
     setPill({ left: a.left - b.left, width: a.width });
   };
-  const rest = () => place(nav.current?.querySelector('[aria-current="page"]'));
+  const rest = () => place(nav.current?.querySelector('.nav-link[aria-current]'));
   useEffect(() => {
     rest();
     document.fonts?.ready.then(rest);
@@ -460,9 +399,11 @@ function Header({ path }) {
       toggle.current?.focus();
     }
   }
+  const current = (href) =>
+    path === href ? "page" : path.startsWith(href + "/") ? "location" : undefined;
   return (
     <header
-      className={`site-header${scrolled ? " scrolled" : ""}${open ? " open" : ""}`}
+      className={`site-header${scrolled ? " scrolled" : " at-top"}${open ? " open" : ""}`}
       onKeyDown={closeOnEscape}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
@@ -502,16 +443,51 @@ function Header({ path }) {
               style={{ transform: `translateX(${pill.left}px)`, width: pill.width }}
             />
           )}
-          {navItems.map(([href, label]) => (
-            <a
-              key={href}
-              href={href}
-              aria-current={path === href ? "page" : path.startsWith(href + "/") ? "location" : undefined}
-              onMouseEnter={(e) => place(e.currentTarget)}
-            >
-              {label}
-            </a>
-          ))}
+          {navItems.map(([href, label]) =>
+            href === "/services" ? (
+              <div className="nav-item has-menu" key={href}>
+                <a
+                  className="nav-link"
+                  href={href}
+                  aria-current={current(href)}
+                  onMouseEnter={(e) => place(e.currentTarget)}
+                >
+                  {label}
+                  <span className="nav-caret" aria-hidden="true" />
+                </a>
+                <div className="nav-menu">
+                  <ul className="nav-menu-inner" aria-label="Our services">
+                    {services.map((s, i) => (
+                      <li key={s.slug}>
+                        <a href={"/services/" + s.slug} aria-current={current("/services/" + s.slug)}>
+                          <span className="nav-menu-num" aria-hidden="true">0{i + 1}</span>
+                          <span>
+                            <strong>{s.name}</strong>
+                            <small>{s.short}</small>
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                    <li>
+                      <a className="nav-menu-all" href="/services">
+                        All services <Arrow />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <a
+                key={href}
+                className="nav-link"
+                href={href}
+                aria-current={current(href)}
+                onMouseEnter={(e) => place(e.currentTarget)}
+              >
+                {label}
+              </a>
+            ),
+          )}
           <a className="button button-primary nav-cta" href="/contact">
             <span>Contact us</span> <Arrow />
           </a>
@@ -521,44 +497,13 @@ function Header({ path }) {
   );
 }
 function Footer() {
-  return (
-    <footer className="footer">
-      <div className="footer-inner glass wrap">
-        <div>
-          <a className="footer-brand" href="/">
-            <Wordmark />
-          </a>
-          <p>Based in Accra, Ghana. Working with clients in Ghana and abroad.</p>
-        </div>
-        <div className="footer-links">
-          <Link href={`mailto:${email}`}>Email</Link>
-          <Link href={whatsapp}>WhatsApp</Link>
-          <Link href="https://github.com/AnnorFrancis">Founder’s GitHub</Link>
-          <Link href="https://linkedin.com/in/francis-annor-649a0a26a">
-            Founder’s LinkedIn
-          </Link>
-        </div>
-        <div className="footer-bottom">
-          <span>© 2026 Perkins_Creatives Tech</span>
-          <span>Websites, online stores and business systems.</span>
-        </div>
-      </div>
-    </footer>
-  );
+  return <SiteFooter Wordmark={Wordmark} />;
 }
-function ContactBand() {
-  return (
-    <section className="contact-band wrap">
-      <div className="contact-inner">
-        <div>
-          <p className="eyebrow">Plan a project</p>
-          <h2>Which part of your business needs better software?</h2>
-        </div>
-        <DirectContact />
-      </div>
-    </section>
-  );
+function ContactBand({ topic }) {
+  return <CtaBand topic={topic} />;
 }
+ContactBand.propTypes = { topic: PropTypes.string };
+
 /* ------------------------------------------------------------------- home */
 const letteropedia = {
   slug: "letteropedia",
@@ -569,166 +514,119 @@ const letteropedia = {
   role: "Solo developer",
   url: "https://letteropedia.online",
 };
-function Feature({ project, index, layout }) {
-  const frame = useTilt(4);
-  const caseStudy = projects.some((p) => p.slug === project.slug);
-  return (
-    <article
-      className={`feature ${layout}`}
-      style={{ "--i": index }}
-      data-reveal
-    >
-      <a ref={frame} className="feature-media glass tilt" href={project.url}>
-        <BrowserFrame url={project.url}>
-          <Shot
-            base={`/images/projects/${project.slug}`}
-            alt={`${project.name} public website`}
-            sizes={layout === "half" ? "(max-width: 860px) 92vw, 44vw" : "(max-width: 860px) 92vw, 56vw"}
-          />
-        </BrowserFrame>
-        <span className="media-tag">
-          <span>{project.visualLabel || project.kind}</span> <Arrow />
-        </span>
-      </a>
-      <div className="feature-copy glass">
-        <p className="eyebrow">
-          0{index + 1} / {project.kind}
-        </p>
-        <h3>{project.name}</h3>
-        <p>{project.summary}</p>
-        {project.stack && (
-          <ul className="chips" aria-label={`${project.name} stack`}>
-            {project.stack.split(" · ").map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ul>
-        )}
-        <p className="project-role">Francis Annor · {project.role}</p>
-        <div className="project-links">
-          {caseStudy ? (
-            <>
-              <Link className="button button-primary" href={`/work/${project.slug}`}>
-                Read the case study
-              </Link>
-              <Link className="text-link" href={project.url}>
-                Live site
-              </Link>
-            </>
-          ) : (
-            <Link className="button button-primary" href={project.url}>
-              Visit the live website
-            </Link>
-          )}
-        </div>
-      </div>
-    </article>
-  );
-}
-function DirectContact({ topic }) {
-  const intro = topic
-    ? "Hello Perkins_Creatives Tech, I’d like to discuss " + topic + "."
-    : "Hello Perkins_Creatives Tech, I’d like to discuss a project.";
-  return (
-    <div className="direct-contact">
-      <a
-        className="button button-primary"
-        href={whatsapp + "?text=" + encodeURIComponent(intro)}
-      >
-        Chat on WhatsApp <Arrow />
-      </a>
-      <a
-        className="direct-email"
-        href={
-          "mailto:" +
-          email +
-          "?subject=" +
-          encodeURIComponent(topic || "Project enquiry")
-        }
-      >
-        Email our team <Arrow />
-      </a>
-    </div>
-  );
-}
-DirectContact.propTypes = { topic: PropTypes.string };
 
+// Sharpest available screenshot of a project for its card.
+const shotBase = (slug) => {
+  const s = shotsFor(slug)[0];
+  return s ? s.small.replace(/-640.webp$/, "") : `/images/projects/${slug}`;
+};
+const processSteps = [
+  ["Understand", "We map the problem, the people using the system, and the tools you already rely on."],
+  ["Build and test", "We agree the scope in writing. You then test the working system on your real daily tasks before launch."],
+  ["Launch and hand over", "We set up payments, staff access and backups, then train your team. Ongoing care is agreed separately."],
+];
+const fromPrice = (service) => "From GHS " + service.price[0].toLocaleString("en-GB");
+const faqs = [
+  ["How much does a website cost?", "Starter websites range from GHS 2,000 to 3,500, and business websites from GHS 5,000 to 8,000. Custom applications range from GHS 10,000 to 15,000. The final price is agreed in writing before work begins."],
+  ["How long does a project take?", "A starter website is usually ready in 1 to 2 weeks, a business website in 3 to 4 weeks, and a custom application in 6 to 10 weeks."],
+  ["Can customers pay with Mobile Money?", "Yes. We connect Paystack, which accepts card payments and Mobile Money, and test a real payment and refund before launch."],
+  ["Will I be able to update the website myself?", "Yes. Business websites include content management, so you can change text, photos and products without a developer."],
+  ["Do you work with clients outside Ghana?", "Yes. We are based in Accra and work with clients in Ghana and abroad. Most of the work happens over WhatsApp, email and video calls."],
+  ["What happens after launch?", "Each plan includes support: 1 month for starter websites, 3 months for business websites and 6 months for custom applications. Website care after that ranges from GHS 300 to 1,200 per month."],
+];
 function ServicePage({ service }) {
   const project = projects.find((item) => item.slug === service.projectSlug);
   const film = films.find((item) => item.id === service.film);
+  const others = services.filter((s) => s.slug !== service.slug);
   return (
     <>
-      <header className="company-intro wrap service-intro">
-        <div>
-          <a className="direct-email" href="/services">
-            All services
-          </a>
-          <h1>{service.title}</h1>
-          <p>{service.summary}</p>
-          <DirectContact topic={service.name} />
+      <PageHero
+        image={servicePhoto[service.slug]}
+        back={["/services", "All services"]}
+        eyebrow={"Services · " + service.name}
+        title={service.title}
+        lead={service.summary}
+        aside={
+          <div className="hero-price glass">
+            <span>Published price</span>
+            <strong>{fromPrice(service)}</strong>
+            <p>{service.budget}</p>
+          </div>
+        }
+      >
+        <DirectContact topic={service.name} light />
+      </PageHero>
+      <Band tone="light">
+        <div className="split-v2">
+          <div data-reveal>
+            <p className="kicker">The question we start with</p>
+            <h2>{service.heading}</h2>
+            <p className="big-text">{service.example}</p>
+          </div>
+          <div className="tick-card" data-reveal>
+            <h3>What you receive</h3>
+            <ul className="ticks">
+              {service.deliverables.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <a className="button button-primary" href={"/contact?service=" + encodeURIComponent(service.name) + "#start"}>
+              Write a project brief <Arrow />
+            </a>
+          </div>
         </div>
-        {project && (
-          <figure className="service-proof glass">
-            <a href={service.proof}>
-              <Shot
-                base={"/images/projects/" + project.slug}
-                alt={project.name + " public website"}
-                sizes="(max-width: 900px) 90vw, 38vw"
-                eager
-              />
+      </Band>
+      <Band tone="mist">
+        <Heading
+          eyebrow="Proof"
+          title={project ? "Built for a real business." : "Made for real launches."}
+          lead={service.prepare}
+        />
+        <div className="proof-v2">
+          {project && (
+            <ProjectCard
+              featured
+              caseStudy
+              project={{ ...project, tag: project.visualLabel, image: shotBase(project.slug) }}
+            />
+          )}
+          {!project && film && (
+            <div className="film-feature" data-reveal>
+              <FilmCard film={film} index={0} />
+              <div>
+                <p className="kicker">{film.kind}</p>
+                <h3>{film.title}</h3>
+                <p>{service.example}</p>
+                <Link className="button button-primary" href={service.proof}>
+                  {service.proofLabel}
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </Band>
+      <Band tone="dark">
+        <Heading eyebrow="More services" title="Other ways we can help." />
+        <div className="mini-tiles">
+          {others.map((s) => (
+            <a key={s.slug} className="mini-tile" href={"/services/" + s.slug} data-reveal>
+              <img src={`/images/photos/${servicePhoto[s.slug]}-640.webp`} alt="" width="640" height="427" loading="lazy" decoding="async" />
+              <span>
+                <strong>{s.name}</strong>
+                <small>{s.short}</small>
+              </span>
+              <Arrow />
             </a>
-            <figcaption>{project.name} · Founder project</figcaption>
-          </figure>
-        )}
-        {!project && film && (
-          <figure className="service-proof glass">
-            <a href={service.proof}>
-              <img
-                className="service-film"
-                src={"/videos/" + film.id + ".webp"}
-                alt={film.title + ", a still from the film"}
-                width="1280"
-                height="2276"
-                loading="eager"
-                fetchpriority="high"
-                decoding="async"
-              />
-            </a>
-            <figcaption>{film.title} · {film.kind}</figcaption>
-          </figure>
-        )}
-      </header>
-      <section className="service-detail wrap">
-        <article>
-          <h2>{service.heading}</h2>
-          <p>{service.example}</p>
-          <h2>What you receive</h2>
-          <ul>
-            {service.deliverables.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <Link href={service.proof}>{service.proofLabel}</Link>
-        </article>
-        <aside className="company-card glass">
-          <h2>Planning your budget</h2>
-          <p>{service.budget}</p>
-          <Link href="/work-with-me#pricing">Compare project ranges</Link>
-          <h3>Where to begin</h3>
-          <p>{service.prepare}</p>
-          <Link
-            href={
-              "/contact?service=" + encodeURIComponent(service.name) + "#start"
-            }
-          >
-            Write a project brief
-          </Link>
-        </aside>
-      </section>
+          ))}
+        </div>
+      </Band>
+      <ContactBand topic={service.name} />
     </>
   );
 }
 ServicePage.propTypes = {
   service: PropTypes.shape({
+    slug: PropTypes.string,
     projectSlug: PropTypes.string,
     film: PropTypes.string,
     title: PropTypes.string,
@@ -741,150 +639,177 @@ ServicePage.propTypes = {
     proofLabel: PropTypes.string,
     budget: PropTypes.string,
     prepare: PropTypes.string,
+    price: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
 };
-function Capabilities({ detailed = false }) {
+function Steps({ light = false }) {
   return (
-    <section id="services" className="company-section wrap">
-      <p className="eyebrow">Capabilities</p>
-      <h2>What we can build for you</h2>
-      <div className="company-grid">
-        {services.map(
-          ({ name: title, summary, slug, proof, proofLabel }, i) => (
-            <article
-              key={title}
-              className="company-card glass"
-              id={detailed ? "service-" + i : undefined}
-            >
-              <h3>{title}</h3>
-              <p>{summary}</p>
-              <Link href={"/services/" + slug}>{title} details</Link>
-              {detailed && (
-                <p>
-                  <Link href={proof}>{proofLabel}</Link>
-                </p>
-              )}
-            </article>
-          ),
-        )}
-      </div>
-    </section>
+    <ol className={light ? "steps-v2 on-dark" : "steps-v2"}>
+      {processSteps.map(([t, p], i) => (
+        <li key={t} style={{ "--i": i }} data-reveal>
+          <span className="steps-num">0{i + 1}</span>
+          <h3>{t}</h3>
+          <p>{p}</p>
+        </li>
+      ))}
+    </ol>
   );
 }
-Capabilities.propTypes = { detailed: PropTypes.bool };
+Steps.propTypes = { light: PropTypes.bool };
 function Services() {
   return (
     <>
-      <header className="company-intro wrap">
-        <p className="eyebrow">Services</p>
-        <h1>
-          Software built around <em>your workflow.</em>
-        </h1>
-        <p>
-          Bring us the task that slows your team down. We’ll work through who
-          uses it, what tools it touches and what a successful first release
-          should do.
-        </p>
-        <Link className="button button-glass" href="/work-with-me#pricing">
-          View project ranges in GHS
-        </Link>
-      </header>
-      <Capabilities detailed />
-      <section className="company-intro wrap">
-        <h2>From discovery to handover</h2>
-        <p>
-          First we map the current process together. You review the scope, price
-          and delivery stages before development begins. We demonstrate each
-          agreed workflow, test it against real operating conditions, and walk
-          your team through running the finished system.
-        </p>
-        <Link href="/work">Explore project examples</Link>
-      </section>
+      <PageHero
+        image="hero-services"
+        eyebrow="Services"
+        title={<>Software built around <em>your workflow.</em></>}
+        lead="Bring us the task that slows your team down. We work through who uses it, what tools it touches and what a successful first release should do."
+      >
+        <DirectContact light />
+        <a className="hero-link" href="/work-with-me#pricing">See prices in GHS</a>
+      </PageHero>
+      <Band tone="light" className="svc-rows-band">
+        <Heading
+          eyebrow="Five services"
+          title="What we build, and what it costs."
+          lead="Each service has a published starting price. The final scope and price are agreed in writing before work begins."
+        />
+        <div className="svc-rows">
+          {services.map((s, i) => (
+            <article key={s.slug} id={"service-" + i} className={i % 2 ? "svc-row flip" : "svc-row"} data-reveal>
+              <a className="svc-row-media" href={"/services/" + s.slug} tabIndex={-1} aria-hidden="true">
+                <img
+                  src={`/images/photos/${servicePhoto[s.slug]}-1000.webp`}
+                  srcSet={`/images/photos/${servicePhoto[s.slug]}-640.webp 640w, /images/photos/${servicePhoto[s.slug]}-1000.webp 1000w, /images/photos/${servicePhoto[s.slug]}-1600.webp 1600w`}
+                  sizes="(max-width: 900px) 92vw, 50vw"
+                  alt=""
+                  width="1000"
+                  height="667"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="svc-row-price">{fromPrice(s)}</span>
+              </a>
+              <div className="svc-row-copy">
+                <p className="kicker">0{i + 1} · {s.name}</p>
+                <h3>{s.title}</h3>
+                <p>{s.summary}</p>
+                <ul className="ticks">
+                  {s.deliverables.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+                <div className="svc-row-actions">
+                  <a className="button button-primary" href={"/services/" + s.slug}>
+                    {s.name} details <Arrow />
+                  </a>
+                  <a className="text-link" href={s.proof}>
+                    <span>{s.proofLabel}</span> <Arrow />
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Band>
+      <Band tone="dark">
+        <Heading
+          eyebrow="How we work"
+          title={<>From discovery <em>to handover.</em></>}
+          lead="You review the scope, price and delivery stages before development begins. Then we test each workflow against your real daily tasks."
+        />
+        <Steps light />
+      </Band>
+      <Band tone="mist">
+        <Heading eyebrow="Questions" title="Answers before you ask." center />
+        <Faq items={faqs} />
+      </Band>
       <ContactBand />
     </>
   );
 }
 const team = [
-  [
-    "Francis Annor",
-    "CEO & Full-stack Developer",
-    "FA",
-    "Leads technical delivery and connects the customer experience to the software behind it.",
-  ],
-  [
-    "Yaw Sarkodie Mensah",
-    "AI Engineer",
-    "YSM",
-    "Designs AI integrations and evaluates how they perform on the tasks they are built to handle.",
-  ],
-  [
-    "Ivy Mensah",
-    "Backend Developer",
-    "IM",
-    "Builds the APIs, data models and business rules that support everyday operations.",
-  ],
-  [
-    "Megaleovis",
-    "UI/UX & Front-end Developer",
-    "M",
-    "Designs user journeys and turns them into responsive interfaces.",
-  ],
-  [
-    "Lizel",
-    "Marketing Officer",
-    "L",
-    "Shapes how the company communicates its services and brings products to market.",
-  ],
+  ["Francis Annor", "CEO & Full-stack Developer", "FA", "Leads technical delivery and connects the customer experience to the software behind it.", "/images/portrait-360.webp"],
+  ["Yaw Sarkodie Mensah", "AI Engineer", "YSM", "Designs AI integrations and evaluates how they perform on the tasks they are built to handle.", null],
+  ["Ivy Mensah", "Backend Developer", "IM", "Builds the APIs, data models and business rules that support everyday operations.", null],
+  ["Megaleovis", "UI/UX & Front-end Developer", "M", "Designs user journeys and turns them into responsive interfaces.", null],
+  ["Lizel", "Marketing Officer", "L", "Shapes how the company communicates its services and brings products to market.", null],
 ];
+function TeamCard({ member, index }) {
+  const [name, role, initials, focus, image] = member;
+  return (
+    <article className={index === 0 ? "team-card lead" : "team-card"} style={{ "--i": index }} data-reveal>
+      <div className="team-card-photo">
+        {image ? (
+          <img src={image} alt={name} width="360" height="463" loading="lazy" decoding="async" />
+        ) : (
+          <span className="team-initials" aria-hidden="true">{initials}</span>
+        )}
+      </div>
+      <div className="team-card-body">
+        <h3>{name}</h3>
+        <p className="team-role">{role}</p>
+        <p>{focus}</p>
+      </div>
+    </article>
+  );
+}
+TeamCard.propTypes = { member: PropTypes.array.isRequired, index: PropTypes.number };
 function About() {
   return (
     <>
-      <header className="company-intro wrap">
-        <p className="eyebrow">About Perkins_Creatives Tech</p>
-        <h1>
-          The team behind <em>your system.</em>
-        </h1>
-        <p>
-          We are an AI and software development company based in Accra, working
-          with businesses and brands locally and internationally. Our team
-          brings design, engineering and marketing into the same project
-          conversation.
-        </p>
-      </header>
-      <section className="company-section wrap">
-        <h2>Meet the team</h2>
-        <div className="company-team">
-          {team.map(([name, role, initials, focus], i) => (
-            <article className="company-card glass" key={name}>
-              {i === 0 ? (
-                <img
-                  className="founder-photo"
-                  src="/images/portrait-360.webp"
-                  width="360"
-                  height="463"
-                  alt="Francis Annor"
-                />
-              ) : (
-                <span className="initials" aria-hidden="true">
-                  {initials}
-                </span>
-              )}
-              <h3>{name}</h3>
-              <strong>{role}</strong>
-              <p>{focus}</p>
-            </article>
+      <PageHero
+        image="hero-about"
+        eyebrow="About Perkins_Creatives Tech"
+        title={<>The team behind <em>your system.</em></>}
+        lead="We are an AI and software development company based in Accra, working with businesses and brands locally and internationally. Design, engineering and marketing sit in the same project conversation."
+      >
+        <DirectContact light />
+      </PageHero>
+      <Band tone="light">
+        <Heading
+          eyebrow="Our team"
+          title="Five people across design, engineering and marketing."
+          lead="Design, engineering and marketing in one team, based in Accra."
+        />
+        <div className="team-grid">
+          {team.map((m, i) => (
+            <TeamCard key={m[0]} member={m} index={i} />
           ))}
         </div>
-      </section>
-      <section className="company-intro wrap">
-        <h2>Where our approach comes from</h2>
-        <p>
-          Our founder’s work in retail and salon operations shaped how we think
-          about delivery. Booking deposits, stock corrections and owner-managed
-          content are part of the work from the first design conversation.
-        </p>
-        <Link href="/engineering">Read Francis’s engineering notes</Link>
-      </section>
+      </Band>
+      <Band tone="dark">
+        <div className="split-v2">
+          <div data-reveal>
+            <p className="kicker kicker-light">Where our approach comes from</p>
+            <h2>Built from real shop floors and salon calendars.</h2>
+            <p className="big-text">
+              Our founder’s work in retail and salon operations shaped how we deliver. Booking deposits, stock
+              corrections and owner-managed content are part of the work from the first design conversation.
+            </p>
+            <Link className="button button-outline-light" href="/engineering">
+              Read Francis’s engineering notes
+            </Link>
+          </div>
+          <ul className="stat-grid" data-reveal>
+            {[
+              [20, "+", "Live builds shipped"],
+              [3, "", "Systems taking live payments"],
+              [5, "", "Service lines"],
+              [30, "+", "Product films produced"],
+            ].map(([v, s, l]) => (
+              <li key={l}>
+                <strong><CountUp value={v} suffix={s} /></strong>
+                <span>{l}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Band>
+      <Band tone="mist">
+        <Heading eyebrow="What we do" title="Five services, one team." />
+        <ServiceTiles />
+      </Band>
       <ContactBand />
     </>
   );
@@ -892,261 +817,269 @@ function About() {
 function Contact() {
   return (
     <>
-      <header className="company-intro wrap">
-        <p className="eyebrow">Project enquiries</p>
-        <h1>
-          Let’s scope <em>your project.</em>
-        </h1>
-        <p>
-          Send us a message about what you want to build. A sentence is enough to start.
-        </p>
-        <DirectContact />
-        <Link href="/work-with-me#pricing">
-          Compare project budgets and timelines
-        </Link>
-      </header>
+      <PageHero
+        image="hero-contact"
+        eyebrow="Project enquiries"
+        title={<>Let’s scope <em>your project.</em></>}
+        lead="Send us a message about what you want to build. A sentence is enough to start."
+        aside={
+          <ul className="contact-card glass">
+            <li>
+              <span>WhatsApp</span>
+              <a href={whatsapp}>{whatsappDisplay}</a>
+            </li>
+            <li>
+              <span>Email</span>
+              <a href={`mailto:${email}`}>{email}</a>
+            </li>
+            <li>
+              <span>Office</span>
+              <strong>Accra, Ghana</strong>
+            </li>
+            <li>
+              <span>Clients</span>
+              <strong>Ghana and abroad</strong>
+            </li>
+          </ul>
+        }
+      >
+        <DirectContact light />
+      </PageHero>
       <ProjectBrief />
+      <Band tone="dark">
+        <Heading eyebrow="What happens next" title="Three steps, no surprises." />
+        <Steps light />
+      </Band>
+      <Band tone="mist">
+        <Heading eyebrow="Questions" title="Before you message us." center />
+        <Faq items={faqs} />
+      </Band>
     </>
   );
 }
 function Home() {
-  const stage = useTilt(7);
-
-
   const heroShots = heroSlugs.flatMap((slug) =>
     shotsFor(slug).slice(0, 1).map((s) => ({ ...s, key: slug })),
   );
   const [trendy, besia, perkos] = projects;
   return (
     <>
-      <section className="hero wrap">
-        <GlassObjects set="hero" />
-        <div className="hero-copy">
-          <p className="eyebrow rise" style={{ "--i": 0 }}>
-            Software development · Accra, Ghana
-          </p>
-          <h1>
-            <span className="line">
-              <span style={{ "--i": 1 }}>Custom software for</span>
-            </span>{" "}
-            <span className="line">
-              <span style={{ "--i": 2 }}>
-                business <em>operations.</em>
-              </span>
-            </span>
-          </h1>
-          <p className="hero-description rise" style={{ "--i": 3 }}>
-            We build websites, AI workflows and software for bookings, payments and stock.
-          </p>
-          <DirectContact />
-          <a className="service-jump" href="#services">Explore our services ↓</a>
-        </div>
-        <div
-          ref={stage}
-          className="stage tilt"
-          role="img"
-          aria-label="Software projects built by Francis Annor"
-        >
-          <div className="stage-float">
-            <div className="device-laptop">
-              <div className="laptop-screen">
-                <Slideshow
-                  shots={heroShots}
-                  alt="Software projects built by Francis Annor"
-                  eager
-                  interval={3800}
-                  sizes="(max-width: 700px) 86vw, (max-width: 1020px) 80vw, 44vw"
-                />
-              </div>
-              <div className="laptop-base" />
-            </div>
-            <PhoneFrame src={mobileShotFor("trendy-norms")} />
-            <span className="float-chip glass c1">
-              <span className="dot" /> Paystack integrations
-            </span>
-            <span className="float-chip glass c2">
-              <span className="dot" /> PerkOS · offline sales
-            </span>
-            <span className="float-chip glass c3">
-              <span className="dot" /> Bēsia · booking deposits
-            </span>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        size="home"
+        image="hero-home"
+        video={[
+          ["/videos/hero-team.webm", "video/webm"],
+          ["/videos/hero-team.mp4", "video/mp4"],
+        ]}
+        eyebrow="Software, websites and AI · Accra, Ghana"
+        title={<>Custom software for <em>business operations.</em></>}
+        lead="We build websites, online stores, AI workflows and the systems behind them: bookings, payments and stock, all connected."
+        aside={
+          <figure className="hero-showcase glass">
+            <Slideshow
+              shots={heroShots}
+              alt="Live systems built by Perkins_Creatives Tech"
+              eager
+              interval={3800}
+              sizes="(max-width: 900px) 86vw, 40vw"
+            />
+            <figcaption>
+              <span><i className="dot" /> Paystack integrations</span>
+              <span><i className="dot" /> Bēsia · booking deposits</span>
+              <span><i className="dot" /> PerkOS · offline sales</span>
+            </figcaption>
+          </figure>
+        }
+      >
+        <DirectContact light />
+      </PageHero>
 
-      <Capabilities />
-      <section id="work" className="selected aura wrap">
-        <GlassObjects set="selected" />
-        <div className="section-heading" data-reveal>
+      <Band tone="light" className="trust-band" label="Clients">
+        <div className="trust-v2" data-reveal>
+          <p>Live systems we have built for</p>
+          <ul>
+            <li>Trendy Norms Hub</li>
+            <li>Bēsia Beauty Studio</li>
+            <li>Letteropedia</li>
+            <li>PerkOS</li>
+          </ul>
+        </div>
+        <ul className="stat-row">
+          {[
+            [20, "+", "Live builds shipped"],
+            [3, "", "Systems taking live payments"],
+            [5, "", "Specialists on the team"],
+            [30, "+", "Product films produced"],
+          ].map(([v, s, l], i) => (
+            <li key={l} style={{ "--i": i }} data-reveal>
+              <strong><CountUp value={v} suffix={s} /></strong>
+              <span>{l}</span>
+            </li>
+          ))}
+        </ul>
+      </Band>
+
+      <Band tone="mist" id="services">
+        <Heading
+          eyebrow="Capabilities"
+          title={<>What we can <em>build for you.</em></>}
+          lead="Five services, each with a published starting price in Ghana cedis."
+          action={
+            <a className="text-link" href="/services">
+              <span>All services and prices</span> <Arrow />
+            </a>
+          }
+        />
+        <ServiceTiles />
+      </Band>
+
+      <Band tone="dark" id="work">
+        <Heading
+          eyebrow="Selected work"
+          title={<>Four projects. <em>All live today.</em></>}
+          lead="Built by our founder, Francis Annor. Open the live products and read the decisions behind each one."
+          action={
+            <a className="button button-outline-light" href="/work">
+              View all work <Arrow />
+            </a>
+          }
+        />
+        <div className="project-grid">
+          <ProjectCard featured caseStudy index={0} project={{ ...trendy, tag: trendy.visualLabel, image: shotBase(trendy.slug) }} />
+          <ProjectCard caseStudy index={1} project={{ ...besia, tag: besia.visualLabel, image: shotBase(besia.slug) }} />
+          <ProjectCard caseStudy index={2} project={{ ...perkos, tag: perkos.visualLabel, image: shotBase(perkos.slug) }} />
+          <ProjectCard index={3} project={{ ...letteropedia, tag: "Education / Client website", image: shotBase(letteropedia.slug) }} />
+        </div>
+      </Band>
+
+      <Band tone="light">
+        <div className="split-v2 media-left">
+          <figure className="split-media" data-reveal>
+            <img
+              src="/images/photos/planning-1000.webp"
+              srcSet="/images/photos/planning-640.webp 640w, /images/photos/planning-1000.webp 1000w"
+              sizes="(max-width: 900px) 92vw, 46vw"
+              alt="A team planning a project around a table"
+              width="1000"
+              height="667"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
           <div>
-            <p className="eyebrow">Selected work / 2026</p>
+            <p className="kicker">How we work</p>
             <h2>
-              Four projects. <em>All live today.</em>
+              From the first message <em>to handover.</em>
             </h2>
+            <Steps />
+            <a className="text-link" href="/work-with-me#pricing">
+              <span>See prices and timelines</span> <Arrow />
+            </a>
           </div>
-          <p>
-            Selected work by our founder, Francis Annor. Explore the live products and the decisions behind each build.
-          </p>
         </div>
-        <div className="features">
-          <Feature project={trendy} index={0} layout="wide" />
-          <Feature project={besia} index={1} layout="half" />
-          <Feature project={perkos} index={2} layout="half" />
-          <Feature project={letteropedia} index={3} layout="wide flip" />
-        </div>
-        <div className="more-row" data-reveal>
-          <Link className="button button-glass button-large" href="/work">
-            View more projects
-          </Link>
-        </div>
-      </section>
+      </Band>
 
-      <section className="company-intro wrap"><p className="eyebrow">Our company</p><h2>Five people across design, engineering and marketing.</h2><Link className="button button-glass" href="/about">Meet the team</Link></section>
+      <Band tone="sea">
+        <div className="team-teaser" data-reveal>
+          <div>
+            <p className="kicker kicker-light">Our company</p>
+            <h2>Five people across design, engineering and marketing.</h2>
+            <a className="button button-light" href="/about">
+              Meet the team <Arrow />
+            </a>
+          </div>
+          <ul className="avatar-row" aria-label="Team members">
+            {team.map(([name, role, initials, , image]) => (
+              <li key={name} title={name + ", " + role}>
+                {image ? <img src={image} alt={name} width="72" height="72" loading="lazy" /> : <span aria-hidden="true">{initials}</span>}
+                <span className="sr-only">{name}, {role}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Band>
       <ContactBand />
     </>
   );
 }
 
 /* ------------------------------------------------------------------- work */
-function BuildCard({ item, index }) {
+const buildCard = (item) => {
   const shot = shotsFor(item.slug)[0];
-  return (
-    <Glass as="article" className="build" style={{ "--i": index }} data-reveal>
-      <a className="build-media" href={item.url} tabIndex={-1} aria-hidden="true">
-        <BrowserFrame url={item.url}>
-          {shot && (
-            <img
-              src={shot.large}
-              srcSet={`${shot.small} 640w, ${shot.large} 1200w`}
-              sizes="(max-width: 860px) 92vw, 44vw"
-              width="1200"
-              height="750"
-              loading="lazy"
-              decoding="async"
-              alt=""
-            />
-          )}
-        </BrowserFrame>
-      </a>
-      <div className="build-body">
-        <div className="build-meta">
-          <span className="eyebrow">{item.sector}</span>
-          <span className={`badge${item.status.startsWith("Live") ? " live" : ""}`}>
-            {item.status}
-          </span>
-        </div>
-        <h3>{item.name}</h3>
-        <p>{item.blurb}</p>
-        <Link className="text-link" href={item.url}>
-          Visit the build
-        </Link>
-      </div>
-    </Glass>
-  );
-}
+  return {
+    slug: item.slug,
+    name: item.name,
+    kind: item.sector,
+    summary: item.blurb,
+    url: item.url,
+    tag: item.status,
+    image: shot ? shot.small.replace(/-640\.webp$/, "") : `/images/projects/${item.slug}`,
+  };
+};
 function Work() {
   return (
     <>
-      <header className="page-intro wrap">
-        <GlassObjects set="intro" />
-        <p className="eyebrow rise" style={{ "--i": 0 }}>More work</p>
-        <h1>
-          <span className="line">
-            <span style={{ "--i": 1 }}>More builds,</span>
-          </span>{" "}
-          <span className="line">
-            <span style={{ "--i": 2 }}>
-              <em>chosen with care.</em>
-            </span>
-          </span>
-        </h1>
-        <p className="lede rise" style={{ "--i": 3 }}>
-          Systems, websites and product films beyond the four on the home page.
-          Every card opens the real, working build.
-        </p>
-        <nav className="jump rise" style={{ "--i": 4 }} aria-label="On this page">
+      <PageHero
+        image="hero-work"
+        eyebrow="Our work"
+        title={<>More builds, <em>chosen with care.</em></>}
+        lead="Case studies, systems, websites and product films. Every card opens the real, working build."
+      >
+        <nav className="hero-chips" aria-label="On this page">
+          <a href="#case-studies">Case studies</a>
           <a href="#systems">Systems</a>
           <a href="#websites">Websites & stores</a>
           <a href="#films">Films</a>
         </nav>
-      </header>
-      <section id="systems" className="work-group aura wrap">
-        <div className="section-heading" data-reveal>
-          <div>
-            <p className="eyebrow">Systems</p>
-            <h2>
-              Software a business <em>runs every day.</em>
-            </h2>
-          </div>
-          <p>Trading desks, course platforms, stock and sales, and back offices tied to the website.</p>
+      </PageHero>
+      <Band tone="dark" id="case-studies">
+        <Heading
+          eyebrow="Case studies"
+          title={<>The full story, <em>decision by decision.</em></>}
+          lead="Delivered systems and our founder’s own product, with the constraints, choices and trade-offs behind each."
+        />
+        <div className="project-grid three">
+          {projects.map((p, k) => (
+            <ProjectCard key={p.slug} caseStudy index={k} project={{ ...p, tag: p.visualLabel, image: shotBase(p.slug) }} />
+          ))}
         </div>
-        <div className="build-grid">
+      </Band>
+      <Band tone="light" id="systems">
+        <Heading
+          eyebrow="Systems"
+          title={<>Software a business <em>runs every day.</em></>}
+          lead="Trading desks, course platforms, stock and sales, and back offices tied to the website."
+        />
+        <div className="project-grid two">
           {moreSystems.map((item, k) => (
-            <BuildCard key={item.slug} item={item} index={k} />
+            <ProjectCard key={item.slug} index={k} project={buildCard(item)} cta="Visit the build" />
           ))}
         </div>
-      </section>
-      <section id="websites" className="work-group wrap">
-        <div className="section-heading" data-reveal>
-          <div>
-            <p className="eyebrow">Websites & stores</p>
-            <h2>
-              First impressions, <em>built to sell.</em>
-            </h2>
-          </div>
-          <p>Storefronts and brand sites with the tools behind them.</p>
-        </div>
-        <div className="build-grid">
+      </Band>
+      <Band tone="mist" id="websites">
+        <Heading
+          eyebrow="Websites & stores"
+          title={<>First impressions, <em>built to sell.</em></>}
+          lead="Storefronts and brand sites with the tools behind them."
+        />
+        <div className="project-grid two">
           {moreSites.map((item, k) => (
-            <BuildCard key={item.slug} item={item} index={k} />
+            <ProjectCard key={item.slug} index={k} project={buildCard(item)} cta="Visit the build" />
           ))}
         </div>
-      </section>
-      <section id="films" className="work-group aura wrap">
-        <div className="section-heading" data-reveal>
-          <div>
-            <p className="eyebrow">Films</p>
-            <h2>
-              Launch and teaser <em>films.</em>
-            </h2>
-          </div>
-          <p>Short films made to launch and explain the products. Press play to watch.</p>
-        </div>
+      </Band>
+      <Band tone="dark" id="films">
+        <Heading
+          eyebrow="Films"
+          title={<>Launch and teaser <em>films.</em></>}
+          lead="Short films made to launch and explain the products. Press play to watch."
+        />
         <div className="film-grid">
           {films.map((film, k) => (
             <FilmCard key={film.id} film={film} index={k} />
           ))}
         </div>
-      </section>
-      <section className="case-strip wrap">
-        <div className="section-heading" data-reveal>
-          <div>
-            <p className="eyebrow">Case studies</p>
-            <h2>
-              The full story, <em>decision by decision.</em>
-            </h2>
-          </div>
-        </div>
-        <div className="case-cards">
-          {projects.map((p, k) => (
-            <Glass as="article" key={p.slug} className="case-card" style={{ "--i": k }} data-reveal>
-              <img
-                src={`/images/projects/${p.slug}-640.webp`}
-                width="640"
-                height="400"
-                loading="lazy"
-                decoding="async"
-                alt=""
-              />
-              <p className="eyebrow">{p.kind}</p>
-              <h3>{p.name}</h3>
-              <Link className="text-link" href={`/work/${p.slug}`}>
-                Read the case study
-              </Link>
-            </Glass>
-          ))}
-        </div>
-      </section>
+      </Band>
       <ContactBand />
     </>
   );
@@ -1212,32 +1145,32 @@ function CaseStudy({ project }) {
   ];
   return (
     <article>
-      <header className="page-intro wrap">
-        <GlassObjects set="intro" />
-        <a className="back-link" href="/#work">
-          ← Selected work
+      <PageHero
+        imageSrc={`/images/projects/${project.slug}-1200.webp`}
+        back={["/work#case-studies", "All case studies"]}
+        eyebrow={project.kind + " · Case study"}
+        title={project.title}
+        lead={project.summary}
+      >
+        <a className="button button-primary" href={project.url}>
+          Visit the live site <Arrow />
         </a>
-        <p className="eyebrow rise" style={{ "--i": 0 }}>
-          {project.kind} / Case study
-        </p>
-        <h1 className="rise" style={{ "--i": 1 }}>
-          {project.title}
-        </h1>
-        <p className="lede rise" style={{ "--i": 2 }}>
-          {project.summary}
-        </p>
+        {relatedService && (
+          <a className="button button-outline-light" href={"/services/" + relatedService.slug}>
+            {relatedService.name} service <Arrow />
+          </a>
+        )}
+      </PageHero>
+      <Band tone="mist" className="facts-band">
         <dl className="project-facts">
           {facts.map(([k, v], i) => (
-            <Glass key={k} className="fact" style={{ "--i": i }} data-reveal>
+            <div key={k} className="fact" style={{ "--i": i }} data-reveal>
               <dt>{k}</dt>
               <dd>{v}</dd>
-            </Glass>
+            </div>
           ))}
         </dl>
-        <Link className="button button-primary" href={project.url}>
-          Visit the live site
-        </Link>
-      </header>
+      </Band>
       <div className="case-visual wrap" data-reveal>
         <div className="case-visual-inner glass">
           <Diagram project={project} />
@@ -1452,55 +1385,40 @@ const addons = [
 function WorkWithMe() {
   return (
     <>
-      <header className="page-intro split wrap">
-        <GlassObjects set="intro" />
-        <div>
-          <p className="eyebrow rise" style={{ "--i": 0 }}>For business owners & teams</p>
-          <h1>
-            <span className="line">
-              <span style={{ "--i": 1 }}>A better way to run</span>
-            </span>{" "}
-            <span className="line">
-              <span style={{ "--i": 2 }}>
-                <em>your day-to-day.</em>
-              </span>
-            </span>
-          </h1>
-          <p className="lede rise" style={{ "--i": 3 }}>
-            We build websites, stores, and the systems behind them. Start with the
-            bottleneck: the booking that gets missed, the stock that doesn’t add
-            up, or the tools that don’t talk to each other.
-          </p>
-          <div className="hero-actions rise" style={{ "--i": 4 }}>
-            <Link className="button button-primary" href="#start">
-              Discuss your project
-            </Link>
-            <Link className="button button-glass" href="#pricing">
-              See the prices
-            </Link>
+      <PageHero
+        image="hero-pricing"
+        eyebrow="Prices and process"
+        title={<>A better way to run <em>your day-to-day.</em></>}
+        lead="We build websites, stores, and the systems behind them. Start with the bottleneck: the booking that gets missed, the stock that doesn’t add up, or the tools that don’t talk to each other."
+        aside={
+          <div className="glance-v2 glass" aria-label="At a glance">
+            <p className="hero-eyebrow">At a glance</p>
+            <ul>
+                  {[
+                    ["Projects from", "GHS 2,000"],
+                    ["Typical build", "1 to 10 weeks"],
+                    ["Payments", "Card and Mobile Money"],
+                    ["Scope", "Agreed in writing before work begins"],
+                  ].map(([k, v]) => (
+                    <li key={k}>
+                      <span className="check" aria-hidden="true">{I.check}</span>
+                      <span>
+                        <small>{k}</small>
+                        {v}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
           </div>
-          <Availability />
-        </div>
-        <Glass as="aside" className="glance rise" style={{ "--i": 3 }} aria-label="At a glance">
-          <p className="eyebrow">At a glance</p>
-          <ul>
-            {[
-              ["Projects from", "GHS 2,000"],
-              ["Typical build", "1 to 10 weeks"],
-              ["Payments", "Card and Mobile Money"],
-              ["Scope", "Agreed in writing before work begins"],
-            ].map(([k, v]) => (
-              <li key={k}>
-                <span className="check" aria-hidden="true">{I.check}</span>
-                <span>
-                  <small>{k}</small>
-                  {v}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Glass>
-      </header>
+        }
+      >
+        <a className="button button-primary" href="#start">
+          Discuss your project <Arrow />
+        </a>
+        <a className="button button-outline-light" href="#pricing">
+          See the prices <Arrow />
+        </a>
+      </PageHero>
       <section className="offer-section aura wrap">
         <div className="section-heading" data-reveal>
           <h2>
@@ -1538,7 +1456,6 @@ function WorkWithMe() {
         ))}
       </section>
       <section id="pricing" className="pricing-section aura">
-        <GlassObjects set="pricing" />
         <div className="wrap">
           <div className="section-heading" data-reveal>
             <div>
@@ -1690,45 +1607,27 @@ const wider = [
 function Engineering() {
   return (
     <>
-      <header className="page-intro split wrap">
-        <GlassObjects set="intro" />
-        <div>
-          <p className="eyebrow rise" style={{ "--i": 0 }}>Founder’s engineering notes · Francis Annor</p>
-          <h1>
-            <span className="line">
-              <span style={{ "--i": 1 }}>The interface is only</span>
-            </span>{" "}
-            <span className="line">
-              <span style={{ "--i": 2 }}>
-                <em>half the work.</em>
-              </span>
-            </span>
-          </h1>
-          <p className="lede rise" style={{ "--i": 3 }}>
-            I build across the application: data models, APIs, payments,
-            permissions, and the interfaces people use. My strongest work is on
-            rules that must not break, like payments, stock and staff permissions.
-          </p>
-          <div className="hero-actions rise" style={{ "--i": 4 }}>
-            <Link
-              className="button button-primary"
-              href="/contact"
-            >
-              Discuss a technical project
-            </Link>
+      <PageHero
+        image="hero-engineering"
+        eyebrow="Founder’s engineering notes · Francis Annor"
+        title={<>The interface is only <em>half the work.</em></>}
+        lead="I build across the application: data models, APIs, payments, permissions, and the interfaces people use. My strongest work is on rules that must not break, like payments, stock and staff permissions."
+        aside={
+          <div className="glance-v2 glass" aria-label="Stack I work in">
+            <p className="hero-eyebrow">Where I work</p>
+            <ul className="chips chips-light">
+              {["Next.js", "React", "TypeScript", "Node.js", "Supabase", "Postgres", "Flutter", "Paystack", "Redis", "Vitest"].map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+            <p className="glance-note">Data models · APIs · payments · permissions · interfaces</p>
           </div>
-          <Availability />
-        </div>
-        <Glass as="aside" className="glance rise" style={{ "--i": 3 }} aria-label="Stack I work in">
-          <p className="eyebrow">Where I work</p>
-          <ul className="chips">
-            {["Next.js", "React", "TypeScript", "Node.js", "Supabase", "Postgres", "Flutter", "Paystack", "Redis", "Vitest"].map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ul>
-          <p className="glance-note">Data models · APIs · payments · permissions · interfaces</p>
-        </Glass>
-      </header>
+        }
+      >
+        <a className="button button-primary" href="/contact">
+          Discuss a technical project <Arrow />
+        </a>
+      </PageHero>
       <section className="engineering-list aura wrap">
         <p className="eyebrow">Selected engineering decisions</p>
         <div className="eng-grid">
@@ -1820,27 +1719,13 @@ function Engineering() {
 function Note() {
   return (
     <article>
-      <header className="page-intro wrap">
-        <GlassObjects set="intro" />
-        <a className="back-link" href="/engineering">
-          ← Engineering
-        </a>
-        <p className="eyebrow rise" style={{ "--i": 0 }}>Engineering notes / 2 November 2026</p>
-        <h1>
-          <span className="line">
-            <span style={{ "--i": 1 }}>When two workers</span>
-          </span>{" "}
-          <span className="line">
-            <span style={{ "--i": 2 }}>
-              <em>reach for one job.</em>
-            </span>
-          </span>
-        </h1>
-        <p className="lede rise" style={{ "--i": 3 }}>
-          A design note from Weave’s push sender: lease ownership, retries, and
-          the difference between protecting state and guaranteeing delivery.
-        </p>
-      </header>
+      <PageHero
+        image="hero-note"
+        back={["/engineering", "Engineering"]}
+        eyebrow="Engineering notes / 2 November 2026"
+        title={<>When two workers <em>reach for one job.</em></>}
+        lead="A design note from Weave’s push sender: lease ownership, retries, and the difference between protecting state and guaranteeing delivery."
+      />
       <div className="note-body article-body glass aura wrap" data-reveal>
         <p>
           Weave is still in development. This note describes the push-worker
@@ -1926,9 +1811,8 @@ function Note() {
 
 /* -------------------------------------------------------------------- app */
 export default function App({ path = "/" }) {
-  useGlassParallax();
   useEffect(() => {
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#f5f8fb");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#0d1820");
   }, []);
   useReveal();
   const normalized = path.replace(/\/$/, "") || "/";
@@ -1947,34 +1831,26 @@ export default function App({ path = "/" }) {
   else if (project) content = <CaseStudy project={project} />;
   else
     content = (
-      <section className="page-intro not-found wrap">
-        <p className="eyebrow">404 / Page not found</p>
-        <h1>
-          <span className="line">
-            <span style={{ "--i": 1 }}>Let’s get you</span>
-          </span>{" "}
-          <span className="line">
-            <span style={{ "--i": 2 }}>
-              <em>back on track.</em>
-            </span>
-          </span>
-        </h1>
-        <div className="hero-actions">
-          <Link className="button button-primary" href="/">
-            Return home
-          </Link>
-          <Link className="button button-glass" href="/work">
-            See the work
-          </Link>
-        </div>
-      </section>
+      <PageHero
+        size="short"
+        image="hero-work"
+        eyebrow="404 / Page not found"
+        title={<>Let’s get you <em>back on track.</em></>}
+        lead="The page you opened does not exist. These links lead to our services, work and contact details."
+      >
+        <a className="button button-primary" href="/">
+          Return home <Arrow />
+        </a>
+        <a className="button button-outline-light" href="/services">
+          See our services <Arrow />
+        </a>
+      </PageHero>
     );
   return (
     <>
       <a className="skip-link" href="#main">
         Skip to main content
       </a>
-      <Backdrop />
       <ScrollProgress />
       <Header path={normalized} />
       <main id="main" tabIndex={-1}>
@@ -2020,14 +1896,6 @@ const shotType = PropTypes.shape({
   small: PropTypes.string.isRequired,
   large: PropTypes.string.isRequired,
 });
-const buildType = PropTypes.shape({
-  slug: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  sector: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  blurb: PropTypes.string.isRequired,
-});
 Link.propTypes = {
   href: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
@@ -2058,7 +1926,6 @@ Slideshow.propTypes = {
   eager: PropTypes.bool,
   sizes: PropTypes.string,
 };
-PhoneFrame.propTypes = { src: PropTypes.string };
 FilmCard.propTypes = {
   film: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -2070,12 +1937,6 @@ FilmCard.propTypes = {
 };
 Header.propTypes = { path: PropTypes.string.isRequired };
 
-Feature.propTypes = {
-  project: projectType.isRequired,
-  index: PropTypes.number.isRequired,
-  layout: PropTypes.string.isRequired,
-};
-BuildCard.propTypes = { item: buildType.isRequired, index: PropTypes.number.isRequired };
 Diagram.propTypes = { project: projectType.isRequired };
 CaseStudy.propTypes = { project: projectType.isRequired };
 App.propTypes = { path: PropTypes.string };

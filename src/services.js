@@ -2,6 +2,7 @@ export const services = [
   {
     slug: "ai-workflow-automation",
     name: "AI & workflow automation",
+    short: "Chatbots and automated workflows",
     title: "AI workflow automation for business teams",
     seoTitle: "AI chatbots and workflow automation in Ghana",
     seoDescription:
@@ -27,6 +28,7 @@ export const services = [
   {
     slug: "business-management-systems",
     name: "Business systems",
+    short: "POS, stock, sales and staff",
     title: "Stock, sales and business management systems",
     seoTitle: "POS, stock and business management systems in Ghana",
     seoDescription:
@@ -53,6 +55,7 @@ export const services = [
   {
     slug: "websites-and-ecommerce",
     name: "Websites & commerce",
+    short: "Websites, online stores and bookings",
     title: "Websites, online stores and booking systems",
     seoTitle: "Website design, online stores and booking sites in Ghana",
     seoDescription:
@@ -79,6 +82,7 @@ export const services = [
   {
     slug: "custom-software-development",
     name: "Custom software",
+    short: "Applications built around your team",
     title: "Custom software development for business operations",
     seoTitle: "Custom software development company in Ghana",
     seoDescription:
@@ -105,6 +109,7 @@ export const services = [
   {
     slug: "branding-social-media-and-video",
     name: "Branding & content",
+    short: "Flyers, social media and video",
     title: "Branding, social media and product videos",
     seoTitle: "Flyer design, social media management and product videos in Ghana",
     seoDescription:
