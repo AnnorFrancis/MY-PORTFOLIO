@@ -52,7 +52,7 @@ describe("Published route contract", () => {
   it("sitemap contains each indexable route and excludes the error page", () => {
     const sitemap = readFileSync("dist/sitemap.xml", "utf8");
     for (const page of pages.filter((p) => p.path !== "/404"))
-      expect(sitemap).toContain(`${new URL(process.env.SITE_URL || "https://perkins-swart.vercel.app").origin}${page.path}`);
+      expect(sitemap).toContain(`${new URL(process.env.SITE_URL || "https://perkinscreatives.perkos.app").origin}${page.path}`);
     expect(sitemap).not.toContain("/404");
   });
   it("featured projects lead to hosted products, not repositories", () => {

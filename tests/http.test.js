@@ -27,7 +27,7 @@ describe("Direct URL delivery", () => {
         `<title>${page.title.replaceAll("&", "&amp;")}</title>`,
       );
       expect(html).toContain(
-        `rel="canonical" href="${new URL(process.env.SITE_URL || "https://perkins-swart.vercel.app").origin}${page.path}"`,
+        `rel="canonical" href="${new URL(process.env.SITE_URL || "https://perkinscreatives.perkos.app").origin}${page.path}"`,
       );
     });
   }

@@ -4,7 +4,7 @@ import React from "react";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
-const configuredOrigin = process.env.SITE_URL || "https://perkins-swart.vercel.app";
+const configuredOrigin = process.env.SITE_URL || "https://perkinscreatives.perkos.app";
 const parsedOrigin = new URL(configuredOrigin);
 if (parsedOrigin.protocol !== "https:" || parsedOrigin.pathname !== "/" || parsedOrigin.search || parsedOrigin.hash) throw new Error("SITE_URL must be an HTTPS origin without a path, query or fragment");
 const origin = parsedOrigin.origin;
