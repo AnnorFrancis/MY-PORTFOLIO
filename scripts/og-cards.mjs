@@ -9,6 +9,7 @@ const cards = [
   ["business-management-systems", "Stock, sales and", "business systems."],
   ["websites-and-ecommerce", "Websites, stores", "and bookings."],
   ["custom-software-development", "Custom software", "for your operations."],
+  ["branding-social-media-and-video", "Flyers, social media", "and product videos."],
   ["home", "Software. Systems.", "Practical AI."],
   ["services", "Built around", "your business."],
   ["about", "Meet the people", "behind the systems."],

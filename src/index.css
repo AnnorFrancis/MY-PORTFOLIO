@@ -3290,6 +3290,14 @@ em {
   }
 }
 
+/* A tall film still, cropped to the same frame as the screenshot cards. */
+.service-proof .service-film {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
 /* ------------------------------------------------------------ responsive */
 @media (max-width: 1080px) {
   .hero,
@@ -3757,5 +3765,27 @@ em {
   }
   .hero-copy h1 {
     text-wrap: balance;
+  }
+}
+
+/* Five service cards: three across the top, two wider cards below on large
+   screens; a full-width last card when two columns leave it alone. */
+@media (min-width: 1100px) {
+  #services .company-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  #services .company-grid > * {
+    grid-column: span 2;
+  }
+  #services .company-grid > :nth-child(n + 4) {
+    grid-column: span 3;
+  }
+}
+@media (min-width: 600px) and (max-width: 1099px) {
+  #services .company-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #services .company-grid > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }

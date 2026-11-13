@@ -218,7 +218,7 @@ function BrowserFrame({ url, children }) {
     </div>
   );
 }
-function Shot({ base, alt, sizes = "(max-width: 760px) 92vw, 50vw", width = 1200, height = 750 }) {
+function Shot({ base, alt, sizes = "(max-width: 760px) 92vw, 50vw", width = 1200, height = 750, eager = false }) {
   return (
     <img
       src={`${base}-1200.webp`}
@@ -226,7 +226,8 @@ function Shot({ base, alt, sizes = "(max-width: 760px) 92vw, 50vw", width = 1200
       sizes={sizes}
       width={width}
       height={height}
-      loading="lazy"
+      loading={eager ? "eager" : "lazy"}
+      fetchpriority={eager ? "high" : undefined}
       decoding="async"
       alt={alt}
     />
@@ -291,6 +292,7 @@ function Slideshow({ shots, alt, interval = 4200, eager = false, sizes = "(max-w
               width="1200"
               height="750"
               loading={eager && k === 0 ? "eager" : "lazy"}
+              fetchpriority={eager && k === 0 ? "high" : undefined}
               decoding="async"
               alt={k === 0 ? alt : ""}
             />
@@ -652,6 +654,7 @@ DirectContact.propTypes = { topic: PropTypes.string };
 
 function ServicePage({ service }) {
   const project = projects.find((item) => item.slug === service.projectSlug);
+  const film = films.find((item) => item.id === service.film);
   return (
     <>
       <header className="company-intro wrap service-intro">
@@ -670,9 +673,27 @@ function ServicePage({ service }) {
                 base={"/images/projects/" + project.slug}
                 alt={project.name + " public website"}
                 sizes="(max-width: 900px) 90vw, 38vw"
+                eager
               />
             </a>
             <figcaption>{project.name} · Founder project</figcaption>
+          </figure>
+        )}
+        {!project && film && (
+          <figure className="service-proof glass">
+            <a href={service.proof}>
+              <img
+                className="service-film"
+                src={"/videos/" + film.id + ".webp"}
+                alt={film.title + ", a still from the film"}
+                width="1280"
+                height="2276"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+              />
+            </a>
+            <figcaption>{film.title} · {film.kind}</figcaption>
           </figure>
         )}
       </header>
@@ -709,6 +730,7 @@ function ServicePage({ service }) {
 ServicePage.propTypes = {
   service: PropTypes.shape({
     projectSlug: PropTypes.string,
+    film: PropTypes.string,
     title: PropTypes.string,
     summary: PropTypes.string,
     name: PropTypes.string,
@@ -933,7 +955,7 @@ function Home() {
                   alt="Software projects built by Francis Annor"
                   eager
                   interval={3800}
-                  sizes="(max-width: 1020px) 92vw, 46vw"
+                  sizes="(max-width: 700px) 86vw, (max-width: 1020px) 80vw, 44vw"
                 />
               </div>
               <div className="laptop-base" />
@@ -2027,6 +2049,7 @@ Shot.propTypes = {
   sizes: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
+  eager: PropTypes.bool,
 };
 Slideshow.propTypes = {
   shots: PropTypes.arrayOf(shotType).isRequired,

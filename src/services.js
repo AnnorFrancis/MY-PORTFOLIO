@@ -102,4 +102,30 @@ export const services = [
     proof: "/work/perkos",
     proofLabel: "Explore PerkOS, our founder’s offline sales product",
   },
+  {
+    slug: "branding-social-media-and-video",
+    name: "Branding & content",
+    title: "Branding, social media and product videos",
+    seoTitle: "Flyer design, social media management and product videos in Ghana",
+    seoDescription:
+      "Flyers, social media management and short product videos for businesses in Ghana. Every post points customers to your website or WhatsApp. Flyers from GHS 80.",
+    price: [80, 2500],
+    summary:
+      "Flyers, social posts and short product films that send customers to one clear next step: your website, your shop or a WhatsApp chat.",
+    heading: "What should a customer do after seeing the post?",
+    example:
+      "A flyer or a short video works when it ends in one action: book, order or send a message. We plan each piece around the offer, size it for the channel it runs on, and link it to the page or chat where the sale happens. That way a post can be traced to the enquiries it brings in.",
+    deliverables: [
+      "Flyers and posts sized for Instagram, Facebook, WhatsApp Status and print.",
+      "Short product and launch films, cut for phones and for YouTube.",
+      "A monthly posting plan, with each post linked to the page or chat that takes the order.",
+    ],
+    budget:
+      "Flyers and simple brand pieces range from GHS 80 to 600. Monthly social media management ranges from GHS 600 to 2,500. Product and launch films are quoted by length and shoot.",
+    prepare:
+      "Send your logo, the product or offer you want to promote, and where customers should end up: your website, your WhatsApp or your shop.",
+    film: "perkos-hook",
+    proof: "/work#films",
+    proofLabel: "Watch our product and launch films",
+  },
 ];
