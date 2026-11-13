@@ -30,8 +30,53 @@ try {
   for (const page of pages) {
     const url = `${origin}${page.path === "/" ? "/" : page.path}`;
     const image = `${origin}/images/og/${page.image}.png`;
-    const organization = { "@type": "Organization", "@id": `${origin}/#organization`, name: "Perkins_Creatives Tech", url: origin, email: "annorfrancis23@outlook.com", founder: {"@type":"Person",name:"Francis Annor"} };
-    const schema = { "@context":"https://schema.org", "@graph": [organization, { "@type": page.path === "/about" ? "AboutPage" : page.path === "/contact" ? "ContactPage" : "WebPage", "@id": `${url}#webpage`, name:page.title, description:page.description, url, publisher:{"@id":`${origin}/#organization`}, ...(page.path.startsWith("/notes/") ? {author:{"@type":"Person",name:"Francis Annor"}} : {}) }] };
+    // The business as search engines should understand it: a professional
+    // service in Accra that serves Ghana and clients abroad.
+    const organization = {
+      "@type": "ProfessionalService",
+      "@id": `${origin}/#organization`,
+      name: "Perkins_Creatives Tech",
+      alternateName: ["Perkins Creatives Tech", "Perkins Creatives"],
+      url: `${origin}/`,
+      logo: `${origin}/apple-touch-icon.png`,
+      image: `${origin}/images/og/home.png`,
+      description:
+        "Software, website and AI company in Accra, Ghana. Websites, online stores, POS and stock systems, custom software and AI automation.",
+      email: "annorfrancis23@outlook.com",
+      telephone: "+233538713916",
+      priceRange: "GHS 1,500 to GHS 15,000",
+      address: { "@type": "PostalAddress", addressLocality: "Accra", addressRegion: "Greater Accra", addressCountry: "GH" },
+      areaServed: [{ "@type": "Country", name: "Ghana" }, "Worldwide"],
+      contactPoint: [{ "@type": "ContactPoint", contactType: "sales", telephone: "+233538713916", email: "annorfrancis23@outlook.com", availableLanguage: ["English"], areaServed: ["GH", "Worldwide"] }],
+      knowsAbout: ["Website design", "E-commerce", "Point of sale systems", "Inventory management software", "Custom software development", "AI chatbots", "Workflow automation", "Paystack and Mobile Money payments"],
+      founder: { "@type": "Person", name: "Francis Annor", url: `${origin}/about` },
+      sameAs: ["https://github.com/AnnorFrancis", "https://linkedin.com/in/francis-annor-649a0a26a"],
+    };
+    const website = {
+      "@type": "WebSite",
+      "@id": `${origin}/#website`,
+      url: `${origin}/`,
+      name: "Perkins_Creatives Tech",
+      alternateName: ["Perkins Creatives Tech", "Perkins Creatives"],
+      inLanguage: "en",
+      publisher: { "@id": organization["@id"] },
+    };
+    const schema = { "@context":"https://schema.org", "@graph": [organization, { "@type": page.path === "/about" ? "AboutPage" : page.path === "/contact" ? "ContactPage" : "WebPage", "@id": `${url}#webpage`, name:page.title, description:page.description, url, inLanguage: "en", isPartOf: { "@id": website["@id"] }, publisher:{"@id":`${origin}/#organization`}, ...(page.path.startsWith("/notes/") ? {author:{"@type":"Person",name:"Francis Annor"}} : {}) }, website] };
+    // Breadcrumbs for nested pages, so results show "Services > ..." or "Work > ...".
+    const [, section, leaf] = page.path.split("/");
+    if (leaf && (section === "services" || section === "work")) {
+      const crumbs = [
+        ["Home", `${origin}/`],
+        [section === "services" ? "Services" : "Work", `${origin}/${section}`],
+        [page.title.split(" | ")[0], url],
+      ];
+      schema["@graph"][1].breadcrumb = { "@id": `${url}#breadcrumb` };
+      schema["@graph"].push({
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: crumbs.map(([name, item], i) => ({ "@type": "ListItem", position: i + 1, name, item })),
+      });
+    }
     if (page.path.startsWith("/services/")) {
       const serviceId = url + "#service";
       schema["@graph"][1].mainEntity = { "@id": serviceId };
@@ -41,7 +86,12 @@ try {
         name: page.title.split(" | ")[0],
         description: page.description,
         url,
+        serviceType: page.title.split(" | ")[0],
         provider: { "@id": organization["@id"] },
+        areaServed: [{ "@type": "Country", name: "Ghana" }, "Worldwide"],
+        ...(page.price
+          ? { offers: { "@type": "Offer", url, priceSpecification: { "@type": "PriceSpecification", priceCurrency: "GHS", minPrice: page.price[0], maxPrice: page.price[1] } } }
+          : {}),
       });
     }
     const head = `<meta name="description" content="${escape(page.description)}" />
@@ -81,7 +131,7 @@ ${page.path === "/404" ? '<meta name="robots" content="noindex" />' : ""}
     "dist/sitemap.xml",
     `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages
       .filter((p) => p.path !== "/404")
-      .map((p) => `<url><loc>${origin}${p.path}</loc></url>`)
+      .map((p) => `<url><loc>${origin}${p.path}</loc><lastmod>${new Date().toISOString().slice(0, 10)}</lastmod></url>`)
       .join("")}</urlset>`,
   );
 } finally {

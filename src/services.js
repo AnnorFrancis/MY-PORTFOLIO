@@ -3,6 +3,10 @@ export const services = [
     slug: "ai-workflow-automation",
     name: "AI & workflow automation",
     title: "AI workflow automation for business teams",
+    seoTitle: "AI chatbots and workflow automation in Ghana",
+    seoDescription:
+      "AI chatbots and workflow automation for businesses in Ghana and abroad. Sort enquiries, answer from your own documents and draft replies for staff to approve. From GHS 1,500.",
+    price: [1500, 6000],
     summary:
       "Help staff sort incoming enquiries, find answers in internal documents and prepare replies for review.",
     heading: "Which decisions should stay with a person?",
@@ -24,6 +28,10 @@ export const services = [
     slug: "business-management-systems",
     name: "Business systems",
     title: "Stock, sales and business management systems",
+    seoTitle: "POS, stock and business management systems in Ghana",
+    seoDescription:
+      "POS, stock and sales management systems for shops and businesses in Ghana. Connect every sale to stock, cash, staff roles and the owner's daily report. Chat with us on WhatsApp.",
+    price: [10000, 15000],
     summary:
       "Connect a sale at the counter to stock, cash, staff permissions and the figures an owner sees at close of day.",
     heading: "What happens after a sale is recorded?",
@@ -46,6 +54,10 @@ export const services = [
     slug: "websites-and-ecommerce",
     name: "Websites & commerce",
     title: "Websites, online stores and booking systems",
+    seoTitle: "Website design, online stores and booking sites in Ghana",
+    seoDescription:
+      "Website design, online stores and booking systems for businesses in Ghana. Mobile-first pages with Paystack and Mobile Money payments. Websites from GHS 2,000.",
+    price: [2000, 8000],
     summary:
       "Give customers a clear route from finding your business to enquiring, paying for an order or booking an appointment.",
     heading: "What should happen after a customer clicks?",
@@ -68,6 +80,10 @@ export const services = [
     slug: "custom-software-development",
     name: "Custom software",
     title: "Custom software development for business operations",
+    seoTitle: "Custom software development company in Ghana",
+    seoDescription:
+      "Custom software development in Ghana. Replace spreadsheets and disconnected tools with one web application built around how your team works. From GHS 10,000.",
+    price: [10000, 15000],
     summary:
       "Replace a spreadsheet handoff or a chain of disconnected tools with one application designed around the way your team works.",
     heading: "Which workflow deserves its own application?",

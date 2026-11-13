@@ -264,49 +264,49 @@ export const company = {
   location: "Accra, Ghana",
 };
 export const pages = [
-  ...services.map(({slug, title, summary}) => ({
-    path: "/services/" + slug, title: title + " | Perkins_Creatives Tech", description: summary, image: slug,
+  ...services.map(({slug, seoTitle, seoDescription, price}) => ({
+    path: "/services/" + slug, title: seoTitle + " | Perkins_Creatives Tech", description: seoDescription, image: slug, price,
   })),
   {
     path: "/",
-    title: "Perkins_Creatives Tech | AI, software and business systems",
+    title: "Software, website and AI company in Accra, Ghana | Perkins_Creatives Tech",
     description:
-      "Custom software, practical AI integrations and connected business systems for businesses and brands. Based in Accra, working locally and internationally.",
+      "Perkins_Creatives Tech builds websites, online stores, POS and stock systems, custom software and AI automation for businesses in Ghana and abroad. Chat with us on WhatsApp.",
     image: "home",
   },
   {
     path: "/services",
-    title: "Software development and AI services | Perkins_Creatives Tech",
+    title: "Software, website and AI services in Ghana | Perkins_Creatives Tech",
     description:
       "Explore custom software, business management systems, AI automation and web commerce services. Start with a defined business problem and a practical delivery plan.",
     image: "services",
   },
   {
     path: "/about",
-    title: "Our company and team | Perkins_Creatives Tech",
+    title: "About our software team in Accra | Perkins_Creatives Tech",
     description:
       "Meet the team behind Perkins_Creatives Tech, covering full-stack development, AI engineering, backend systems, user experience and marketing.",
     image: "about",
   },
   {
     path: "/contact",
-    title: "Discuss your project | Perkins_Creatives Tech",
+    title: "Contact us on WhatsApp or email | Perkins_Creatives Tech",
     description:
-      "Tell Perkins_Creatives Tech about your business, software needs and budget. Discuss a new system, AI integration, website or existing product improvement.",
+      "Talk to Perkins_Creatives Tech in Accra about a website, online store, business system, custom software or AI project. WhatsApp, email or a short project brief.",
     image: "contact",
   },
   {
     path: "/work",
-    title: "Selected work and case studies | Perkins_Creatives Tech",
+    title: "Our work: websites, systems and case studies | Perkins_Creatives Tech",
     description:
       "Explore delivered systems, independent products and clearly labelled concepts. See the work, technical decisions and outcomes behind our capabilities.",
     image: "home",
   },
   {
     path: "/work-with-me",
-    title: "Project scope and pricing | Perkins_Creatives Tech",
+    title: "Website and software prices in Ghana (GHS) | Perkins_Creatives Tech",
     description:
-      "Published GHS project ranges, delivery process and project enquiries for websites, commerce and custom business software.",
+      "Published prices in Ghana cedis for websites, online stores, custom software and AI automation, with delivery times and how a project works.",
     image: "contact",
   },
   {

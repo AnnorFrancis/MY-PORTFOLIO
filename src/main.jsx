@@ -12,3 +12,8 @@ const app = (
 );
 if (root.hasChildNodes()) hydrateRoot(root, app);
 else createRoot(root).render(app);
+
+// Visitor counts, real-user speed and enquiry clicks (Vercel Web Analytics and
+// Speed Insights). Off unless the build sets VITE_ANALYTICS=on, because both
+// must first be enabled in the Vercel project.
+if (import.meta.env.VITE_ANALYTICS === "on") import("./analytics.js");
