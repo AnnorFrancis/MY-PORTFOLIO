@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { services } from "./services";
 
-export const email = "annorfrancis23@outlook.com";
+export const email = "hello@perkos.app";
 export const whatsapp = "https://wa.me/233200214147";
 export const whatsappDisplay = "+233 20 021 4147";
 

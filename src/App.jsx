@@ -26,7 +26,7 @@ import {
   whatsappDisplay,
 } from "./ui";
 
-const email = "annorfrancis23@outlook.com";
+const email = "hello@perkos.app";
 const whatsapp = "https://wa.me/233200214147";
 // Address shown in the glass browser bar: the host, plus the project folder
 // for builds hosted on GitHub Pages.

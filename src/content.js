@@ -260,7 +260,7 @@ export const films = [
 ];
 export const company = {
   name: "Perkins_Creatives Tech",
-  email: "annorfrancis23@outlook.com",
+  email: "hello@perkos.app",
   location: "Accra, Ghana",
 };
 export const pages = [
