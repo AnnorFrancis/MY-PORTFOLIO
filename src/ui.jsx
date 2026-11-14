@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import { services } from "./services";
 
 export const email = "hello@perkos.app";
+// Backup inbox, copied on every enquiry so a message still arrives if one address fails.
+export const backupEmail = "francisannor212@gmail.com";
 export const whatsapp = "https://wa.me/233200214147";
 export const whatsappDisplay = "+233 20 021 4147";
 
@@ -209,7 +211,7 @@ export function DirectContact({ topic, light = false }) {
       </a>
       <a
         className={light ? "button button-outline-light" : "direct-email"}
-        href={"mailto:" + email + "?subject=" + encodeURIComponent(topic || "Project enquiry")}
+        href={"mailto:" + email + "?cc=" + backupEmail + "&subject=" + encodeURIComponent(topic || "Project enquiry")}
       >
         Email our team <ArrowIcon />
       </a>
@@ -439,6 +441,7 @@ export function SiteFooter({ Wordmark, minimal = false }) {
           <ul>
             <li><a href={whatsapp}>WhatsApp {whatsappDisplay}</a></li>
             <li><a href={"mailto:" + email}>{email}</a></li>
+            <li><a href={"mailto:" + backupEmail}>{backupEmail}</a></li>
             <li>Accra, Ghana</li>
             <li>Working with clients in Ghana and abroad</li>
           </ul>

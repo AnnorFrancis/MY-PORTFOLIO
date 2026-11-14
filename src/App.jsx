@@ -24,6 +24,7 @@ import {
   SiteFooter,
   servicePhoto,
   whatsappDisplay,
+  backupEmail,
 } from "./ui";
 
 const email = "hello@perkos.app";
@@ -856,6 +857,10 @@ function Contact() {
               <a href={`mailto:${email}`}>{email}</a>
             </li>
             <li>
+              <span>Backup email</span>
+              <a href={`mailto:${backupEmail}`}>{backupEmail}</a>
+            </li>
+            <li>
               <span>Office</span>
               <strong>Accra, Ghana</strong>
             </li>
@@ -1098,7 +1103,7 @@ function Privacy() {
       <Band tone="light">
         <div className="prose-v2">
           <h2>Who we are</h2>
-          <p>Perkins_Creatives Tech is a software, website and AI company based in Accra, Ghana. You can reach us on WhatsApp at {phoneDisplay} or by email at {email}.</p>
+          <p>Perkins_Creatives Tech is a software, website and AI company based in Accra, Ghana. You can reach us on WhatsApp at {phoneDisplay} or by email at {email} or {backupEmail}.</p>
           <h2>What this website collects</h2>
           <p>This website has no accounts and does not store anything you type. The project brief and quick forms only prepare a message in your own email or WhatsApp app. Nothing is sent until you send it yourself.</p>
           <p>We count visits and clicks on our WhatsApp and email buttons to understand which pages help people. These counts use Vercel Web Analytics, which does not use cookies and does not collect names, email addresses or anything you type.</p>
@@ -1110,7 +1115,7 @@ function Privacy() {
           <h2>How long we keep it</h2>
           <p>We keep enquiry messages for as long as needed to reply and to keep records of work we deliver. You can ask us to delete your messages at any time unless we must keep them by law.</p>
           <h2>Your rights</h2>
-          <p>Under Ghana’s Data Protection Act, 2012 (Act 843), you can ask to see, correct or delete the personal information we hold about you. Email {email} or message us on WhatsApp and we will respond.</p>
+          <p>Under Ghana’s Data Protection Act, 2012 (Act 843), you can ask to see, correct or delete the personal information we hold about you. Email {email} or {backupEmail}, or message us on WhatsApp and we will respond.</p>
         </div>
       </Band>
     </>
@@ -1560,7 +1565,7 @@ function ProjectBrief() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const body = `Hello Perkins_Creatives Tech,\n\n${data.get("message")}\n\nService: ${data.get("service")}\nBudget: ${data.get("budget")}`;
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent("A system for my business")}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${email}?cc=${backupEmail}&subject=${encodeURIComponent("A system for my business")}&body=${encodeURIComponent(body)}`;
     setStatus(
       "Your email app should open with the brief filled in. Nothing is sent until you send it. If it did not open, use the direct email or WhatsApp link in this section.",
     );
