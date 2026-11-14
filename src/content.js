@@ -330,6 +330,26 @@ export const pages = [
     image: "engineering",
   },
   {
+    path: "/privacy",
+    title: "Privacy | Perkins_Creatives Tech",
+    description: "How Perkins_Creatives Tech handles website visits, enquiries and messages, and your rights under Ghana’s Data Protection Act.",
+    image: "contact",
+  },
+  ...[
+    ["", "Websites, systems and AI for businesses in Ghana", "home"],
+    ["websites", "Get a website that brings in enquiries", "websites-and-ecommerce"],
+    ["business-systems", "POS, stock and sales systems for Ghanaian businesses", "business-management-systems"],
+    ["custom-software", "Custom software built around your team", "custom-software-development"],
+    ["ai-automation", "AI assistants that answer customer messages faster", "ai-workflow-automation"],
+    ["branding", "Flyers, posts and videos that make people message you", "branding-social-media-and-video"],
+  ].map(([slug, title, image]) => ({
+    path: "/start" + (slug ? "/" + slug : ""),
+    title: title + " | Perkins_Creatives Tech",
+    description: "Tell Perkins_Creatives Tech what you need on WhatsApp and get a clear price. Published prices in Ghana cedis, Paystack and Mobile Money, scope agreed before work starts.",
+    image,
+    noindex: true,
+  })),
+  {
     path: "/404",
     title: "Page not found | Perkins_Creatives Tech",
     description:

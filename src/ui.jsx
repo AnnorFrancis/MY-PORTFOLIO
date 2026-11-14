@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 import { services } from "./services";
 
 export const email = "annorfrancis23@outlook.com";
-export const whatsapp = "https://wa.me/233538713916";
-export const whatsappDisplay = "+233 53 871 3916";
+export const whatsapp = "https://wa.me/233200214147";
+export const whatsappDisplay = "+233 20 021 4147";
 
 const ArrowIcon = () => (
   <span className="arrow-icon" aria-hidden="true">
@@ -385,7 +385,18 @@ export function Faq({ items }) {
 }
 Faq.propTypes = { items: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired };
 
-export function SiteFooter({ Wordmark }) {
+export function SiteFooter({ Wordmark, minimal = false }) {
+  if (minimal)
+    return (
+      <footer className="footer-v2 footer-min">
+        <div className="wrap footer-v2-bottom">
+          <span>© 2026 Perkins_Creatives Tech · Accra, Ghana</span>
+          <span>
+            <a href="/">Website</a> · <a href="/privacy">Privacy</a>
+          </span>
+        </div>
+      </footer>
+    );
   return (
     <footer className="footer-v2">
       <div className="wrap footer-v2-top">
@@ -420,6 +431,7 @@ export function SiteFooter({ Wordmark }) {
             <li><a href="/work-with-me">Prices in GHS</a></li>
             <li><a href="/engineering">Engineering</a></li>
             <li><a href="/contact">Contact</a></li>
+            <li><a href="/privacy">Privacy</a></li>
           </ul>
         </nav>
         <div className="footer-v2-col">
@@ -432,6 +444,8 @@ export function SiteFooter({ Wordmark }) {
           </ul>
           <h2 className="footer-v2-sub">Follow</h2>
           <ul className="footer-v2-social">
+            <li><a href="https://www.instagram.com/perkins_creative/">Instagram</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=61588510061817">Facebook</a></li>
             <li><a href="https://linkedin.com/in/francis-annor-649a0a26a">LinkedIn</a></li>
             <li><a href="https://github.com/AnnorFrancis">GitHub</a></li>
           </ul>
@@ -444,4 +458,4 @@ export function SiteFooter({ Wordmark }) {
     </footer>
   );
 }
-SiteFooter.propTypes = { Wordmark: PropTypes.elementType.isRequired };
+SiteFooter.propTypes = { Wordmark: PropTypes.elementType.isRequired, minimal: PropTypes.bool };

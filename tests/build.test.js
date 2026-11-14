@@ -27,7 +27,7 @@ describe("Published route contract", () => {
         .split("<body>")[1]
         .replace(/<script[^>]*>[\s\S]*?<\/script>/g, "")
         .replace(/<[^>]*>/g, "");
-      expect(body.length).toBeGreaterThan(page.path === "/404" ? 250 : page.path === "/contact" ? 850 : page.path.startsWith("/services/") ? 1200 : page.path === "/about" ? 1400 : 1800);
+      expect(body.length).toBeGreaterThan(page.path === "/404" ? 250 : page.path === "/contact" ? 850 : page.path.startsWith("/start") ? 1000 : page.path.startsWith("/services/") ? 1200 : page.path === "/about" ? 1400 : 1800);
     });
     it(`${page.path} has no broken local images, links or fragment targets`, () => {
       const html = readPage(page.path);
@@ -51,9 +51,13 @@ describe("Published route contract", () => {
   }
   it("sitemap contains each indexable route and excludes the error page", () => {
     const sitemap = readFileSync("dist/sitemap.xml", "utf8");
-    for (const page of pages.filter((p) => p.path !== "/404"))
+    for (const page of pages.filter((p) => p.path !== "/404" && !p.noindex))
       expect(sitemap).toContain(`${new URL(process.env.SITE_URL || "https://perkinscreatives.perkos.app").origin}${page.path}`);
     expect(sitemap).not.toContain("/404");
+    for (const page of pages.filter((p) => p.noindex)) {
+      expect(sitemap).not.toContain(`${page.path}<`);
+      expect(readPage(page.path)).toContain('<meta name="robots" content="noindex" />');
+    }
   });
   it("featured projects lead to hosted products, not repositories", () => {
     for (const p of projects) {

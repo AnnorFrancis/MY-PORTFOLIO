@@ -27,7 +27,7 @@ import {
 } from "./ui";
 
 const email = "annorfrancis23@outlook.com";
-const whatsapp = "https://wa.me/233538713916";
+const whatsapp = "https://wa.me/233200214147";
 // Address shown in the glass browser bar: the host, plus the project folder
 // for builds hosted on GitHub Pages.
 const domainOf = (url) => {
@@ -371,7 +371,7 @@ const navItems = [
   ["/about", "Team"],
   ["/work-with-me", "Prices"],
 ];
-function Header({ path }) {
+function Header({ path, minimal = false }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [pill, setPill] = useState(null);
@@ -405,6 +405,22 @@ function Header({ path }) {
       toggle.current?.focus();
     }
   }
+  if (minimal)
+    return (
+      <header className={`site-header lp-header${scrolled ? " scrolled" : " at-top"}`}>
+        <div className="header-inner glass">
+          <a className="identity" href="/">
+            <Wordmark />
+          </a>
+          <div className="lp-header-actions">
+            <a className="lp-call" href="tel:+233200214147">Call</a>
+            <a className="button button-primary" href={whatsapp}>
+              WhatsApp <Arrow />
+            </a>
+          </div>
+        </div>
+      </header>
+    );
   const current = (href) =>
     path === href ? "page" : path.startsWith(href + "/") ? "location" : undefined;
   return (
@@ -502,9 +518,10 @@ function Header({ path }) {
     </header>
   );
 }
-function Footer() {
-  return <SiteFooter Wordmark={Wordmark} />;
+function Footer({ minimal = false }) {
+  return <SiteFooter Wordmark={Wordmark} minimal={minimal} />;
 }
+Footer.propTypes = { minimal: PropTypes.bool };
 function ContactBand({ topic }) {
   return <CtaBand topic={topic} />;
 }
@@ -863,6 +880,243 @@ function Contact() {
     </>
   );
 }
+/* ------------------------------------------------------- ad landing pages */
+// One page per ad: a headline that matches the ad, the starting price, proof
+// and a direct WhatsApp route. No menu to wander off into. Hidden from search.
+const adPages = [
+  {
+    slug: "",
+    service: null,
+    eyebrow: "Perkins_Creatives Tech · Accra, Ghana",
+    title: <>A website or system that <em>brings you customers.</em></>,
+    lead: "Websites, online stores, POS and stock systems, AI assistants and branding for businesses in Ghana. Tell us what you need on WhatsApp and get a clear price.",
+    bullets: ["Published prices in Ghana cedis", "Paystack and Mobile Money payments", "Scope and price agreed before work starts"],
+    price: "From GHS 2,000",
+    image: "hero-home",
+    project: "trendy-norms",
+  },
+  {
+    slug: "websites",
+    service: "websites-and-ecommerce",
+    eyebrow: "Websites and online stores · Accra",
+    title: <>Get a website that <em>brings in enquiries.</em></>,
+    lead: "A professional website or online store for your business, built for phones first, with WhatsApp, Paystack and Mobile Money built in.",
+    bullets: ["Starter websites usually ready in 1 to 2 weeks", "Customers can book, buy or message you", "Update text and photos yourself"],
+    price: "From GHS 2,000",
+    image: "svc-web",
+    project: "besia",
+  },
+  {
+    slug: "business-systems",
+    service: "business-management-systems",
+    eyebrow: "POS, stock and sales systems · Accra",
+    title: <>Know your stock, sales and cash <em>every single day.</em></>,
+    lead: "One system that connects every sale to your stock, your cash, your staff and the report you see at close of day.",
+    bullets: ["Point of sale and stock in one place", "Staff roles and approvals", "Daily figures for the owner"],
+    price: "From GHS 10,000",
+    image: "svc-business",
+    project: "trendy-norms",
+  },
+  {
+    slug: "custom-software",
+    service: "custom-software-development",
+    eyebrow: "Custom software · Accra",
+    title: <>Software built around <em>how your team works.</em></>,
+    lead: "Replace spreadsheets and copy and paste with one application your team actually enjoys using.",
+    bullets: ["A first release agreed in writing", "Your data, roles and approvals", "Tested on your real daily tasks"],
+    price: "From GHS 10,000",
+    image: "svc-custom",
+    project: "perkos",
+  },
+  {
+    slug: "ai-automation",
+    service: "ai-workflow-automation",
+    eyebrow: "AI assistants and automation · Accra",
+    title: <>Answer customer messages <em>faster with AI.</em></>,
+    lead: "An assistant that sorts incoming enquiries, finds answers in your own documents and drafts replies, with a person approving anything important.",
+    bullets: ["Sorts and answers routine questions", "Uses your own documents and prices", "A person approves important replies"],
+    price: "From GHS 1,500",
+    image: "svc-ai",
+    project: null,
+  },
+  {
+    slug: "branding",
+    service: "branding-social-media-and-video",
+    eyebrow: "Flyers, social media and video · Accra",
+    title: <>Posts and videos that make people <em>message you.</em></>,
+    lead: "Flyers, social media posts and short product videos, each one pointing customers to your WhatsApp, your shop or your website.",
+    bullets: ["Flyers sized for Instagram, Facebook and WhatsApp", "Short product videos for Reels", "A monthly posting plan"],
+    price: "From GHS 80",
+    image: "svc-brand",
+    project: null,
+  },
+];
+const phoneDisplay = "020 021 4147";
+const phoneLink = "tel:+233200214147";
+const budgets = ["Let’s discuss", "Under GHS 2,000", "GHS 2,000 to 5,000", "GHS 5,000 to 10,000", "Above GHS 10,000"];
+
+// Turns three quick choices into a ready-to-send WhatsApp message.
+function QuickBrief({ preset, slug }) {
+  const [need, setNeed] = useState(preset || services[0].name);
+  function submit(event) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") || "").trim();
+    const fromAd = new window.URLSearchParams(window.location.search).has("utm_source");
+    const lines = [
+      "Hello Perkins_Creatives Tech" + (name ? ", my name is " + name : "") + ".",
+      "I’m interested in: " + need + ".",
+      "Budget: " + data.get("budget") + ".",
+      "I found you through " + (fromAd ? "your ad" : "your website") + " (" + ("/start" + (slug ? "/" + slug : "")) + ").",
+    ];
+    window.location.href = whatsapp + "?text=" + encodeURIComponent(lines.join("\n"));
+  }
+  return (
+    <form className="lp-quick glass brief-form" onSubmit={submit}>
+      <p className="lp-quick-title">Get a price in one message</p>
+      <fieldset>
+        <legend>What do you need?</legend>
+        <div className="chip-options">
+          {services.map((s) => (
+            <label key={s.slug} className={need === s.name ? "on" : undefined}>
+              <input type="radio" name="service" value={s.name} checked={need === s.name} onChange={() => setNeed(s.name)} />
+              {s.name}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <label className="lp-field">
+        Your name <span>(optional)</span>
+        <input name="name" type="text" autoComplete="name" maxLength={60} placeholder="e.g. Ama" />
+      </label>
+      <label className="lp-field">
+        Budget
+        <select name="budget" defaultValue={budgets[0]}>
+          {budgets.map((b) => (
+            <option key={b}>{b}</option>
+          ))}
+        </select>
+      </label>
+      <button className="button button-primary lp-send" type="submit">
+        Send on WhatsApp <Arrow />
+      </button>
+      <p className="lp-note">Opens WhatsApp with your message ready. Nothing is stored on this website.</p>
+    </form>
+  );
+}
+QuickBrief.propTypes = { preset: PropTypes.string, slug: PropTypes.string };
+
+function AdLanding({ page }) {
+  const service = services.find((s) => s.slug === page.service);
+  const project = page.project ? projects.find((p) => p.slug === page.project) : null;
+  const topic = service ? service.name : "a project";
+  const chat = whatsapp + "?text=" + encodeURIComponent("Hello Perkins_Creatives Tech, I saw your ad and I’d like to discuss " + topic + ".");
+  return (
+    <>
+      <PageHero
+        image={page.image}
+        eyebrow={page.eyebrow}
+        title={page.title}
+        lead={page.lead}
+        aside={<QuickBrief preset={service ? service.name : undefined} slug={page.slug} />}
+      >
+        <ul className="lp-bullets">
+          {page.bullets.map((b) => (
+            <li key={b}>{b}</li>
+          ))}
+        </ul>
+        <div className="lp-actions">
+          <a className="button button-primary button-large" href={chat}>
+            Chat on WhatsApp now <Arrow />
+          </a>
+          <a className="button button-outline-light button-large" href={phoneLink}>
+            Call {phoneDisplay}
+          </a>
+        </div>
+        <p className="lp-price">
+          {page.price} · price agreed before any work starts
+        </p>
+      </PageHero>
+      <Band tone="light" className="trust-band" label="Clients">
+        <div className="trust-v2" data-reveal>
+          <p>Live systems we have built for</p>
+          <ul>
+            <li>Trendy Norms Hub</li>
+            <li>Bēsia Beauty Studio</li>
+            <li>Letteropedia</li>
+            <li>PerkOS</li>
+          </ul>
+        </div>
+      </Band>
+      <Band tone="mist">
+        <div className={project ? "split-v2" : "split-v2 single"}>
+          <div>
+            <p className="kicker">What you get</p>
+            <h2>{service ? service.title : "Software and websites that work for your business."}</h2>
+            <ul className="ticks">
+              {(service ? service.deliverables : processSteps.map(([t, p]) => t + ": " + p)).map((d) => (
+                <li key={d}>{d}</li>
+              ))}
+            </ul>
+          </div>
+          {project && (
+            <ProjectCard
+              caseStudy
+              project={{ ...project, tag: project.visualLabel, image: shotBase(project.slug) }}
+            />
+          )}
+        </div>
+      </Band>
+      <Band tone="dark">
+        <Heading eyebrow="How it works" title="Three steps, no surprises." />
+        <Steps light />
+      </Band>
+      <Band tone="light">
+        <Heading eyebrow="Questions" title="Before you message us." center />
+        <Faq items={faqs.slice(0, 4)} />
+      </Band>
+      <CtaBand title="Ready when you are. Send one message." topic={topic} />
+      <div className="lp-sticky" aria-label="Contact us">
+        <a className="button button-primary" href={chat}>WhatsApp</a>
+        <a className="button button-light" href={phoneLink}>Call</a>
+      </div>
+    </>
+  );
+}
+AdLanding.propTypes = { page: PropTypes.object.isRequired };
+
+function Privacy() {
+  return (
+    <>
+      <PageHero
+        size="short"
+        image="hero-contact"
+        eyebrow="Privacy"
+        title={<>How we handle <em>your information.</em></>}
+        lead="Last updated 14 November 2026. Plain answers about what this website collects and what we do with your messages."
+      />
+      <Band tone="light">
+        <div className="prose-v2">
+          <h2>Who we are</h2>
+          <p>Perkins_Creatives Tech is a software, website and AI company based in Accra, Ghana. You can reach us on WhatsApp at {phoneDisplay} or by email at {email}.</p>
+          <h2>What this website collects</h2>
+          <p>This website has no accounts and does not store anything you type. The project brief and quick forms only prepare a message in your own email or WhatsApp app. Nothing is sent until you send it yourself.</p>
+          <p>We count visits and clicks on our WhatsApp and email buttons to understand which pages help people. These counts use Vercel Web Analytics, which does not use cookies and does not collect names, email addresses or anything you type.</p>
+          <p>Our hosting provider, Vercel, keeps standard technical logs such as IP addresses and browser type to keep the website secure and running.</p>
+          <h2>If you contact us</h2>
+          <p>When you message us on WhatsApp, email us, or answer one of our ad forms, we receive your name, contact details and what you tell us about your project. We use this only to reply, prepare a quote and deliver work you agree to. We do not sell your information.</p>
+          <h2>Advertising</h2>
+          <p>If you reach us through a Facebook or Instagram ad, Meta may share with us the details you choose to submit in an ad form. If we add Meta’s advertising tools to this website, we will update this page first.</p>
+          <h2>How long we keep it</h2>
+          <p>We keep enquiry messages for as long as needed to reply and to keep records of work we deliver. You can ask us to delete your messages at any time unless we must keep them by law.</p>
+          <h2>Your rights</h2>
+          <p>Under Ghana’s Data Protection Act, 2012 (Act 843), you can ask to see, correct or delete the personal information we hold about you. Email {email} or message us on WhatsApp and we will respond.</p>
+        </div>
+      </Band>
+    </>
+  );
+}
+
 function Home() {
   const heroShots = heroSlugs.flatMap((slug) =>
     shotsFor(slug).slice(0, 1).map((s) => ({ ...s, key: slug })),
@@ -1824,6 +2078,7 @@ export default function App({ path = "/" }) {
   const normalized = path.replace(/\/$/, "") || "/";
   const project = projects.find((p) => normalized === `/work/${p.slug}`);
   const service = services.find(item => normalized === "/services/" + item.slug);
+  const adPage = adPages.find((p) => normalized === "/start" + (p.slug ? "/" + p.slug : ""));
   let content;
   if (normalized === "/") content = <Home />;
   else if (normalized === "/about") content = <About />;
@@ -1833,6 +2088,8 @@ export default function App({ path = "/" }) {
   else if (normalized === "/work-with-me") content = <WorkWithMe />;
   else if (normalized === "/engineering") content = <Engineering />;
   else if (normalized === "/notes/lease-based-push") content = <Note />;
+  else if (normalized === "/privacy") content = <Privacy />;
+  else if (adPage) content = <AdLanding page={adPage} />;
   else if (service) content = <ServicePage service={service} />;
   else if (project) content = <CaseStudy project={project} />;
   else
@@ -1858,11 +2115,11 @@ export default function App({ path = "/" }) {
         Skip to main content
       </a>
       <ScrollProgress />
-      <Header path={normalized} />
+      <Header path={normalized} minimal={Boolean(adPage)} />
       <main id="main" tabIndex={-1}>
         {content}
       </main>
-      <Footer />
+      <Footer minimal={Boolean(adPage)} />
     </>
   );
 }
@@ -1941,7 +2198,7 @@ FilmCard.propTypes = {
   }).isRequired,
   index: PropTypes.number.isRequired,
 };
-Header.propTypes = { path: PropTypes.string.isRequired };
+Header.propTypes = { path: PropTypes.string.isRequired, minimal: PropTypes.bool };
 
 Diagram.propTypes = { project: projectType.isRequired };
 CaseStudy.propTypes = { project: projectType.isRequired };

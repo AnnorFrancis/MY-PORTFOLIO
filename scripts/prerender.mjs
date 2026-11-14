@@ -43,14 +43,14 @@ try {
       description:
         "Software, website and AI company in Accra, Ghana. Websites, online stores, POS and stock systems, custom software and AI automation.",
       email: "annorfrancis23@outlook.com",
-      telephone: "+233538713916",
+      telephone: "+233200214147",
       priceRange: "GHS 1,500 to GHS 15,000",
       address: { "@type": "PostalAddress", addressLocality: "Accra", addressRegion: "Greater Accra", addressCountry: "GH" },
       areaServed: [{ "@type": "Country", name: "Ghana" }, "Worldwide"],
-      contactPoint: [{ "@type": "ContactPoint", contactType: "sales", telephone: "+233538713916", email: "annorfrancis23@outlook.com", availableLanguage: ["English"], areaServed: ["GH", "Worldwide"] }],
+      contactPoint: [{ "@type": "ContactPoint", contactType: "sales", telephone: "+233200214147", email: "annorfrancis23@outlook.com", availableLanguage: ["English"], areaServed: ["GH", "Worldwide"] }],
       knowsAbout: ["Website design", "E-commerce", "Point of sale systems", "Inventory management software", "Custom software development", "AI chatbots", "Workflow automation", "Paystack and Mobile Money payments"],
       founder: { "@type": "Person", name: "Francis Annor", url: `${origin}/about` },
-      sameAs: ["https://github.com/AnnorFrancis", "https://linkedin.com/in/francis-annor-649a0a26a"],
+      sameAs: ["https://www.instagram.com/perkins_creative/", "https://www.facebook.com/profile.php?id=61588510061817", "https://linkedin.com/in/francis-annor-649a0a26a", "https://github.com/AnnorFrancis"],
     };
     const website = {
       "@type": "WebSite",
@@ -107,7 +107,7 @@ try {
 <meta name="twitter:title" content="${escape(page.title)}" />
 <meta name="twitter:description" content="${escape(page.description)}" />
 <meta name="twitter:image" content="${image}" />
-${page.path === "/404" ? '<meta name="robots" content="noindex" />' : ""}
+${page.path === "/404" || page.noindex ? '<meta name="robots" content="noindex" />' : ""}
 <script type="application/ld+json">${JSON.stringify(schema).replaceAll("<", "\\u003c")}</script>`;
     const body = renderToString(React.createElement(App, { path: page.path }));
     const html = template
@@ -130,7 +130,7 @@ ${page.path === "/404" ? '<meta name="robots" content="noindex" />' : ""}
   await writeFile(
     "dist/sitemap.xml",
     `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages
-      .filter((p) => p.path !== "/404")
+      .filter((p) => p.path !== "/404" && !p.noindex)
       .map((p) => `<url><loc>${origin}${p.path}</loc><lastmod>${new Date().toISOString().slice(0, 10)}</lastmod></url>`)
       .join("")}</urlset>`,
   );
