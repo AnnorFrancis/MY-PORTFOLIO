@@ -25,6 +25,8 @@ import {
   servicePhoto,
   whatsappDisplay,
   backupEmail,
+  CookieChoice,
+  resetCookieChoice,
 } from "./ui";
 
 const email = "hello@perkos.app";
@@ -1111,7 +1113,14 @@ function Privacy() {
           <h2>If you contact us</h2>
           <p>When you message us on WhatsApp, email us, or answer one of our ad forms, we receive your name, contact details and what you tell us about your project. We use this only to reply, prepare a quote and deliver work you agree to. We do not sell your information.</p>
           <h2>Advertising</h2>
-          <p>If you reach us through a Facebook or Instagram ad, Meta may share with us the details you choose to submit in an ad form. If we add Meta’s advertising tools to this website, we will update this page first.</p>
+          <p>If you reach us through a Facebook or Instagram ad, Meta may share with us the details you choose to submit in an ad form. Ad forms are covered by this page and by Meta’s own privacy policy.</p>
+          <h2>Meta pixel</h2>
+          <p>We use the Meta pixel to see which of our Facebook and Instagram ads lead to enquiries, and to show our ads to people who have visited this website. It only loads if you choose Allow on the cookie choice bar. When it is on, Meta receives the pages you view and whether you tapped our WhatsApp, phone or email buttons, together with technical details such as your browser and IP address, and Meta may set cookies. We never send Meta your name, number or anything you type. We remember your choice in your browser only.</p>
+          <p>
+            <button type="button" className="button button-light" onClick={resetCookieChoice}>
+              Change my cookie choice
+            </button>
+          </p>
           <h2>How long we keep it</h2>
           <p>We keep enquiry messages for as long as needed to reply and to keep records of work we deliver. You can ask us to delete your messages at any time unless we must keep them by law.</p>
           <h2>Your rights</h2>
@@ -2125,6 +2134,7 @@ export default function App({ path = "/" }) {
         {content}
       </main>
       <Footer minimal={Boolean(adPage)} />
+      <CookieChoice />
     </>
   );
 }

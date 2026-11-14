@@ -1949,3 +1949,71 @@ main > article > .note-body {
 .footer-min a {
   color: var(--aqua);
 }
+
+/* ---------------------------------------------------------- cookie choice */
+.consent-bar {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 80;
+  width: min(420px, calc(100vw - 32px));
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow: 0 24px 48px -20px rgba(13, 24, 32, 0.45);
+  color: #1e2731;
+  animation: consent-in 0.4s ease-out both;
+}
+.consent-bar p {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.consent-bar a {
+  color: #06506f;
+  font-weight: 600;
+}
+.consent-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.consent-actions .button {
+  min-height: 44px;
+  padding-inline: 22px;
+}
+.consent-no {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #1e2731;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.consent-no:hover,
+.consent-no:focus-visible {
+  background: rgba(10, 111, 150, 0.1);
+}
+@keyframes consent-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .consent-bar {
+    animation: none;
+  }
+}
+/* On ad pages the WhatsApp/Call bar owns the bottom of the screen on phones. */
+@media (max-width: 700px) {
+  body:has(.lp-sticky) .consent-bar {
+    bottom: calc(100px + env(safe-area-inset-bottom));
+  }
+}

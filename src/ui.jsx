@@ -462,3 +462,68 @@ export function SiteFooter({ Wordmark, minimal = false }) {
   );
 }
 SiteFooter.propTypes = { Wordmark: PropTypes.elementType.isRequired, minimal: PropTypes.bool };
+
+/* ------------------------------------------------------------ cookie choice */
+// Asks once before the Meta pixel runs. The choice is remembered in this browser only.
+// Nothing renders on the server, so prerendered pages stay identical for every visitor.
+const CONSENT_KEY = "pct-ads-consent";
+
+function readChoice() {
+  try {
+    return window.localStorage.getItem(CONSENT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function startPixel() {
+  import("./meta-pixel.js").then((m) => m.startPixel());
+}
+
+export function resetCookieChoice() {
+  try {
+    window.localStorage.removeItem(CONSENT_KEY);
+  } catch {
+    /* storage blocked: the bar simply shows again next visit */
+  }
+  window.location.reload();
+}
+
+export function CookieChoice() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!import.meta.env.PROD) return;
+    const choice = readChoice();
+    if (choice === "granted") startPixel();
+    if (choice) return;
+    // Shown a moment after load so it never competes with the first paint.
+    const timer = window.setTimeout(() => setOpen(true), 1200);
+    return () => window.clearTimeout(timer);
+  }, []);
+  function decide(granted) {
+    try {
+      window.localStorage.setItem(CONSENT_KEY, granted ? "granted" : "denied");
+    } catch {
+      /* storage blocked: honour the choice for this visit only */
+    }
+    setOpen(false);
+    if (granted) startPixel();
+  }
+  if (!open) return null;
+  return (
+    <section className="consent-bar" aria-label="Cookie choice">
+      <p>
+        May we use a Meta pixel to see which of our ads bring enquiries? It stays off unless you allow it.{" "}
+        <a href="/privacy">Privacy</a>
+      </p>
+      <div className="consent-actions">
+        <button type="button" className="button button-primary" onClick={() => decide(true)}>
+          Allow
+        </button>
+        <button type="button" className="consent-no" onClick={() => decide(false)}>
+          No thanks
+        </button>
+      </div>
+    </section>
+  );
+}
