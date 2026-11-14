@@ -2017,3 +2017,63 @@ main > article > .note-body {
     bottom: calc(100px + env(safe-area-inset-bottom));
   }
 }
+
+/* ------------------------------------------------------------ client reviews */
+.quotes-v2 {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 20px;
+}
+.quote-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid rgba(10, 111, 150, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 40px -28px rgba(13, 24, 32, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.quote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 50px -28px rgba(6, 80, 111, 0.45);
+}
+.quote-card blockquote {
+  margin: 0;
+}
+.quote-card blockquote p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: #1e2731;
+}
+.quote-by {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #06506f;
+}
+.quote-by::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  margin: 0 10px 4px 0;
+  vertical-align: middle;
+  background: #1188b5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .quote-card {
+    transition: none;
+  }
+  .quote-card:hover {
+    transform: none;
+  }
+}

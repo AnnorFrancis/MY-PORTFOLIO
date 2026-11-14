@@ -10,6 +10,7 @@ import {
   moreSites,
   films,
   shotsFor,
+  testimonials,
 } from "./content";
 import {
   PageHero,
@@ -27,6 +28,7 @@ import {
   backupEmail,
   CookieChoice,
   resetCookieChoice,
+  Testimonials,
 } from "./ui";
 
 const email = "hello@perkos.app";
@@ -1074,6 +1076,7 @@ function AdLanding({ page }) {
           )}
         </div>
       </Band>
+      <Testimonials items={testimonials} tone="light" limit={3} />
       <Band tone="dark">
         <Heading eyebrow="How it works" title="Three steps, no surprises." />
         <Steps light />
@@ -1225,6 +1228,8 @@ function Home() {
           <ProjectCard index={3} project={{ ...letteropedia, tag: "Education / Client website", image: shotBase(letteropedia.slug) }} />
         </div>
       </Band>
+
+      <Testimonials items={testimonials} />
 
       <Band tone="light">
         <div className="split-v2 media-left">

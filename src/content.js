@@ -357,3 +357,32 @@ export const pages = [
     image: "home",
   },
 ];
+
+// Client reviews, as supplied by the owner from each client.
+export const testimonials = [
+  {
+    quote:
+      "Obsessed with our new website and booking system! It fits the Bēsia Beauty aesthetic perfectly, and the AI assistant handles routine client DMs and questions automatically, saving our team hours every week.",
+    by: "Bēsia Beauty Studio",
+  },
+  {
+    quote:
+      "Huge upgrade for Trendy Norms. Our new site is fast, sleek, and effortless to shop, while the backend management and AI tools keep our inventory organized and our customers assisted 24/7.",
+    by: "Trendy Norms Hub",
+  },
+  {
+    quote:
+      "Clean design, smooth booking management, and an AI assistant that answers client questions around the clock. Everything at Naku’s Beauty runs so much smoother now, easily our best business upgrade.",
+    by: "Naku’s Beauty",
+  },
+  {
+    quote:
+      "Crisp design and an ultra-smooth management system that makes running Letteropedia effortless. Integrating the AI tools completely elevated the user experience: smart, fast, and super intuitive.",
+    by: "Letteropedia",
+  },
+  {
+    quote:
+      "Our new website looks sharp and builds instant trust. Between the streamlined inventory system and the AI assistant answering customer spec questions 24/7, running the tech shop has never been easier.",
+    by: "Nana, tech shop owner",
+  },
+];

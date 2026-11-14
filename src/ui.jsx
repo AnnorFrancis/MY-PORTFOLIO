@@ -527,3 +527,28 @@ export function CookieChoice() {
     </section>
   );
 }
+
+/* ------------------------------------------------------------- client reviews */
+export function Testimonials({ items, tone = "mist", limit }) {
+  const list = limit ? items.slice(0, limit) : items;
+  return (
+    <Band tone={tone} label="Client reviews">
+      <Heading eyebrow="What clients say" title={<>Businesses that run on <em>our work.</em></>} />
+      <ul className="quotes-v2">
+        {list.map((t) => (
+          <li key={t.by} className="quote-card" data-reveal>
+            <blockquote>
+              <p>“{t.quote}”</p>
+            </blockquote>
+            <p className="quote-by">{t.by}</p>
+          </li>
+        ))}
+      </ul>
+    </Band>
+  );
+}
+Testimonials.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({ quote: PropTypes.string, by: PropTypes.string })).isRequired,
+  tone: PropTypes.string,
+  limit: PropTypes.number,
+};
