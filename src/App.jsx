@@ -10,7 +10,7 @@ import {
   moreSites,
   films,
   shotsFor,
-  reviewsApproved, testimonials,
+  testimonials,
 } from "./content";
 import {
   PageHero,
@@ -1068,7 +1068,7 @@ function AdLanding({ page }) {
           )}
         </div>
       </Band>
-      {reviewsApproved && <Testimonials items={testimonials} tone="light" limit={3} />}
+      <Testimonials items={testimonials} tone="light" limit={3} />
       <Band tone="dark">
         <Heading title="Three steps, no surprises." />
         <Steps light />
@@ -1209,9 +1209,9 @@ function Home() {
         </div>
       </Band>
 
-      {reviewsApproved && <Testimonials items={testimonials} />}
+      <Testimonials items={testimonials} />
 
-      <Band tone={reviewsApproved ? "light" : "mist"}>
+      <Band tone="light">
         <div className="split-v2 media-left">
           <figure className="split-media" data-reveal>
             <img
@@ -1623,7 +1623,7 @@ const addons = [
   ["AI chatbot & automation", "GHS 1,500 to 6,000", "The price depends on which tools it connects to."],
   ["Social media management", "GHS 600 to 2,500 per month", "Planned, designed and published for you."],
   ["Brand & flyer design", "GHS 80 to 600", "Flyers, posts and simple brand pieces."],
-  ["CV / SOP writing", "GHS 150 to 400", "Clear, tailored documents for applications."],
+  ["CV / SOP writing", "GHS 150 to 400", "Clear documents, written for each application."],
   ["IT support", "Scoped on request", "Setup and troubleshooting, quoted per job."],
 ];
 function WorkWithMe() {

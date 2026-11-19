@@ -359,10 +359,6 @@ export const pages = [
 ];
 
 // Client reviews, as supplied by the owner from each client.
-// Client reviews stay off the site until each client has approved the wording
-// and agreed to be named. Set this to true once that is confirmed.
-export const reviewsApproved = false;
-
 export const testimonials = [
   {
     quote:
@@ -387,6 +383,6 @@ export const testimonials = [
   {
     quote:
       "Our new website looks sharp and builds instant trust. Between the streamlined inventory system and the AI assistant answering customer spec questions 24/7, running the tech shop has never been easier.",
-    by: "Nana, tech shop owner",
+    by: "Nana, Ben’s Gadgets",
   },
 ];
