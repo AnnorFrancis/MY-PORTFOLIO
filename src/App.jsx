@@ -19,7 +19,6 @@ import {
   DirectContact,
   ServiceTiles,
   ProjectCard,
-  CountUp,
   CtaBand,
   Faq,
   SiteFooter,
@@ -420,7 +419,7 @@ function Header({ path, minimal = false }) {
           <div className="lp-header-actions">
             <a className="lp-call" href="tel:+233200214147">Call</a>
             <a className="button button-primary" href={whatsapp}>
-              WhatsApp <Arrow />
+              WhatsApp
             </a>
           </div>
         </div>
@@ -484,10 +483,9 @@ function Header({ path, minimal = false }) {
                 </a>
                 <div className="nav-menu">
                   <ul className="nav-menu-inner" aria-label="Our services">
-                    {services.map((s, i) => (
+                    {services.map((s) => (
                       <li key={s.slug}>
                         <a href={"/services/" + s.slug} aria-current={current("/services/" + s.slug)}>
-                          <span className="nav-menu-num" aria-hidden="true">0{i + 1}</span>
                           <span>
                             <strong>{s.name}</strong>
                             <small>{s.short}</small>
@@ -516,7 +514,7 @@ function Header({ path, minimal = false }) {
             ),
           )}
           <a className="button button-primary nav-cta" href="/contact">
-            <span>Contact us</span> <Arrow />
+            Contact us
           </a>
         </nav>
       </div>
@@ -571,13 +569,12 @@ function ServicePage({ service }) {
       <PageHero
         image={servicePhoto[service.slug]}
         back={["/services", "All services"]}
-        eyebrow={"Services · " + service.name}
         title={service.title}
         lead={service.summary}
         aside={
           <div className="hero-price glass">
-            <span>Published price</span>
             <strong>{fromPrice(service)}</strong>
+            <span>Published price</span>
             <p>{service.budget}</p>
           </div>
         }
@@ -587,7 +584,6 @@ function ServicePage({ service }) {
       <Band tone="light">
         <div className="split-v2">
           <div data-reveal>
-            <p className="kicker">The question we start with</p>
             <h2>{service.heading}</h2>
             <p className="big-text">{service.example}</p>
           </div>
@@ -599,14 +595,13 @@ function ServicePage({ service }) {
               ))}
             </ul>
             <a className="button button-primary" href={"/contact?service=" + encodeURIComponent(service.name) + "#start"}>
-              Write a project brief <Arrow />
+              Write a project brief
             </a>
           </div>
         </div>
       </Band>
       <Band tone="mist">
         <Heading
-          eyebrow="Proof"
           title={project ? "Built for a real business." : "Made for real launches."}
           lead={service.prepare}
         />
@@ -622,7 +617,6 @@ function ServicePage({ service }) {
             <div className="film-feature" data-reveal>
               <FilmCard film={film} index={0} />
               <div>
-                <p className="kicker">{film.kind}</p>
                 <h3>{film.title}</h3>
                 <p>{service.example}</p>
                 <Link className="button button-primary" href={service.proof}>
@@ -634,7 +628,7 @@ function ServicePage({ service }) {
         </div>
       </Band>
       <Band tone="dark">
-        <Heading eyebrow="More services" title="Other ways we can help." />
+        <Heading title="Other ways we can help." />
         <div className="mini-tiles">
           {others.map((s) => (
             <a key={s.slug} className="mini-tile" href={"/services/" + s.slug} data-reveal>
@@ -675,7 +669,6 @@ function Steps({ light = false }) {
     <ol className={light ? "steps-v2 on-dark" : "steps-v2"}>
       {processSteps.map(([t, p], i) => (
         <li key={t} style={{ "--i": i }} data-reveal>
-          <span className="steps-num">0{i + 1}</span>
           <h3>{t}</h3>
           <p>{p}</p>
         </li>
@@ -689,8 +682,7 @@ function Services() {
     <>
       <PageHero
         image="hero-services"
-        eyebrow="Services"
-        title={<>Software built around <em>your workflow.</em></>}
+        title="Software built around your workflow."
         lead="Bring us the task that slows your team down. We work through who uses it, what tools it touches and what a successful first release should do."
       >
         <DirectContact light />
@@ -698,7 +690,6 @@ function Services() {
       </PageHero>
       <Band tone="light" className="svc-rows-band">
         <Heading
-          eyebrow="Five services"
           title="What we build, and what it costs."
           lead="Each service has a published starting price. The final scope and price are agreed in writing before work begins."
         />
@@ -719,8 +710,8 @@ function Services() {
                 <span className="svc-row-price">{fromPrice(s)}</span>
               </a>
               <div className="svc-row-copy">
-                <p className="kicker">0{i + 1} · {s.name}</p>
-                <h3>{s.title}</h3>
+                <h3>{s.name}</h3>
+                <p className="svc-row-title">{s.title}</p>
                 <p>{s.summary}</p>
                 <ul className="ticks">
                   {s.deliverables.map((d) => (
@@ -729,7 +720,7 @@ function Services() {
                 </ul>
                 <div className="svc-row-actions">
                   <a className="button button-primary" href={"/services/" + s.slug}>
-                    {s.name} details <Arrow />
+                    {s.name} details
                   </a>
                   <a className="text-link" href={s.proof}>
                     <span>{s.proofLabel}</span> <Arrow />
@@ -742,14 +733,13 @@ function Services() {
       </Band>
       <Band tone="dark">
         <Heading
-          eyebrow="How we work"
-          title={<>From discovery <em>to handover.</em></>}
+          title="From discovery to handover."
           lead="You review the scope, price and delivery stages before development begins. Then we test each workflow against your real daily tasks."
         />
         <Steps light />
       </Band>
       <Band tone="mist">
-        <Heading eyebrow="Questions" title="Answers before you ask." center />
+        <Heading title="Answers before you ask." center />
         <Faq items={faqs} />
       </Band>
       <ContactBand />
@@ -788,15 +778,13 @@ function About() {
     <>
       <PageHero
         image="hero-about"
-        eyebrow="About Perkins_Creatives Tech"
-        title={<>The team behind <em>your system.</em></>}
+        title="The team behind your system."
         lead="We are an AI and software development company based in Accra, working with businesses and brands locally and internationally. Design, engineering and marketing sit in the same project conversation."
       >
         <DirectContact light />
       </PageHero>
       <Band tone="light">
         <Heading
-          eyebrow="Our team"
           title="Five people across design, engineering and marketing."
           lead="Design, engineering and marketing in one team, based in Accra."
         />
@@ -809,7 +797,6 @@ function About() {
       <Band tone="dark">
         <div className="split-v2">
           <div data-reveal>
-            <p className="kicker kicker-light">Where our approach comes from</p>
             <h2>Built from real shop floors and salon calendars.</h2>
             <p className="big-text">
               Our founder’s work in retail and salon operations shaped how we deliver. Booking deposits, stock
@@ -827,7 +814,7 @@ function About() {
               [30, "+", "Product films produced"],
             ].map(([v, s, l]) => (
               <li key={l}>
-                <strong><CountUp value={v} suffix={s} /></strong>
+                <strong>{v}{s}</strong>
                 <span>{l}</span>
               </li>
             ))}
@@ -835,7 +822,7 @@ function About() {
         </div>
       </Band>
       <Band tone="mist">
-        <Heading eyebrow="What we do" title="Five services, one team." />
+        <Heading title="Five services, one team." />
         <ServiceTiles />
       </Band>
       <ContactBand />
@@ -847,8 +834,7 @@ function Contact() {
     <>
       <PageHero
         image="hero-contact"
-        eyebrow="Project enquiries"
-        title={<>Let’s scope <em>your project.</em></>}
+        title="Let’s scope your project."
         lead="Send us a message about what you want to build. A sentence is enough to start."
         aside={
           <ul className="contact-card glass">
@@ -879,11 +865,11 @@ function Contact() {
       </PageHero>
       <ProjectBrief />
       <Band tone="dark">
-        <Heading eyebrow="What happens next" title="Three steps, no surprises." />
+        <Heading title="Three steps, no surprises." />
         <Steps light />
       </Band>
       <Band tone="mist">
-        <Heading eyebrow="Questions" title="Before you message us." center />
+        <Heading title="Before you message us." center />
         <Faq items={faqs} />
       </Band>
     </>
@@ -896,8 +882,7 @@ const adPages = [
   {
     slug: "",
     service: null,
-    eyebrow: "Perkins_Creatives Tech · Accra, Ghana",
-    title: <>A website or system that <em>brings you customers.</em></>,
+    title: "A website or system that brings you customers.",
     lead: "Websites, online stores, POS and stock systems, AI assistants and branding for businesses in Ghana. Tell us what you need on WhatsApp and get a clear price.",
     bullets: ["Published prices in Ghana cedis", "Paystack and Mobile Money payments", "Scope and price agreed before work starts"],
     price: "From GHS 2,000",
@@ -907,8 +892,7 @@ const adPages = [
   {
     slug: "websites",
     service: "websites-and-ecommerce",
-    eyebrow: "Websites and online stores · Accra",
-    title: <>Get a website that <em>brings in enquiries.</em></>,
+    title: "Get a website that brings in enquiries.",
     lead: "A professional website or online store for your business, built for phones first, with WhatsApp, Paystack and Mobile Money built in.",
     bullets: ["Starter websites usually ready in 1 to 2 weeks", "Customers can book, buy or message you", "Update text and photos yourself"],
     price: "From GHS 2,000",
@@ -918,8 +902,7 @@ const adPages = [
   {
     slug: "business-systems",
     service: "business-management-systems",
-    eyebrow: "POS, stock and sales systems · Accra",
-    title: <>Know your stock, sales and cash <em>every single day.</em></>,
+    title: "Know your stock, sales and cash every single day.",
     lead: "One system that connects every sale to your stock, your cash, your staff and the report you see at close of day.",
     bullets: ["Point of sale and stock in one place", "Staff roles and approvals", "Daily figures for the owner"],
     price: "From GHS 10,000",
@@ -929,8 +912,7 @@ const adPages = [
   {
     slug: "custom-software",
     service: "custom-software-development",
-    eyebrow: "Custom software · Accra",
-    title: <>Software built around <em>how your team works.</em></>,
+    title: "Software built around how your team works.",
     lead: "Replace spreadsheets and copy and paste with one application your team actually enjoys using.",
     bullets: ["A first release agreed in writing", "Your data, roles and approvals", "Tested on your real daily tasks"],
     price: "From GHS 10,000",
@@ -940,8 +922,7 @@ const adPages = [
   {
     slug: "ai-automation",
     service: "ai-workflow-automation",
-    eyebrow: "AI assistants and automation · Accra",
-    title: <>Answer customer messages <em>faster with AI.</em></>,
+    title: "Answer customer messages faster with AI.",
     lead: "An assistant that sorts incoming enquiries, finds answers in your own documents and drafts replies, with a person approving anything important.",
     bullets: ["Sorts and answers routine questions", "Uses your own documents and prices", "A person approves important replies"],
     price: "From GHS 1,500",
@@ -951,8 +932,7 @@ const adPages = [
   {
     slug: "branding",
     service: "branding-social-media-and-video",
-    eyebrow: "Flyers, social media and video · Accra",
-    title: <>Posts and videos that make people <em>message you.</em></>,
+    title: "Posts and videos that make people message you.",
     lead: "Flyers, social media posts and short product videos, each one pointing customers to your WhatsApp, your shop or your website.",
     bullets: ["Flyers sized for Instagram, Facebook and WhatsApp", "Short product videos for Reels", "A monthly posting plan"],
     price: "From GHS 80",
@@ -1007,7 +987,7 @@ function QuickBrief({ preset, slug }) {
         </select>
       </label>
       <button className="button button-primary lp-send" type="submit">
-        Send on WhatsApp <Arrow />
+        Send on WhatsApp
       </button>
       <p className="lp-note">Opens WhatsApp with your message ready. Nothing is stored on this website.</p>
     </form>
@@ -1024,7 +1004,6 @@ function AdLanding({ page }) {
     <>
       <PageHero
         image={page.image}
-        eyebrow={page.eyebrow}
         title={page.title}
         lead={page.lead}
         aside={<QuickBrief preset={service ? service.name : undefined} slug={page.slug} />}
@@ -1036,7 +1015,7 @@ function AdLanding({ page }) {
         </ul>
         <div className="lp-actions">
           <a className="button button-primary button-large" href={chat}>
-            Chat on WhatsApp now <Arrow />
+            Chat on WhatsApp now
           </a>
           <a className="button button-outline-light button-large" href={phoneLink}>
             Call {phoneDisplay}
@@ -1048,19 +1027,15 @@ function AdLanding({ page }) {
       </PageHero>
       <Band tone="light" className="trust-band" label="Clients">
         <div className="trust-v2" data-reveal>
-          <p>Live systems we have built for</p>
-          <ul>
-            <li>Trendy Norms Hub</li>
-            <li>Bēsia Beauty Studio</li>
-            <li>Letteropedia</li>
-            <li>PerkOS</li>
-          </ul>
+          <p>
+            Live systems we have built: <strong>Trendy Norms Hub</strong>, <strong>Bēsia Beauty Studio</strong>,{" "}
+            <strong>Letteropedia</strong> and <strong>PerkOS</strong>.
+          </p>
         </div>
       </Band>
       <Band tone="mist">
         <div className={project ? "split-v2" : "split-v2 single"}>
           <div>
-            <p className="kicker">What you get</p>
             <h2>{service ? service.title : "Software and websites that work for your business."}</h2>
             <ul className="ticks">
               {(service ? service.deliverables : processSteps.map(([t, p]) => t + ": " + p)).map((d) => (
@@ -1078,11 +1053,11 @@ function AdLanding({ page }) {
       </Band>
       <Testimonials items={testimonials} tone="light" limit={3} />
       <Band tone="dark">
-        <Heading eyebrow="How it works" title="Three steps, no surprises." />
+        <Heading title="Three steps, no surprises." />
         <Steps light />
       </Band>
       <Band tone="light">
-        <Heading eyebrow="Questions" title="Before you message us." center />
+        <Heading title="Before you message us." center />
         <Faq items={faqs.slice(0, 4)} />
       </Band>
       <CtaBand title="Ready when you are. Send one message." topic={topic} />
@@ -1101,8 +1076,7 @@ function Privacy() {
       <PageHero
         size="short"
         image="hero-contact"
-        eyebrow="Privacy"
-        title={<>How we handle <em>your information.</em></>}
+        title="How we handle your information."
         lead="Last updated 14 November 2026. Plain answers about what this website collects and what we do with your messages."
       />
       <Band tone="light">
@@ -1148,9 +1122,8 @@ function Home() {
           ["/videos/hero-team.webm", "video/webm"],
           ["/videos/hero-team.mp4", "video/mp4"],
         ]}
-        eyebrow="Software, websites and AI · Accra, Ghana"
-        title={<>Custom software for <em>business operations.</em></>}
-        lead="We build websites, online stores, AI workflows and the systems behind them: bookings, payments and stock, all connected."
+        title="Websites and apps built in Accra."
+        lead="We design and build websites, online stores, booking and stock systems, and AI assistants for businesses in Ghana. Websites start from GHS 2,000."
         aside={
           <figure className="hero-showcase glass">
             <Slideshow
@@ -1160,11 +1133,6 @@ function Home() {
               interval={3800}
               sizes="(max-width: 900px) 86vw, 40vw"
             />
-            <figcaption>
-              <span><i className="dot" /> Paystack integrations</span>
-              <span><i className="dot" /> Bēsia · booking deposits</span>
-              <span><i className="dot" /> PerkOS · offline sales</span>
-            </figcaption>
           </figure>
         }
       >
@@ -1173,13 +1141,10 @@ function Home() {
 
       <Band tone="light" className="trust-band" label="Clients">
         <div className="trust-v2" data-reveal>
-          <p>Live systems we have built for</p>
-          <ul>
-            <li>Trendy Norms Hub</li>
-            <li>Bēsia Beauty Studio</li>
-            <li>Letteropedia</li>
-            <li>PerkOS</li>
-          </ul>
+          <p>
+            Live systems we have built: <strong>Trendy Norms Hub</strong>, <strong>Bēsia Beauty Studio</strong>,{" "}
+            <strong>Letteropedia</strong> and <strong>PerkOS</strong>.
+          </p>
         </div>
         <ul className="stat-row">
           {[
@@ -1189,7 +1154,7 @@ function Home() {
             [30, "+", "Product films produced"],
           ].map(([v, s, l]) => (
             <li key={l}>
-              <strong><CountUp value={v} suffix={s} /></strong>
+              <strong>{v}{s}</strong>
               <span>{l}</span>
             </li>
           ))}
@@ -1198,8 +1163,7 @@ function Home() {
 
       <Band tone="mist" id="services">
         <Heading
-          eyebrow="Capabilities"
-          title={<>What we can <em>build for you.</em></>}
+          title="What we can build for you."
           lead="Five services, each with a published starting price in Ghana cedis."
           action={
             <a className="text-link" href="/services">
@@ -1210,14 +1174,13 @@ function Home() {
         <ServiceTiles />
       </Band>
 
-      <Band tone="dark" id="work">
+      <Band tone="light" id="work">
         <Heading
-          eyebrow="Selected work"
-          title={<>Four projects. <em>All live today.</em></>}
+          title="Four projects. All live today."
           lead="Built by our founder, Francis Annor. Open the live products and read the decisions behind each one."
           action={
-            <a className="button button-outline-light" href="/work">
-              View all work <Arrow />
+            <a className="text-link" href="/work">
+              <span>View all work</span> <Arrow />
             </a>
           }
         />
@@ -1246,9 +1209,8 @@ function Home() {
             />
           </figure>
           <div>
-            <p className="kicker">How we work</p>
             <h2>
-              From the first message <em>to handover.</em>
+              From the first message to handover.
             </h2>
             <Steps />
             <a className="text-link" href="/work-with-me#pricing">
@@ -1261,10 +1223,9 @@ function Home() {
       <Band tone="sea">
         <div className="team-teaser" data-reveal>
           <div>
-            <p className="kicker kicker-light">Our company</p>
-            <h2>Five people across design, engineering and marketing.</h2>
+            <h2>Meet the five people who build it.</h2>
             <a className="button button-light" href="/about">
-              Meet the team <Arrow />
+              Meet the team
             </a>
           </div>
           <ul className="avatar-row" aria-label="Team members">
@@ -1300,8 +1261,7 @@ function Work() {
     <>
       <PageHero
         image="hero-work"
-        eyebrow="Our work"
-        title={<>More builds, <em>chosen with care.</em></>}
+        title="More builds, chosen with care."
         lead="Case studies, systems, websites and product films. Every card opens the real, working build."
       >
         <nav className="hero-chips" aria-label="On this page">
@@ -1313,8 +1273,7 @@ function Work() {
       </PageHero>
       <Band tone="dark" id="case-studies">
         <Heading
-          eyebrow="Case studies"
-          title={<>The full story, <em>decision by decision.</em></>}
+          title="The full story, decision by decision."
           lead="Delivered systems and our founder’s own product, with the constraints, choices and trade-offs behind each."
         />
         <div className="project-grid three">
@@ -1325,8 +1284,7 @@ function Work() {
       </Band>
       <Band tone="light" id="systems">
         <Heading
-          eyebrow="Systems"
-          title={<>Software a business <em>runs every day.</em></>}
+          title="Software a business runs every day."
           lead="Trading desks, course platforms, stock and sales, and back offices tied to the website."
         />
         <div className="project-grid two">
@@ -1337,8 +1295,7 @@ function Work() {
       </Band>
       <Band tone="mist" id="websites">
         <Heading
-          eyebrow="Websites & stores"
-          title={<>First impressions, <em>built to sell.</em></>}
+          title="First impressions, built to sell."
           lead="Storefronts and brand sites with the tools behind them."
         />
         <div className="project-grid two">
@@ -1349,8 +1306,7 @@ function Work() {
       </Band>
       <Band tone="dark" id="films">
         <Heading
-          eyebrow="Films"
-          title={<>Launch and teaser <em>films.</em></>}
+          title="Launch and teaser films."
           lead="Short films made to launch and explain the products. Press play to watch."
         />
         <div className="film-grid">
@@ -1379,7 +1335,6 @@ function Diagram({ project }) {
       <ol className="system-flow">
         {project.flow.map((step, i) => (
           <li key={step} style={{ "--i": i }}>
-            <span className="flow-number">0{i + 1}</span>
             <strong>{step}</strong>
           </li>
         ))}
@@ -1389,10 +1344,10 @@ function Diagram({ project }) {
   );
 }
 const caseSections = [
-  ["context", "01 Context"],
-  ["constraints", "02 Constraints"],
-  ["decisions", "03 Decisions & trade-offs"],
-  ["outcome", "04 Outcome & limits"],
+  ["context", "Context"],
+  ["constraints", "Constraints"],
+  ["decisions", "Decisions & trade-offs"],
+  ["outcome", "Outcome & limits"],
 ];
 function useActiveSection(ids) {
   const [active, setActive] = useState(ids[0]);
@@ -1427,16 +1382,15 @@ function CaseStudy({ project }) {
       <PageHero
         imageSrc={`/images/projects/${project.slug}-1200.webp`}
         back={["/work#case-studies", "All case studies"]}
-        eyebrow={project.kind + " · Case study"}
         title={project.title}
         lead={project.summary}
       >
         <a className="button button-primary" href={project.url}>
-          Visit the live site <Arrow />
+          Visit the live site
         </a>
         {relatedService && (
           <a className="button button-outline-light" href={"/services/" + relatedService.slug}>
-            {relatedService.name} service <Arrow />
+            {relatedService.name} service
           </a>
         )}
       </PageHero>
@@ -1465,7 +1419,7 @@ function CaseStudy({ project }) {
       <div className="article-layout wrap">
         <aside>
           <nav className="toc glass" aria-label="In this case study">
-            <p className="eyebrow">In this case study</p>
+            <h2 className="plain-heading">In this case study</h2>
             {caseSections.map(([id, label]) => (
               <a
                 key={id}
@@ -1480,14 +1434,12 @@ function CaseStudy({ project }) {
         </aside>
         <div className="article-body aura">
           <section id="context" data-reveal>
-            <p className="eyebrow">01 / Context</p>
             <h2>{project.contextTitle}</h2>
             {project.context.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </section>
           <section id="constraints" data-reveal>
-            <p className="eyebrow">02 / Constraints</p>
             <h2>What the system had to handle.</h2>
             <ul className="check-list">
               {project.constraints.map((p) => (
@@ -1499,11 +1451,9 @@ function CaseStudy({ project }) {
             </ul>
           </section>
           <section id="decisions">
-            <p className="eyebrow">03 / Decisions & trade-offs</p>
             <h2>Key decisions and their trade-offs.</h2>
             {project.decisions.map((d, i) => (
               <Glass className="decision" key={d.title} max={3} style={{ "--i": i }} data-reveal>
-                <span className="decision-number">0{i + 1}</span>
                 <h3>{d.title}</h3>
                 <p>{d.choice}</p>
                 <dl>
@@ -1520,7 +1470,6 @@ function CaseStudy({ project }) {
             ))}
           </section>
           <section id="outcome" data-reveal>
-            <p className="eyebrow">04 / Outcome</p>
             <h2>{project.outcomeTitle}</h2>
             <p>{project.outcome}</p>
             <div className="limitation glass">
@@ -1535,7 +1484,7 @@ function CaseStudy({ project }) {
         </div>
       </div>
       <section className="more-work wrap">
-        <p className="eyebrow">Continue exploring</p>
+        <h2 className="plain-heading">Continue exploring</h2>
         <div className="more-cards">
           {projects
             .filter((p) => p.slug !== project.slug)
@@ -1550,7 +1499,7 @@ function CaseStudy({ project }) {
                   alt=""
                 />
                 <span>
-                  <span className="eyebrow">{p.kind}</span>
+                  <span className="more-card-kind">{p.kind}</span>
                   <strong>{p.name}</strong>
                 </span>
                 <Arrow />
@@ -1587,9 +1536,8 @@ function ProjectBrief() {
   return (
     <section id="start" className="brief-section wrap">
       <div className="brief-copy" data-reveal>
-        <p className="eyebrow">Start a conversation</p>
         <h2>
-          Tell us what <em>isn’t working yet.</em>
+          Tell us what isn’t working yet.
         </h2>
         <p>
           For an email brief, describe one task you want to improve. Service and budget are optional.
@@ -1634,7 +1582,7 @@ function ProjectBrief() {
           </select>
         </label>
         <button className="button button-primary" type="submit">
-          <span>Prepare email brief</span> <Arrow />
+          Prepare email brief
         </button>
         <p className="small muted">
           Opens your email app. This form does not upload or store your
@@ -1666,12 +1614,11 @@ function WorkWithMe() {
     <>
       <PageHero
         image="hero-pricing"
-        eyebrow="Prices and process"
-        title={<>A better way to run <em>your day-to-day.</em></>}
+        title="A better way to run your day-to-day."
         lead="We build websites, stores, and the systems behind them. Start with the bottleneck: the booking that gets missed, the stock that doesn’t add up, or the tools that don’t talk to each other."
         aside={
           <div className="glance-v2 glass" aria-label="At a glance">
-            <p className="hero-eyebrow">At a glance</p>
+            <h2 className="glance-title">At a glance</h2>
             <ul>
                   {[
                     ["Projects from", "GHS 2,000"],
@@ -1692,16 +1639,16 @@ function WorkWithMe() {
         }
       >
         <a className="button button-primary" href="#start">
-          Discuss your project <Arrow />
+          Discuss your project
         </a>
         <a className="button button-outline-light" href="#pricing">
-          See the prices <Arrow />
+          See the prices
         </a>
       </PageHero>
       <section className="offer-section aura wrap">
         <div className="section-heading" data-reveal>
           <h2>
-            Three parts. <em>One connected system.</em>
+            Three parts. One connected system.
           </h2>
           <p>
             Your customers need a good experience. Your team needs a reliable
@@ -1710,13 +1657,11 @@ function WorkWithMe() {
         </div>
         <div className="offer-grid">
           {[
-            [I.web, "A public front", "Fast, clear websites and online stores that help people understand your business, book, buy, or get in touch."],
-            [I.office, "The working back office", "Stock, tills, calendars, customer records, staff permissions, and reporting designed around the way your team works."],
-            [I.link, "The connections", "Card and Mobile Money payments, notifications, existing calendars, and training for the people who will use it."],
-          ].map(([ic, t, p], k) => (
+            ["A public front", "Fast, clear websites and online stores that help people understand your business, book, buy, or get in touch."],
+            ["The working back office", "Stock, tills, calendars, customer records, staff permissions, and reporting designed around the way your team works."],
+            ["The connections", "Card and Mobile Money payments, notifications, existing calendars, and training for the people who will use it."],
+          ].map(([t, p], k) => (
             <Glass key={t} className="offer" style={{ "--i": k }} data-reveal>
-              <span className="offer-icon">{ic}</span>
-              <span className="eyebrow">0{k + 1}</span>
               <h3>{t}</h3>
               <p>{p}</p>
             </Glass>
@@ -1724,7 +1669,7 @@ function WorkWithMe() {
         </div>
       </section>
       <section className="proof-links wrap">
-        <p className="eyebrow">See it in practice</p>
+        <h2 className="plain-heading">See it in practice</h2>
         {projects.slice(0, 2).map((p, k) => (
           <Glass as="a" key={p.slug} href={`/work/${p.slug}`} className="proof-row" max={2} style={{ "--i": k }} data-reveal>
             <img src={`/images/projects/${p.slug}-640.webp`} width="640" height="400" loading="lazy" decoding="async" alt="" />
@@ -1738,9 +1683,8 @@ function WorkWithMe() {
         <div className="wrap">
           <div className="section-heading" data-reveal>
             <div>
-              <p className="eyebrow">Project prices / GHS</p>
               <h2>
-                Clear prices. <em>In Ghana cedis.</em>
+                Clear prices. In Ghana cedis.
               </h2>
             </div>
             <p>
@@ -1775,7 +1719,7 @@ function WorkWithMe() {
                 </ul>
                 <p className="price-time">{time}</p>
                 <a className={k === 1 ? "button button-light" : "button button-primary"} href="#start">
-                  <span>Discuss this scope</span> <Arrow />
+                  Discuss this scope
                 </a>
               </Glass>
             ))}
@@ -1802,9 +1746,8 @@ function WorkWithMe() {
       <section className="process wrap">
         <div className="section-heading" data-reveal>
           <div>
-            <p className="eyebrow">How we work together</p>
             <h2>
-              Three steps, <em>no surprises.</em>
+              Three steps, no surprises.
             </h2>
           </div>
         </div>
@@ -1815,7 +1758,6 @@ function WorkWithMe() {
             ["Launch and hand over", "We set up payments, staff access and backups, then train your team. Ongoing care is agreed separately."],
           ].map(([t, p], i) => (
             <Glass key={t} className="step" style={{ "--i": i }}>
-              <span className="step-number">0{i + 1}</span>
               <h3>{t}</h3>
               <p>{p}</p>
             </Glass>
@@ -1830,7 +1772,7 @@ function WorkWithMe() {
 /* ------------------------------------------------------------ engineering */
 const engineering = [
   {
-    index: "01 / Team project",
+    index: "Team project",
     title: "SAMTEC · Contract before implementation.",
     body: [
       "I own the API and database; Samuel owns the dashboard. An OpenAPI contract and generated-type drift checks let us develop the two halves against the same agreement.",
@@ -1841,7 +1783,7 @@ const engineering = [
     link: ["https://github.com/TEAM-DEVV/samtec-security-system", "Explore the public repository"],
   },
   {
-    index: "02 / In development",
+    index: "In development",
     title: "Weave · A worker must know when it no longer owns the work.",
     body: [
       "My Flutter and Supabase app includes a push sender with lease-token batch claiming, renewal during processing, and a conditional finish. If another run takes over a row, the old worker cannot mark it complete.",
@@ -1852,7 +1794,7 @@ const engineering = [
     link: ["/notes/lease-based-push", "Read the engineering note"],
   },
   {
-    index: "03 / Live learning product",
+    index: "Live learning product",
     title: "POLI 443 · A course that shows every step of the working.",
     body: [
       "I built an interactive statistics course with worked examples, guided attempts, saved notes, and practice scoring. Plain JavaScript modules keep the teaching experience independent of a UI framework.",
@@ -1868,7 +1810,7 @@ const wider = [
     url: "https://letteropedia.online",
     base: "/images/projects/letteropedia",
     alt: "Letteropedia public website",
-    eyebrow: "Delivered client work · Solo developer",
+    note: "Delivered client work · Solo developer",
     name: "Letteropedia",
     text: "A quote-request website the owner updates without a developer, with backup contact options if a connected service goes down.",
     cta: "Visit the live website",
@@ -1877,7 +1819,7 @@ const wider = [
     url: "https://meridian-trading-desk.vercel.app",
     base: "/images/projects/meridian",
     alt: "MERIDIAN trading journal interface with demonstration data",
-    eyebrow: "Independent product · Solo developer",
+    note: "Independent product · Solo developer",
     name: "MERIDIAN",
     text: "A browser-local trading journal and analytics tool. Market prices and calendar entries are demo data; live feeds and account sync are not built.",
     cta: "Explore the product",
@@ -1888,12 +1830,11 @@ function Engineering() {
     <>
       <PageHero
         image="hero-engineering"
-        eyebrow="Founder’s engineering notes · Francis Annor"
-        title={<>The interface is only <em>half the work.</em></>}
+        title="The interface is only half the work."
         lead="I build across the application: data models, APIs, payments, permissions, and the interfaces people use. My strongest work is on rules that must not break, like payments, stock and staff permissions."
         aside={
           <div className="glance-v2 glass" aria-label="Stack I work in">
-            <p className="hero-eyebrow">Where I work</p>
+            <h2 className="glance-title">Where I work</h2>
             <ul className="chips chips-light">
               {["Next.js", "React", "TypeScript", "Node.js", "Supabase", "Postgres", "Flutter", "Paystack", "Redis", "Vitest"].map((s) => (
                 <li key={s}>{s}</li>
@@ -1904,11 +1845,11 @@ function Engineering() {
         }
       >
         <a className="button button-primary" href="/contact">
-          Discuss a technical project <Arrow />
+          Discuss a technical project
         </a>
       </PageHero>
       <section className="engineering-list aura wrap">
-        <p className="eyebrow">Selected engineering decisions</p>
+        <h2 className="plain-heading">Selected engineering decisions</h2>
         <div className="eng-grid">
           {engineering.map((e, k) => (
             <Glass as="article" key={e.title} className="eng" max={3} style={{ "--i": k }} data-reveal>
@@ -1930,7 +1871,7 @@ function Engineering() {
         </div>
       </section>
       <section className="proof-links wrap">
-        <p className="eyebrow">Production systems, with the decisions behind them</p>
+        <h2 className="plain-heading">Production systems, with the decisions behind them</h2>
         {projects.map((p, k) => (
           <Glass as="a" key={p.slug} href={`/work/${p.slug}`} className="proof-row" max={2} style={{ "--i": k }} data-reveal>
             <img src={`/images/projects/${p.slug}-640.webp`} width="640" height="400" loading="lazy" decoding="async" alt="" />
@@ -1943,9 +1884,8 @@ function Engineering() {
       <section className="other-work wrap">
         <div className="section-heading" data-reveal>
           <div>
-            <p className="eyebrow">A wider view</p>
             <h2>
-              Different problems. <em>The same care.</em>
+              Different problems. The same care.
             </h2>
           </div>
           <Link className="button button-glass" href="/work">
@@ -1960,8 +1900,8 @@ function Engineering() {
                   <Shot base={w.base} alt="" sizes="(max-width: 860px) 92vw, 45vw" />
                 </BrowserFrame>
               </a>
-              <p className="eyebrow">{w.eyebrow}</p>
               <h3>{w.name}</h3>
+              <p className="card-note">{w.note}</p>
               <p>{w.text}</p>
               <Link className="text-link" href={w.url}>
                 {w.cta}
@@ -1973,9 +1913,8 @@ function Engineering() {
       <section className="credentials wrap">
         <div className="section-heading" data-reveal>
           <div>
-            <p className="eyebrow">Verified learning</p>
             <h2>
-              A foundation in <em>systems & support.</em>
+              A foundation in systems & support.
             </h2>
           </div>
         </div>
@@ -2001,9 +1940,8 @@ function Note() {
       <PageHero
         image="hero-note"
         back={["/engineering", "Engineering"]}
-        eyebrow="Engineering notes / 2 November 2026"
-        title={<>When two workers <em>reach for one job.</em></>}
-        lead="A design note from Weave’s push sender: lease ownership, retries, and the difference between protecting state and guaranteeing delivery."
+        title="When two workers reach for one job."
+        lead="A design note from Weave’s push sender, written on 2 November 2026: lease ownership, retries, and the difference between protecting state and guaranteeing delivery."
       />
       <div className="note-body article-body glass aura wrap" data-reveal>
         <p>
@@ -2116,15 +2054,14 @@ export default function App({ path = "/" }) {
       <PageHero
         size="short"
         image="hero-work"
-        eyebrow="404 / Page not found"
-        title={<>Let’s get you <em>back on track.</em></>}
+        title="Let’s get you back on track."
         lead="The page you opened does not exist. These links lead to our services, work and contact details."
       >
         <a className="button button-primary" href="/">
-          Return home <Arrow />
+          Return home
         </a>
         <a className="button button-outline-light" href="/services">
-          See our services <Arrow />
+          See our services
         </a>
       </PageHero>
     );

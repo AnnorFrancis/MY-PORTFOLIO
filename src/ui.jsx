@@ -1,7 +1,7 @@
 // Shared building blocks for the company site: photo heroes, toned
 // sections, image tiles, project cards, the photo call-to-action and the
 // footer. Pages compose these so every section has its own look.
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { services } from "./services";
 
@@ -84,7 +84,6 @@ export function PageHero({
   image,
   imageSrc,
   video,
-  eyebrow,
   title,
   lead,
   children,
@@ -119,11 +118,6 @@ export function PageHero({
               <span aria-hidden="true">←</span> {back[1]}
             </a>
           )}
-          {eyebrow && (
-            <p className="hero-eyebrow rise" style={{ "--i": 0 }}>
-              {eyebrow}
-            </p>
-          )}
           <h1 className="rise" style={{ "--i": 1 }}>
             {title}
           </h1>
@@ -151,7 +145,6 @@ PageHero.propTypes = {
   image: PropTypes.string,
   imageSrc: PropTypes.string,
   video: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-  eyebrow: PropTypes.node,
   title: PropTypes.node.isRequired,
   lead: PropTypes.node,
   children: PropTypes.node,
@@ -176,11 +169,10 @@ Band.propTypes = {
   label: PropTypes.string,
 };
 
-export function Heading({ eyebrow, title, lead, center = false, action }) {
+export function Heading({ title, lead, center = false, action }) {
   return (
     <div className={center ? "heading-v2 center" : "heading-v2"} data-reveal>
       <div>
-        {eyebrow && <p className="kicker">{eyebrow}</p>}
         <h2>{title}</h2>
       </div>
       {(lead || action) && (
@@ -193,7 +185,6 @@ export function Heading({ eyebrow, title, lead, center = false, action }) {
   );
 }
 Heading.propTypes = {
-  eyebrow: PropTypes.node,
   title: PropTypes.node.isRequired,
   lead: PropTypes.node,
   center: PropTypes.bool,
@@ -207,13 +198,13 @@ export function DirectContact({ topic, light = false }) {
   return (
     <div className={light ? "direct-contact on-dark" : "direct-contact"}>
       <a className="button button-primary" href={whatsapp + "?text=" + encodeURIComponent(intro)}>
-        Chat on WhatsApp <ArrowIcon />
+        Chat on WhatsApp
       </a>
       <a
         className={light ? "button button-outline-light" : "direct-email"}
         href={"mailto:" + email + "?cc=" + backupEmail + "&subject=" + encodeURIComponent(topic || "Project enquiry")}
       >
-        Email our team <ArrowIcon />
+        Email our team
       </a>
     </div>
   );
@@ -240,11 +231,10 @@ export function ServiceTiles() {
             />
             <span className="svc-tile-shade" aria-hidden="true" />
             <span className="svc-tile-body">
-              <span className="svc-tile-num">0{i + 1}</span>
               <span className="svc-tile-title">{s.name}</span>
               <span className="svc-tile-text">{s.summary}</span>
               <span className="svc-tile-more">
-                Explore {s.name.toLowerCase()} <ArrowIcon />
+                Explore {s.name.startsWith("AI") ? s.name : s.name.toLowerCase()} <ArrowIcon />
               </span>
             </span>
           </a>
@@ -271,13 +261,12 @@ export function ProjectCard({ project, featured = false, caseStudy = false, inde
           loading="lazy"
           decoding="async"
         />
-        {project.tag && <span className="project-card-tag">{project.tag}</span>}
       </a>
       <div className="project-card-body">
-        <p className="project-card-kind">{project.kind}</p>
         <h3>
           <a href={primary}>{project.name}</a>
         </h3>
+        <p className="project-card-kind">{project.kind}</p>
         <p className="project-card-text">{project.summary}</p>
         {project.stack && (
           <ul className="project-card-chips" aria-label={`${project.name} stack`}>
@@ -290,7 +279,7 @@ export function ProjectCard({ project, featured = false, caseStudy = false, inde
           {caseStudy ? (
             <>
               <a className="button button-primary button-small" href={`/work/${project.slug}`}>
-                Read the case study <ArrowIcon />
+                Read the case study
               </a>
               <a className="text-link" href={project.url}>
                 <span>Live site</span> <ArrowIcon />
@@ -298,7 +287,7 @@ export function ProjectCard({ project, featured = false, caseStudy = false, inde
             </>
           ) : (
             <a className="button button-primary button-small" href={project.url}>
-              {cta || "Visit the live website"} <ArrowIcon />
+              {cta || "Visit the live website"}
             </a>
           )}
         </div>
@@ -324,43 +313,15 @@ ProjectCard.propTypes = {
 };
 
 // Counts up once when it scrolls into view; the final number is in the HTML.
-export function CountUp({ value, suffix = "" }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-    const io = new window.IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      io.disconnect();
-      const start = window.performance.now();
-      const tick = (t) => {
-        const p = Math.min(1, (t - start) / 1400);
-        el.textContent = Math.round(value * (1 - Math.pow(1 - p, 3))) + suffix;
-        if (p < 1) window.requestAnimationFrame(tick);
-      };
-      window.requestAnimationFrame(tick);
-    }, { threshold: 0.4 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [value, suffix]);
-  return (
-    <span ref={ref}>
-      {value}
-      {suffix}
-    </span>
-  );
-}
-CountUp.propTypes = { value: PropTypes.number.isRequired, suffix: PropTypes.string };
 
 // Full-width photo call-to-action that closes most pages.
-export function CtaBand({ title = "Which part of your business needs better software?", topic, image = "accra-glass" }) {
+export function CtaBand({ title = "Tell us what you need built.", topic, image = "accra-glass" }) {
   const ph = photo(image);
   return (
     <section className="cta-v2" aria-label="Start a project">
       <img className="cta-v2-media" src={ph.src} srcSet={ph.srcSet} sizes="100vw" alt="" width="1920" height="1280" loading="lazy" decoding="async" />
       <div className="cta-v2-scrim" aria-hidden="true" />
       <div className="cta-v2-inner wrap" data-reveal>
-        <p className="kicker kicker-light">Start a project</p>
         <h2>{title}</h2>
         <p>Send one message on WhatsApp or email. We reply personally and agree the scope and price with you before any work starts.</p>
         <DirectContact topic={topic} light />
@@ -513,7 +474,7 @@ export function CookieChoice() {
   return (
     <section className="consent-bar" aria-label="Cookie choice">
       <p>
-        May we use a Meta pixel to see which of our ads bring enquiries? It stays off unless you allow it.{" "}
+        May we use a Meta pixel to see which ads bring enquiries?{" "}
         <a href="/privacy">Privacy</a>
       </p>
       <div className="consent-actions">
@@ -533,7 +494,7 @@ export function Testimonials({ items, tone = "mist", limit }) {
   const list = limit ? items.slice(0, limit) : items;
   return (
     <Band tone={tone} label="Client reviews">
-      <Heading eyebrow="What clients say" title={<>Businesses that run on <em>our work.</em></>} />
+      <Heading title="What our clients say." />
       <ul className="quotes-v2">
         {list.map((t) => (
           <li key={t.by} className="quote-card" data-reveal>
