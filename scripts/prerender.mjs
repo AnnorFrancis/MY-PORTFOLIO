@@ -65,6 +65,17 @@ try {
       publisher: { "@id": organization["@id"] },
     };
     const schema = { "@context":"https://schema.org", "@graph": [organization, { "@type": page.path === "/about" ? "AboutPage" : page.path === "/contact" ? "ContactPage" : "WebPage", "@id": `${url}#webpage`, name:page.title, description:page.description, url, inLanguage: "en", isPartOf: { "@id": website["@id"] }, publisher:{"@id":`${origin}/#organization`}, ...(page.path.startsWith("/notes/") ? {author:{"@type":"Person",name:"Francis Annor"}} : {}) }, website] };
+    if (page.path === "/")
+      schema["@graph"].push({
+        "@type": "VideoObject",
+        name: "Perkins_Creatives Tech: what we build",
+        description: "A one-minute film of the websites, business systems, mobile apps, AI assistants and ads we build for businesses in Ghana.",
+        thumbnailUrl: `${origin}/videos/master-film.webp`,
+        contentUrl: `${origin}/videos/master-film.mp4`,
+        uploadDate: "2026-11-19",
+        duration: "PT1M4S",
+        publisher: { "@id": `${origin}/#organization` },
+      });
     // Breadcrumbs for nested pages, so results show "Services > ..." or "Work > ...".
     const [, section, leaf] = page.path.split("/");
     if (leaf && (section === "services" || section === "work")) {
@@ -98,7 +109,7 @@ try {
       });
     }
     const head = `<meta name="description" content="${escape(page.description)}" />
-<link rel="canonical" href="${url}" />
+<link rel="canonical" href="${url}" />${page.path === "/" ? '<link rel="preload" as="image" href="/videos/master-film.webp" />' : ""}
 <meta property="og:type" content="${page.path.startsWith("/notes/") ? "article" : "website"}" />
 <meta property="og:title" content="${escape(page.title)}" />
 <meta property="og:description" content="${escape(page.description)}" />

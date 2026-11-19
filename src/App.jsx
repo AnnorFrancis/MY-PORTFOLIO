@@ -5,7 +5,6 @@ import {
   projects,
   pages,
   credentials,
-  heroSlugs,
   moreSystems,
   moreSites,
   films,
@@ -30,6 +29,7 @@ import {
   resetCookieChoice,
   Testimonials,
   FlyerShare,
+  HeroFilm,
   callDisplay,
   callLink,
 } from "./ui";
@@ -1225,32 +1225,15 @@ function Privacy() {
 }
 
 function Home() {
-  const heroShots = heroSlugs.flatMap((slug) =>
-    shotsFor(slug).slice(0, 1).map((s) => ({ ...s, key: slug })),
-  );
   const [trendy, besia, perkos] = projects;
   return (
     <>
       <PageHero
         size="home"
         image="hero-home"
-        video={[
-          ["/videos/hero-team.webm", "video/webm"],
-          ["/videos/hero-team.mp4", "video/mp4"],
-        ]}
         title="Websites and apps built in Accra."
         lead="We design and build websites, online stores, booking and stock systems, and AI assistants for businesses in Ghana. Websites start from GHS 2,000."
-        aside={
-          <figure className="hero-showcase glass">
-            <Slideshow
-              shots={heroShots}
-              alt="Live systems built by Perkins_Creatives Tech"
-              eager
-              interval={3800}
-              sizes="(max-width: 900px) 86vw, 40vw"
-            />
-          </figure>
-        }
+        aside={<HeroFilm />}
       >
         <DirectContact light />
       </PageHero>

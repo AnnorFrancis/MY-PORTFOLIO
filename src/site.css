@@ -2052,3 +2052,64 @@ main > article > .note-body {
     transform: none;
   }
 }
+
+/* ------------------------------------------------------- company film (home) */
+.hero-film {
+  position: relative;
+  justify-self: end;
+  width: min(340px, calc((100vh - 230px) * 9 / 16), 100%);
+  min-width: 250px;
+  padding: 10px;
+  border-radius: 30px;
+}
+.hero-film-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  border-radius: 21px;
+  background: #f2eadd;
+}
+.hero-film-play {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  translate: -50% 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--sea-deep);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.55);
+  transition: background 0.2s var(--ease), scale 0.2s var(--ease);
+}
+.hero-film-play:hover,
+.hero-film-play:focus-visible {
+  background: var(--aqua-soft);
+  scale: 1.03;
+}
+.hero-film-play span {
+  font-weight: 600;
+  color: var(--ink-2);
+}
+@media (max-width: 960px) {
+  .hero-film {
+    justify-self: center;
+    width: min(320px, 82vw);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-film-play {
+    transition: none;
+  }
+}

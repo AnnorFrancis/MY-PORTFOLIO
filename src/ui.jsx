@@ -1,7 +1,7 @@
 // Shared building blocks for the company site: photo heroes, toned
 // sections, image tiles, project cards, the photo call-to-action and the
 // footer. Pages compose these so every section has its own look.
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { services } from "./services";
 
@@ -567,3 +567,77 @@ FlyerShare.propTypes = {
   path: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
+
+// The company film in the home page hero, framed like a phone.
+// A silent 12-second preview loops in place (never with reduced motion or data
+// saving, and only while it is on screen). "Watch with sound" plays the full
+// film; that file (6 MB) loads only after the tap. The source is set directly
+// on the element inside the tap, so phones allow playback with sound.
+const film = {
+  full: "/videos/master-film.mp4",
+  preview: "/videos/master-film-preview.mp4",
+  poster: "/videos/master-film.webp",
+};
+export function HeroFilm() {
+  const ref = useRef(null);
+  const [watching, setWatching] = useState(false);
+  useEffect(() => {
+    const video = ref.current;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saving = window.navigator.connection?.saveData;
+    if (!video || calm || saving || !("IntersectionObserver" in window)) return undefined;
+    const observer = new window.IntersectionObserver(([entry]) => {
+      if (video.dataset.mode === "full") return observer.disconnect();
+      if (entry.isIntersecting) {
+        if (!video.dataset.mode) {
+          video.dataset.mode = "preview";
+          video.muted = true;
+          video.loop = true;
+          video.src = film.preview;
+        }
+        video.play().catch(() => {});
+      } else video.pause();
+    }, { threshold: 0.25 });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+  function watch() {
+    const video = ref.current;
+    if (!video) return;
+    video.dataset.mode = "full";
+    video.loop = false;
+    video.muted = false;
+    video.controls = true;
+    video.src = film.full;
+    video.play().catch(() => {});
+    setWatching(true);
+    window.fbq?.("trackCustom", "WatchFilm");
+  }
+  return (
+    <figure className="hero-showcase glass hero-film">
+      <video
+        ref={ref}
+        className="hero-film-video"
+        poster={film.poster}
+        playsInline
+        preload="none"
+        width="540"
+        height="960"
+        aria-label="Perkins_Creatives Tech film: the websites, business systems, apps, AI assistants and ads we build"
+      />
+      {!watching && (
+        <button type="button" className="hero-film-play" onClick={watch} aria-label="Watch our one-minute film with sound">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
+          </svg>
+          Watch with sound
+          <span>1:04</span>
+        </button>
+      )}
+      <figcaption className="sr-only">
+        A one-minute film about what we build: websites that convert, booking and sales systems, mobile apps,
+        payments, AI assistants, custom software and ads.
+      </figcaption>
+    </figure>
+  );
+}
