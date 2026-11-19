@@ -1,17 +1,11 @@
-// Social preview cards (the image WhatsApp, LinkedIn and X show for a link).
+// Social preview cards (the image WhatsApp, LinkedIn and X show for a link) for
+// pages that have no flyer. Pages with a flyer get theirs from scripts/flyers.mjs.
 // Run with `node scripts/og-cards.mjs`; the PNGs are committed.
 import sharp from "sharp";
 import { mkdir } from "node:fs/promises";
 
 await mkdir("public/images/og", { recursive: true });
 const cards = [
-  ["ai-workflow-automation", "AI workflow", "automation."],
-  ["business-management-systems", "Stock, sales and", "business systems."],
-  ["websites-and-ecommerce", "Websites, stores", "and bookings."],
-  ["custom-software-development", "Custom software", "for your operations."],
-  ["branding-social-media-and-video", "Flyers, social media", "and product videos."],
-  ["home", "Software. Systems.", "Practical AI."],
-  ["services", "Built around", "your business."],
   ["about", "Meet the people", "behind the systems."],
   ["contact", "Your next project", "starts here."],
   ["engineering", "The interface is only", "half the work."],
@@ -22,27 +16,16 @@ const cards = [
 const font = "Segoe UI, Montserrat, Arial, sans-serif";
 for (const [name, line1, line2] of cards) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
-<defs>
-<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f8fb"/><stop offset="1" stop-color="#dcEEf8"/></linearGradient>
-<radialGradient id="o1" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#2ba3cf" stop-opacity="0.75"/><stop offset="1" stop-color="#2ba3cf" stop-opacity="0"/></radialGradient>
-<radialGradient id="o2" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#8fd8ef" stop-opacity="0.8"/><stop offset="1" stop-color="#8fd8ef" stop-opacity="0"/></radialGradient>
-<linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.82"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.5"/></linearGradient>
-<linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#8fd8ef"/></linearGradient>
-</defs>
-<rect width="1200" height="630" fill="url(#bg)"/>
-<circle cx="1040" cy="90" r="360" fill="url(#o1)"/>
-<circle cx="140" cy="600" r="320" fill="url(#o2)"/>
-<rect x="60" y="60" width="1080" height="510" rx="40" fill="url(#glass)" stroke="url(#rim)" stroke-width="2.5"/>
-<text x="120" y="160" fill="#1e2731" font-family="${font}" font-size="30" font-weight="800">Perkins</text>
-<rect x="235" y="156" width="30" height="6" rx="3" fill="#0a6f96"/>
-<text x="269" y="160" fill="#1e2731" font-family="${font}" font-size="30" font-weight="800">Creatives Tech</text>
-<text x="116" y="320" fill="#1e2731" font-family="${font}" font-size="70" font-weight="800" letter-spacing="-2">${line1}</text>
-<text x="116" y="408" fill="#0a6f96" font-family="${font}" font-size="70" font-weight="800" letter-spacing="-2">${line2}</text>
-<text x="120" y="510" fill="#4b5866" font-family="${font}" font-size="24" font-weight="600">Websites · Online stores · Business systems · Accra, Ghana</text>
+<rect width="1200" height="630" fill="#ffffff"/>
+<rect x="0" y="560" width="1200" height="70" fill="#06506f"/>
+<text x="96" y="140" fill="#1e2731" font-family="${font}" font-size="34" font-weight="800">Perkins</text>
+<rect x="228" y="136" width="34" height="6" rx="3" fill="#2ba3cf"/>
+<text x="266" y="140" fill="#1e2731" font-family="${font}" font-size="34" font-weight="500">Creatives Tech</text>
+<text x="92" y="318" fill="#1e2731" font-family="${font}" font-size="76" font-weight="800" letter-spacing="-2">${line1}</text>
+<text x="92" y="412" fill="#0a6f96" font-family="${font}" font-size="76" font-weight="800" letter-spacing="-2">${line2}</text>
+<text x="96" y="605" fill="#ffffff" font-family="${font}" font-size="26" font-weight="600">perkinscreatives.perkos.app · Call 053 871 3916 · Accra, Ghana</text>
 </svg>`;
-  await sharp(Buffer.from(svg))
-    .png({ compressionLevel: 9 })
-    .toFile(`public/images/og/${name}.png`);
+  await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(`public/images/og/${name}.png`);
 }
 await sharp("public/favicon.svg").resize(180).png().toFile("public/apple-touch-icon.png");
 console.log("Social cards and touch icon written.");

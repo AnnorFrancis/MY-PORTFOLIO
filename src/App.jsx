@@ -12,6 +12,7 @@ import {
   shotsFor,
   testimonials,
 } from "./content";
+import { flyers, flyerFor } from "./flyers";
 import {
   PageHero,
   Band,
@@ -28,6 +29,9 @@ import {
   CookieChoice,
   resetCookieChoice,
   Testimonials,
+  FlyerShare,
+  callDisplay,
+  callLink,
 } from "./ui";
 
 const email = "hello@perkos.app";
@@ -552,7 +556,8 @@ const processSteps = [
   ["Build and test", "We agree the scope in writing. You then test the working system on your real daily tasks before launch."],
   ["Launch and hand over", "We set up payments, staff access and backups, then train your team. Ongoing care is agreed separately."],
 ];
-const fromPrice = (service) => "From GHS " + service.price[0].toLocaleString("en-GB");
+const fromPrice = (service) =>
+  service.price ? "From GHS " + service.price[0].toLocaleString("en-GB") : "Priced per project";
 const faqs = [
   ["How much does a website cost?", "Starter websites range from GHS 2,000 to 3,500, and business websites from GHS 5,000 to 8,000. Custom applications range from GHS 10,000 to 15,000. The final price is agreed in writing before work begins."],
   ["How long does a project take?", "A starter website is usually ready in 1 to 2 weeks, a business website in 3 to 4 weeks, and a custom application in 6 to 10 weeks."],
@@ -565,6 +570,8 @@ function ServicePage({ service }) {
   const project = projects.find((item) => item.slug === service.projectSlug);
   const film = films.find((item) => item.id === service.film);
   const others = services.filter((s) => s.slug !== service.slug);
+  const work = service.work;
+  const flyer = flyerFor(service.slug);
   return (
     <>
       <PageHero
@@ -575,7 +582,7 @@ function ServicePage({ service }) {
         aside={
           <div className="hero-price glass">
             <strong>{fromPrice(service)}</strong>
-            <span>Published price</span>
+            <span>{service.price ? "Published price" : "Agreed in writing before work starts"}</span>
             <p>{service.budget}</p>
           </div>
         }
@@ -601,12 +608,28 @@ function ServicePage({ service }) {
           </div>
         </div>
       </Band>
+      {service.reviews && <Testimonials items={testimonials} />}
+      {!service.reviews && (
       <Band tone="mist">
         <Heading
-          title={project ? "Built for a real business." : "Made for real launches."}
+          title={project ? "Built for a real business." : work ? "Work we have built." : "Made for real launches."}
           lead={service.prepare}
         />
         <div className="proof-v2">
+          {!project && work && (
+            <ProjectCard
+              featured
+              cta={work.cta}
+              project={{
+                slug: service.slug,
+                name: work.name,
+                kind: work.kind,
+                summary: work.summary,
+                url: work.url,
+                image: work.gallery ? shotBase(work.gallery) : work.image,
+              }}
+            />
+          )}
           {project && (
             <ProjectCard
               featured
@@ -628,6 +651,8 @@ function ServicePage({ service }) {
           )}
         </div>
       </Band>
+      )}
+      {flyer && <FlyerShare flyer={flyer} path={"/services/" + service.slug} title={service.title} />}
       <Band tone="dark">
         <Heading title="Other ways we can help." />
         <div className="mini-tiles">
@@ -663,6 +688,16 @@ ServicePage.propTypes = {
     budget: PropTypes.string,
     prepare: PropTypes.string,
     price: PropTypes.arrayOf(PropTypes.number),
+    reviews: PropTypes.bool,
+    work: PropTypes.shape({
+      name: PropTypes.string,
+      kind: PropTypes.string,
+      summary: PropTypes.string,
+      url: PropTypes.string,
+      cta: PropTypes.string,
+      image: PropTypes.string,
+      gallery: PropTypes.string,
+    }),
   }).isRequired,
 };
 function Steps({ light = false }) {
@@ -692,7 +727,7 @@ function Services() {
       <Band tone="light" className="svc-rows-band">
         <Heading
           title="What we build, and what it costs."
-          lead="Each service has a published starting price. The final scope and price are agreed in writing before work begins."
+          lead="Most services have a published starting price. The final scope and price are agreed in writing before work begins."
         />
         <div className="svc-rows">
           {services.map((s, i) => (
@@ -731,6 +766,37 @@ function Services() {
             </article>
           ))}
         </div>
+      </Band>
+      <Band tone="mist" id="flyers" label="Our flyers">
+        <Heading
+          title="Our flyers."
+          lead="Open a flyer to see it full size, or download it to post on your status. Each one links to the service it is about."
+        />
+        <ul className="flyer-grid">
+          {flyers.map((f) => {
+            const s = services.find((item) => item.slug === f.service);
+            return (
+              <li key={f.key} data-reveal>
+                <a className="flyer-thumb" href={"/images/flyers/" + f.key + ".jpg"}>
+                  <img
+                    src={"/images/flyers/" + f.key + "-640.webp"}
+                    alt={f.alt}
+                    width="640"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+                <p>
+                  <a href={f.general ? "/services" : "/services/" + s.slug}>{f.general ? "All our services" : s.name}</a>
+                  <a className="flyer-download" href={"/images/flyers/" + f.key + ".jpg"} download={"Perkins-Creatives-Tech-" + f.key + ".jpg"}>
+                    Download
+                  </a>
+                </p>
+              </li>
+            );
+          })}
+        </ul>
       </Band>
       <Band tone="dark">
         <Heading
@@ -811,7 +877,7 @@ function About() {
             {[
               [20, "+", "Live builds shipped"],
               [3, "", "Systems taking live payments"],
-              [5, "", "Service lines"],
+              [services.length, "", "Service lines"],
               [30, "+", "Product films produced"],
             ].map(([v, s, l]) => (
               <li key={l}>
@@ -823,7 +889,7 @@ function About() {
         </div>
       </Band>
       <Band tone="mist">
-        <Heading title="Five services, one team." />
+        <Heading title="Eight services, one team." />
         <ServiceTiles />
       </Band>
       <ContactBand />
@@ -839,6 +905,10 @@ function Contact() {
         lead="Send us a message about what you want to build. A sentence is enough to start."
         aside={
           <ul className="contact-card glass">
+            <li>
+              <span>Call</span>
+              <a href={callLink}>{callDisplay}</a>
+            </li>
             <li>
               <span>WhatsApp</span>
               <a href={whatsapp}>{whatsappDisplay}</a>
@@ -884,7 +954,7 @@ const adPages = [
     slug: "",
     service: null,
     title: "A website or system that brings you customers.",
-    lead: "Websites, online stores, POS and stock systems, AI assistants and branding for businesses in Ghana. Tell us what you need on WhatsApp and get a clear price.",
+    lead: "Websites, online stores, POS systems, mobile apps, payroll systems, AI chatbots and Meta ads for businesses in Ghana. Tell us what you need on WhatsApp and get a clear price.",
     bullets: ["Published prices in Ghana cedis", "Paystack and Mobile Money payments", "Scope and price agreed before work starts"],
     price: "From GHS 2,000",
     image: "hero-home",
@@ -903,8 +973,8 @@ const adPages = [
   {
     slug: "business-systems",
     service: "business-management-systems",
-    title: "Know your stock, sales and cash every single day.",
-    lead: "One system that connects every sale to your stock, your cash, your staff and the report you see at close of day.",
+    title: "One system for your whole business.",
+    lead: "POS, stock, sales, bookings and customers, all in one place. Every sale updates your stock, your cash and the report you see at close of day.",
     bullets: ["Point of sale and stock in one place", "Staff roles and approvals", "Daily figures for the owner"],
     price: "From GHS 10,000",
     image: "svc-business",
@@ -923,9 +993,9 @@ const adPages = [
   {
     slug: "ai-automation",
     service: "ai-workflow-automation",
-    title: "Answer customer messages faster with AI.",
-    lead: "An assistant that sorts incoming enquiries, finds answers in your own documents and drafts replies, with a person approving anything important.",
-    bullets: ["Sorts and answers routine questions", "Uses your own documents and prices", "A person approves important replies"],
+    title: "AI chatbots that answer your customers.",
+    lead: "Replies on WhatsApp, Telegram and your website, day and night. It takes bookings and orders, answers questions from your own prices and passes anything important to a person.",
+    bullets: ["Answers on WhatsApp, Telegram and your website", "Takes bookings and orders", "A person handles anything important"],
     price: "From GHS 1,500",
     image: "svc-ai",
     project: null,
@@ -933,16 +1003,44 @@ const adPages = [
   {
     slug: "branding",
     service: "branding-social-media-and-video",
-    title: "Posts and videos that make people message you.",
-    lead: "Flyers, social media posts and short product videos, each one pointing customers to your WhatsApp, your shop or your website.",
-    bullets: ["Flyers sized for Instagram, Facebook and WhatsApp", "Short product videos for Reels", "A monthly posting plan"],
+    title: "Ads, videos and posts that bring you customers.",
+    lead: "Meta ads, UGC video ads, flyers and social media, each one pointing customers to your WhatsApp, your shop or your website.",
+    bullets: ["Meta ads on Facebook and Instagram", "UGC video ads cut for phones", "Flyers, posts and a monthly plan"],
     price: "From GHS 80",
     image: "svc-brand",
     project: null,
   },
+  {
+    slug: "mobile-apps",
+    service: "mobile-apps",
+    title: "Mobile apps for your business.",
+    lead: "Your own app on iPhone and Android, for your customers or your team, with bookings, payments and push notifications.",
+    bullets: ["One app for iPhone and Android", "Bookings, payments and push notifications", "Built with Flutter, handed over to you"],
+    price: "Price agreed in writing after one short call",
+    image: "svc-mobile",
+    project: null,
+  },
+  {
+    slug: "payroll",
+    service: "payroll-and-staff-systems",
+    title: "Payroll, staff and security systems.",
+    lead: "Built around how your company works, from clock-in to payslip. Pay follows verified attendance, and anything that does not add up is flagged for a person to check.",
+    bullets: ["Clock-in and attendance by site", "Pay runs with PAYE and SSNIT", "Ghost names and paid absences flagged"],
+    price: "Price agreed in writing after one short call",
+    image: "svc-payroll",
+    project: null,
+  },
+  {
+    slug: "forex",
+    service: "systems-for-forex-traders",
+    title: "Systems and apps for forex traders.",
+    lead: "Your setup online day and night, monitored and built around how you trade. We build software; we do not manage money or give trading advice.",
+    bullets: ["A trading computer kept online", "Alerts on your phone", "Journals, playbooks and trading group apps"],
+    price: "Price agreed in writing after one short call",
+    image: "svc-forex",
+    project: null,
+  },
 ];
-const phoneDisplay = "020 021 4147";
-const phoneLink = "tel:+233200214147";
 const budgets = ["Let’s discuss", "Under GHS 2,000", "GHS 2,000 to 5,000", "GHS 5,000 to 10,000", "Above GHS 10,000"];
 
 // Turns three quick choices into a ready-to-send WhatsApp message.
@@ -1025,12 +1123,13 @@ function AdLanding({ page }) {
           <a className="button button-primary button-large" href={chat}>
             Chat on WhatsApp now
           </a>
-          <a className="button button-outline-light button-large" href={phoneLink}>
-            Call {phoneDisplay}
+          <a className="button button-outline-light button-large" href={callLink}>
+            Call {callDisplay}
           </a>
         </div>
         <p className="lp-price">
-          {page.price} · price agreed before any work starts
+          {page.price}
+          {page.price.startsWith("From") && " · price agreed before any work starts"}
         </p>
       </PageHero>
       <Band tone="light" className="trust-band" label="Clients">
@@ -1080,7 +1179,7 @@ function AdLanding({ page }) {
       <CtaBand title="Ready when you are. Send one message." topic={topic} />
       <div className="lp-sticky" aria-label="Contact us">
         <a className="button button-primary" href={chat}>WhatsApp</a>
-        <a className="button button-light" href={phoneLink}>Call</a>
+        <a className="button button-light" href={callLink}>Call</a>
       </div>
     </>
   );
@@ -1099,7 +1198,7 @@ function Privacy() {
       <Band tone="light">
         <div className="prose-v2">
           <h2>Who we are</h2>
-          <p>Perkins_Creatives Tech is a software, website and AI company based in Accra, Ghana. You can reach us on WhatsApp at {phoneDisplay} or by email at {email} or {backupEmail}.</p>
+          <p>Perkins_Creatives Tech is a software, website and AI company based in Accra, Ghana. You can call us on {callDisplay}, reach us on WhatsApp at {whatsappDisplay} or email us at {email} or {backupEmail}.</p>
           <h2>What this website collects</h2>
           <p>This website has no accounts and does not store anything you type. The project brief and quick forms only prepare a message in your own email or WhatsApp app. Nothing is sent until you send it yourself.</p>
           <p>We count visits and clicks on our WhatsApp and email buttons to understand which pages help people. These counts use Vercel Web Analytics, which does not use cookies and does not collect names, email addresses or anything you type.</p>
@@ -1181,7 +1280,7 @@ function Home() {
       <Band tone="mist" id="services">
         <Heading
           title="What we can build for you."
-          lead="Five services, each with a published starting price in Ghana cedis."
+          lead="Eight services. Most have a published starting price in Ghana cedis."
           action={
             <a className="text-link" href="/services">
               <span>All services and prices</span> <Arrow />
@@ -1625,6 +1724,10 @@ const addons = [
   ["Brand & flyer design", "GHS 80 to 600", "Flyers, posts and simple brand pieces."],
   ["CV / SOP writing", "GHS 150 to 400", "Clear documents, written for each application."],
   ["IT support", "Scoped on request", "Setup and troubleshooting, quoted per job."],
+  ["Mobile apps", "Priced per project", "iPhone and Android, agreed after one short call."],
+  ["Payroll & staff systems", "Priced per project", "Priced by the number of staff, sites and devices."],
+  ["Systems for forex traders", "Priced per project", "Journals, alerts and apps for trading groups."],
+  ["Meta ads & UGC video ads", "Priced per campaign", "The ad budget you pay Meta is separate."],
 ];
 function WorkWithMe() {
   return (

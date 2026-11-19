@@ -9,7 +9,7 @@ export const PIXEL_ID = "2337964750035566";
 let started = false;
 
 function contactChannel(href) {
-  if (href.startsWith("https://wa.me/")) return "WhatsApp";
+  if (/^https:\/\/wa\.me\/\d/.test(href)) return "WhatsApp";
   if (href.startsWith("mailto:")) return "Email";
   if (href.startsWith("tel:")) return "Phone";
   return null;

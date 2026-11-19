@@ -10,6 +10,10 @@ export const email = "hello@perkos.app";
 export const backupEmail = "francisannor212@gmail.com";
 export const whatsapp = "https://wa.me/233200214147";
 export const whatsappDisplay = "+233 20 021 4147";
+// The calls line printed on the flyers. WhatsApp stays on the number above.
+export const callDisplay = "053 871 3916";
+export const callLink = "tel:+233538713916";
+export const siteUrl = "https://perkinscreatives.perkos.app";
 
 const ArrowIcon = () => (
   <span className="arrow-icon" aria-hidden="true">
@@ -34,6 +38,9 @@ export const servicePhoto = {
   "business-management-systems": "svc-business",
   "websites-and-ecommerce": "svc-web",
   "custom-software-development": "svc-custom",
+  "mobile-apps": "svc-mobile",
+  "payroll-and-staff-systems": "svc-payroll",
+  "systems-for-forex-traders": "svc-forex",
   "branding-social-media-and-video": "svc-brand",
 };
 
@@ -234,7 +241,7 @@ export function ServiceTiles() {
               <span className="svc-tile-title">{s.name}</span>
               <span className="svc-tile-text">{s.summary}</span>
               <span className="svc-tile-more">
-                Explore {s.name.startsWith("AI") ? s.name : s.name.toLowerCase()} <ArrowIcon />
+                Explore {s.name.split(" ").map((w) => (/^(AI|Meta|UGC|POS)$/.test(w) ? w : w.toLowerCase())).join(" ")} <ArrowIcon />
               </span>
             </span>
           </a>
@@ -369,7 +376,7 @@ export function SiteFooter({ Wordmark, minimal = false }) {
           </a>
           <p>
             Software, website and AI company in Accra, Ghana. We build websites, online stores, business systems,
-            custom software and AI automation for businesses in Ghana and abroad.
+            mobile apps, payroll systems, AI chatbots and Meta ads for businesses in Ghana and abroad.
           </p>
           <DirectContact light />
         </div>
@@ -400,6 +407,7 @@ export function SiteFooter({ Wordmark, minimal = false }) {
         <div className="footer-v2-col">
           <h2>Contact</h2>
           <ul>
+            <li><a href={callLink}>Call {callDisplay}</a></li>
             <li><a href={whatsapp}>WhatsApp {whatsappDisplay}</a></li>
             <li><a href={"mailto:" + email}>{email}</a></li>
             <li><a href={"mailto:" + backupEmail}>{backupEmail}</a></li>
@@ -512,4 +520,50 @@ Testimonials.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({ quote: PropTypes.string, by: PropTypes.string })).isRequired,
   tone: PropTypes.string,
   limit: PropTypes.number,
+};
+
+// A service's flyer with two ways to pass it on. "Share on WhatsApp" sends the
+// page link; the page's share preview is the same flyer, so the flyer is what
+// the other person sees. The download is the full-size flyer.
+export function FlyerShare({ flyer, path, title }) {
+  const link = siteUrl + path + "?utm_source=whatsapp&utm_medium=share&utm_campaign=flyer";
+  const file = "/images/flyers/" + flyer.key;
+  return (
+    <Band tone="light" className="flyer-band" label="Share this flyer">
+      <div className="flyer-split">
+        <a className="flyer-frame" href={file + ".jpg"} data-reveal>
+          <img
+            src={file + "-1000.webp"}
+            srcSet={file + "-640.webp 640w, " + file + "-1000.webp 1000w"}
+            sizes="(max-width: 700px) 86vw, 440px"
+            alt={flyer.alt}
+            width="1000"
+            height="1250"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <div className="flyer-copy" data-reveal>
+          <h2>Know someone who needs this?</h2>
+          <p className="big-text">
+            Send this page on WhatsApp and the flyer shows up as the preview. Or download the flyer and post it
+            to your status.
+          </p>
+          <div className="flyer-actions">
+            <a className="button button-primary" href={"https://wa.me/?text=" + encodeURIComponent(title + ": " + link)}>
+              Share on WhatsApp
+            </a>
+            <a className="text-link" href={file + ".jpg"} download={"Perkins-Creatives-Tech-" + flyer.key + ".jpg"}>
+              <span>Download the flyer</span> <ArrowIcon />
+            </a>
+          </div>
+        </div>
+      </div>
+    </Band>
+  );
+}
+FlyerShare.propTypes = {
+  flyer: PropTypes.shape({ key: PropTypes.string.isRequired, alt: PropTypes.string.isRequired }).isRequired,
+  path: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
 };

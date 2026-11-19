@@ -24,6 +24,7 @@ export const services = [
       "Bring one repetitive task, an anonymised example and the answer your team would accept. That gives us a concrete starting point for deciding whether automation is worthwhile.",
     proof: "/engineering",
     proofLabel: "Explore our founder’s approach to reliable integrations",
+    reviews: true,
   },
   {
     slug: "business-management-systems",
@@ -107,26 +108,133 @@ export const services = [
     proofLabel: "Explore PerkOS, our founder’s offline sales product",
   },
   {
-    slug: "branding-social-media-and-video",
-    name: "Branding & content",
-    short: "Flyers, social media and video",
-    title: "Branding, social media and product videos",
-    seoTitle: "Flyer design, social media management and product videos in Ghana",
+    slug: "mobile-apps",
+    name: "Mobile apps",
+    short: "iPhone and Android apps",
+    title: "Mobile apps for your customers or your team",
+    seoTitle: "Mobile app development in Ghana for iPhone and Android",
     seoDescription:
-      "Flyers, social media management and short product videos for businesses in Ghana. Every post points customers to your website or WhatsApp. Flyers from GHS 80.",
+      "Mobile apps for businesses in Ghana: customer apps with bookings, payments and push notifications, and apps for your staff. Built with Flutter for iPhone and Android.",
+    price: null,
+    summary:
+      "Your own app on iPhone and Android, for customers who book and pay, or for staff who work away from a desk.",
+    heading: "Does this need an app, or a good website?",
+    example:
+      "An app earns its place when people open it every week: to rebook, track an order or get a reminder. If customers visit once, a fast website costs less and is easier to find. We decide which one you need first, then build the app around the few things people will open it for.",
+    deliverables: [
+      "One app for iPhone and Android, built with Flutter.",
+      "Sign-in, bookings or payments, and push notifications, as agreed for your business.",
+      "Test builds for your team, the store listings and a handover of every account.",
+    ],
+    budget:
+      "Mobile app prices depend on the screens, the payments and the system behind the app. We agree the price in writing after one short call.",
+    prepare:
+      "Tell us who will use the app, the one thing they must be able to do in it, and whether it should connect to a website or system you already have.",
+    work: {
+      name: "Weave",
+      kind: "Our founder’s app, in development",
+      summary:
+        "A Flutter and Supabase app, Android first, with sign-in, push notifications and privacy controls. Its notification sender is designed so a retry never shows the same message twice.",
+      url: "/notes/lease-based-push",
+      cta: "Read how its notifications work",
+      image: "/images/photos/svc-mobile",
+    },
+    proof: "/notes/lease-based-push",
+    proofLabel: "Read how Weave’s notifications work",
+  },
+  {
+    slug: "payroll-and-staff-systems",
+    name: "Payroll & staff systems",
+    short: "Payroll, attendance and site security",
+    title: "Payroll, staff and security systems for companies",
+    seoTitle: "Payroll, attendance and staff management systems in Ghana",
+    seoDescription:
+      "Payroll, clock-in, attendance and staff records for companies and institutions in Ghana. Pay runs with PAYE and SSNIT, built from verified attendance.",
+    price: null,
+    summary:
+      "Clock-in, attendance, staff records and payroll in one system, so pay follows verified attendance.",
+    heading: "Who gets paid, and for which hours?",
+    example:
+      "In a security company, pay should follow verified presence on site. When clock-ins, staff records and payroll live in different places, ghost names and paid absences slip through. We connect identity, attendance and pay, and flag anything that does not add up for a person to check.",
+    deliverables: [
+      "Staff records, sites and roles, with a sign-in for each user.",
+      "Clock-in and attendance, with exceptions flagged for review.",
+      "Pay runs with PAYE and SSNIT, approval before payment, and payslips staff can open.",
+    ],
+    budget:
+      "Payroll and staff systems are priced by the number of staff, sites and devices. We agree the price in writing after one short call.",
+    prepare:
+      "Walk us through last month’s payroll: where attendance came from, who approved the pay run and which mistakes had to be fixed by hand.",
+    work: {
+      name: "SAMTEC Security System",
+      kind: "Team project · Attendance and payroll",
+      summary:
+        "Biometric attendance and payroll for security companies in Ghana. Pay is worked out only from verified clock-ins, and checks flag one fingerprint under two names or pay without attendance. Francis built the API and database; a teammate built the dashboard.",
+      url: "https://github.com/TEAM-DEVV/samtec-security-system",
+      cta: "See the public code",
+      image: "/images/photos/svc-payroll",
+    },
+    proof: "/engineering",
+    proofLabel: "Read about the SAMTEC engineering decisions",
+  },
+  {
+    slug: "systems-for-forex-traders",
+    name: "Systems for forex traders",
+    short: "Journals, alerts and trading group apps",
+    title: "Systems and apps for forex traders",
+    seoTitle: "Software for forex traders and trading groups in Ghana",
+    seoDescription:
+      "Trading journals, playbook tools, apps for trading groups and a trading computer kept online with alerts on your phone. We build software; we do not manage money or give trading advice.",
+    price: null,
+    summary:
+      "Journals, playbooks, apps for trading groups and a trading computer that stays online, built around how you trade.",
+    heading: "What breaks when you are away from your screen?",
+    example:
+      "A trading setup fails quietly: the computer restarts, the terminal disconnects, an alert never arrives. We set up the tools you rely on, check that they stay online and send an alert to your phone when something needs you. For mentors and trading groups, we build the app members use for lessons and records.",
+    deliverables: [
+      "A trading journal and playbook tool with your own rules and reports.",
+      "A trading computer (VPS) kept online, with alerts on your phone when something stops.",
+      "Apps and member areas for trading groups and mentors.",
+    ],
+    budget:
+      "Prices depend on the tools and the number of members. We agree the price in writing after one short call. We build software; we do not manage money or give trading advice.",
+    prepare:
+      "Tell us what you trade on, for example MetaTrader, what you track today, and what you want to know without opening your laptop.",
+    work: {
+      name: "MERIDIAN Trading Desk",
+      kind: "Live product · demo data",
+      summary:
+        "A desk for traders, mentors and signal providers: journal, analytics, playbook, risk tools, a signals desk and a calendar, with equity curves from a hand-built charting engine.",
+      url: "https://meridian-trading-desk.vercel.app",
+      cta: "Open the live desk",
+      gallery: "meridian",
+    },
+    proof: "https://meridian-trading-desk.vercel.app",
+    proofLabel: "Open the MERIDIAN Trading Desk",
+  },
+  {
+    slug: "branding-social-media-and-video",
+    name: "Meta ads & content",
+    short: "Meta ads, UGC video ads, flyers and posts",
+    title: "Meta ads, UGC video ads and content",
+    seoTitle: "Meta ads, UGC video ads, flyers and social media in Ghana",
+    seoDescription:
+      "Meta ads, UGC video ads, flyers, social media management and product videos for businesses in Ghana. Every ad points customers to your website or WhatsApp. Flyers from GHS 80.",
     price: [80, 2500],
     summary:
-      "Flyers, social posts and short product films that send customers to one clear next step: your website, your shop or a WhatsApp chat.",
+      "Meta ads, UGC video ads, flyers and posts that send customers to one clear next step: your website, your shop or a WhatsApp chat.",
     heading: "What should a customer do after seeing the post?",
     example:
       "A flyer or a short video works when it ends in one action: book, order or send a message. We plan each piece around the offer, size it for the channel it runs on, and link it to the page or chat where the sale happens. That way a post can be traced to the enquiries it brings in.",
     deliverables: [
+      "Meta ads on Facebook and Instagram, with tracking so you can see which ads bring messages.",
+      "UGC-style video ads, filmed and cut for phones.",
       "Flyers and posts sized for Instagram, Facebook, WhatsApp Status and print.",
       "Short product and launch films, cut for phones and for YouTube.",
       "A monthly posting plan, with each post linked to the page or chat that takes the order.",
     ],
     budget:
-      "Flyers and simple brand pieces range from GHS 80 to 600. Monthly social media management ranges from GHS 600 to 2,500. Product and launch films are quoted by length and shoot.",
+      "Flyers and simple brand pieces range from GHS 80 to 600. Monthly social media management ranges from GHS 600 to 2,500. Product and launch films are quoted by length and shoot. Meta ads and UGC video ads are priced per campaign, and the budget you pay Meta for the ads is separate.",
     prepare:
       "Send your logo, the product or offer you want to promote, and where customers should end up: your website, your WhatsApp or your shop.",
     film: "perkos-hook",

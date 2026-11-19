@@ -271,7 +271,7 @@ export const pages = [
     path: "/",
     title: "Software, website and AI company in Accra, Ghana | Perkins_Creatives Tech",
     description:
-      "Perkins_Creatives Tech builds websites, online stores, POS and stock systems, custom software and AI automation for businesses in Ghana and abroad. Chat with us on WhatsApp.",
+      "Perkins_Creatives Tech builds websites, online stores, POS systems, mobile apps, payroll systems, AI chatbots and Meta ads for businesses in Ghana and abroad. Chat with us on WhatsApp.",
     image: "home",
   },
   {
@@ -338,10 +338,13 @@ export const pages = [
   ...[
     ["", "Websites, systems and AI for businesses in Ghana", "home"],
     ["websites", "Get a website that brings in enquiries", "websites-and-ecommerce"],
-    ["business-systems", "POS, stock and sales systems for Ghanaian businesses", "business-management-systems"],
+    ["business-systems", "One system for your whole business", "business-management-systems"],
     ["custom-software", "Custom software built around your team", "custom-software-development"],
-    ["ai-automation", "AI assistants that answer customer messages faster", "ai-workflow-automation"],
-    ["branding", "Flyers, posts and videos that make people message you", "branding-social-media-and-video"],
+    ["ai-automation", "AI chatbots that answer your customers", "ai-workflow-automation"],
+    ["branding", "Ads, videos and posts that bring you customers", "branding-social-media-and-video"],
+    ["mobile-apps", "Mobile apps for your business", "mobile-apps"],
+    ["payroll", "Payroll, staff and security systems", "payroll-and-staff-systems"],
+    ["forex", "Systems and apps for forex traders", "systems-for-forex-traders"],
   ].map(([slug, title, image]) => ({
     path: "/start" + (slug ? "/" + slug : ""),
     title: title + " | Perkins_Creatives Tech",

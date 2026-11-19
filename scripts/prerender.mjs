@@ -41,7 +41,7 @@ try {
       logo: `${origin}/apple-touch-icon.png`,
       image: `${origin}/images/og/home.png`,
       description:
-        "Software, website and AI company in Accra, Ghana. Websites, online stores, POS and stock systems, custom software and AI automation.",
+        "Software, website and AI company in Accra, Ghana. Websites, online stores, POS systems, mobile apps, payroll systems, AI chatbots and Meta ads.",
       email: "hello@perkos.app",
       telephone: "+233200214147",
       priceRange: "GHS 1,500 to GHS 15,000",

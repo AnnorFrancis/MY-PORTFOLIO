@@ -10,7 +10,7 @@ document.addEventListener("click", (event) => {
   const link = event.target.closest?.("a[href]");
   if (!link) return;
   const href = link.getAttribute("href");
-  const channel = href.startsWith("https://wa.me/")
+  const channel = /^https:\/\/wa\.me\/\d/.test(href)
     ? "WhatsApp"
     : href.startsWith("mailto:")
       ? "Email"
