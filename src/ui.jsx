@@ -118,7 +118,7 @@ export function PageHero({
               <span aria-hidden="true">←</span> {back[1]}
             </a>
           )}
-          <h1 className="rise" style={{ "--i": 1 }}>
+          <h1 className={typeof title === "string" && title.length > 36 ? "rise long" : "rise"} style={{ "--i": 1 }}>
             {title}
           </h1>
           {lead && (

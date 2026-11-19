@@ -10,7 +10,7 @@ import {
   moreSites,
   films,
   shotsFor,
-  testimonials,
+  reviewsApproved, testimonials,
 } from "./content";
 import {
   PageHero,
@@ -151,7 +151,8 @@ function useTilt(max = 5) {
 function Link({ href, children, className = "" }) {
   return (
     <a className={className} href={href}>
-      <span>{children}</span> <Arrow />
+      {/* Buttons carry words only; the arrow belongs to plain text links. */}
+      {className.includes("button") ? children : <><span>{children}</span> <Arrow /></>}
     </a>
   );
 }
@@ -995,6 +996,13 @@ function QuickBrief({ preset, slug }) {
 }
 QuickBrief.propTypes = { preset: PropTypes.string, slug: PropTypes.string };
 
+// Real, live builds shown as proof under the ad page hero.
+const liveWork = [
+  ["trendy-norms", "Trendy Norms Hub", "Online store and shop back office"],
+  ["besia", "Bēsia Beauty Studio", "Booking website and studio manager"],
+  ["letteropedia", "Letteropedia", "Quote request website"],
+  ["perkos", "PerkOS", "Sales and stock system"],
+];
 function AdLanding({ page }) {
   const service = services.find((s) => s.slug === page.service);
   const project = page.project ? projects.find((p) => p.slug === page.project) : null;
@@ -1027,11 +1035,20 @@ function AdLanding({ page }) {
       </PageHero>
       <Band tone="light" className="trust-band" label="Clients">
         <div className="trust-v2" data-reveal>
-          <p>
+          <h2>
             Live systems we have built: <strong>Trendy Norms Hub</strong>, <strong>Bēsia Beauty Studio</strong>,{" "}
             <strong>Letteropedia</strong> and <strong>PerkOS</strong>.
-          </p>
+          </h2>
         </div>
+        <ul className="proof-strip" data-reveal>
+          {liveWork.map(([slug, name, what]) => (
+            <li key={slug}>
+              <img src={`/images/projects/${slug}-640.webp`} alt={`${name} home page`} width="640" height="400" loading="lazy" decoding="async" />
+              <strong>{name}</strong>
+              <span>{what}</span>
+            </li>
+          ))}
+        </ul>
       </Band>
       <Band tone="mist">
         <div className={project ? "split-v2" : "split-v2 single"}>
@@ -1051,7 +1068,7 @@ function AdLanding({ page }) {
           )}
         </div>
       </Band>
-      <Testimonials items={testimonials} tone="light" limit={3} />
+      {reviewsApproved && <Testimonials items={testimonials} tone="light" limit={3} />}
       <Band tone="dark">
         <Heading title="Three steps, no surprises." />
         <Steps light />
@@ -1141,10 +1158,10 @@ function Home() {
 
       <Band tone="light" className="trust-band" label="Clients">
         <div className="trust-v2" data-reveal>
-          <p>
+          <h2>
             Live systems we have built: <strong>Trendy Norms Hub</strong>, <strong>Bēsia Beauty Studio</strong>,{" "}
             <strong>Letteropedia</strong> and <strong>PerkOS</strong>.
-          </p>
+          </h2>
         </div>
         <ul className="stat-row">
           {[
@@ -1192,9 +1209,9 @@ function Home() {
         </div>
       </Band>
 
-      <Testimonials items={testimonials} />
+      {reviewsApproved && <Testimonials items={testimonials} />}
 
-      <Band tone="light">
+      <Band tone={reviewsApproved ? "light" : "mist"}>
         <div className="split-v2 media-left">
           <figure className="split-media" data-reveal>
             <img
@@ -1702,8 +1719,10 @@ function WorkWithMe() {
                 style={{ "--i": k }}
                 data-reveal
               >
-                {k === 1 && <span className="popular-tag">Recommended</span>}
-                <h3>{name}</h3>
+                <h3>
+                  {name}
+                  {k === 1 && " (recommended)"}
+                </h3>
                 <p className="price">
                   <small>GHS</small>
                   {price}

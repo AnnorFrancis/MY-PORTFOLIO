@@ -529,7 +529,7 @@ body {
 .trust-v2 {
   padding-bottom: 28px;
 }
-.trust-v2 p {
+.trust-v2 h2 {
   max-width: 44ch;
   margin: 0;
   font-size: clamp(1.15rem, 1.9vw, 1.6rem);
@@ -1895,4 +1895,65 @@ main > article > .note-body {
 }
 .button-light:hover {
   background: var(--aqua-soft);
+}
+
+/* Long page titles step down a size so they stay within two lines on a laptop. */
+.hero-v2 h1.long {
+  max-width: 26ch;
+  font-size: clamp(1.6rem, 3.5vw, 2.9rem);
+  line-height: 1.1;
+}
+/* Live work shown as proof under an ad page hero. */
+.proof-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.proof-strip img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 14px;
+  background: var(--mist);
+}
+.proof-strip strong {
+  display: block;
+  margin-top: 12px;
+  font-size: 16px;
+}
+.proof-strip span {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+@media (max-width: 700px) {
+  .proof-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+/* Hero text is on screen from the first paint. A fade from invisible would make
+   the browser record the main content about a second late (Largest Contentful Paint). */
+.hero-v2 .rise {
+  animation: none;
+}
+/* Phones: project rows read as picture and name, with the description full width below. */
+@media (max-width: 560px) {
+  .proof-row {
+    grid-template-columns: 72px minmax(0, 1fr);
+    padding: 14px;
+  }
+  .proof-row img {
+    width: 72px;
+    grid-row: auto;
+  }
+  .proof-description {
+    grid-column: 1 / -1;
+  }
+  .proof-row .arrow-icon {
+    display: none;
+  }
 }

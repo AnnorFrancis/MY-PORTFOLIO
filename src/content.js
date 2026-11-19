@@ -22,7 +22,7 @@ export const projects = [
     url: "https://trendynormshub.com",
     stack: "Next.js · TypeScript · Supabase · Paystack",
     status: "Live retail system",
-    title: "An online store connected to the shop’s stock, payments and staff.",
+    title: "An online store tied to the shop’s stock.",
     summary:
       "An online storefront and retail back office, connecting sales, stock, payments, and the people running the shop.",
     visualLabel: "Retail / Connected commerce",
@@ -82,7 +82,7 @@ export const projects = [
     url: "https://www.besiabeauty.com",
     stack: "JavaScript · Node.js · Supabase · Paystack",
     status: "Launched October 2026",
-    title: "A salon website with the booking and studio system behind it.",
+    title: "A salon website with booking built in.",
     summary:
       "Bookings, deposits, commerce, and a studio manager, with an editor that puts everyday website changes in the owner’s hands.",
     visualLabel: "Beauty / Studio operations",
@@ -139,7 +139,7 @@ export const projects = [
     url: "https://perkos.app",
     stack: "Next.js · TypeScript · Supabase · Vitest",
     status: "Live · commercially unproven",
-    title: "A till that keeps selling when the internet drops.",
+    title: "A till that keeps selling offline.",
     summary:
       "My own business software product, exploring offline sale queues, stock controls, and the rules that keep a till trustworthy.",
     visualLabel: "Own product / Business software",
@@ -359,6 +359,10 @@ export const pages = [
 ];
 
 // Client reviews, as supplied by the owner from each client.
+// Client reviews stay off the site until each client has approved the wording
+// and agreed to be named. Set this to true once that is confirmed.
+export const reviewsApproved = false;
+
 export const testimonials = [
   {
     quote:
