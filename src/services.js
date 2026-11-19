@@ -114,8 +114,8 @@ export const services = [
     title: "Mobile apps for your customers or your team",
     seoTitle: "Mobile app development in Ghana for iPhone and Android",
     seoDescription:
-      "Mobile apps for businesses in Ghana: customer apps with bookings, payments and push notifications, and apps for your staff. Built with Flutter for iPhone and Android.",
-    price: null,
+      "Mobile apps for businesses in Ghana: customer apps with bookings, payments and push notifications, and apps for your staff. Built with Flutter for iPhone and Android. From GHS 5,000.",
+    price: [5000],
     summary:
       "Your own app on iPhone and Android, for customers who book and pay, or for staff who work away from a desk.",
     heading: "Does this need an app, or a good website?",
@@ -127,7 +127,7 @@ export const services = [
       "Test builds for your team, the store listings and a handover of every account.",
     ],
     budget:
-      "Mobile app prices depend on the screens, the payments and the system behind the app. We agree the price in writing after one short call.",
+      "Mobile apps start from GHS 5,000. The final price depends on the screens, the payments and the system behind the app, and is agreed in writing before work starts.",
     prepare:
       "Tell us who will use the app, the one thing they must be able to do in it, and whether it should connect to a website or system you already have.",
     work: {
@@ -149,8 +149,8 @@ export const services = [
     title: "Payroll, staff and security systems for companies",
     seoTitle: "Payroll, attendance and staff management systems in Ghana",
     seoDescription:
-      "Payroll, clock-in, attendance and staff records for companies and institutions in Ghana. Pay runs with PAYE and SSNIT, built from verified attendance.",
-    price: null,
+      "Payroll, clock-in, attendance and staff records for companies and institutions in Ghana. Pay runs with PAYE and SSNIT, built from verified attendance. From GHS 8,000.",
+    price: [8000],
     summary:
       "Clock-in, attendance, staff records and payroll in one system, so pay follows verified attendance.",
     heading: "Who gets paid, and for which hours?",
@@ -162,7 +162,7 @@ export const services = [
       "Pay runs with PAYE and SSNIT, approval before payment, and payslips staff can open.",
     ],
     budget:
-      "Payroll and staff systems are priced by the number of staff, sites and devices. We agree the price in writing after one short call.",
+      "Payroll and staff systems start from GHS 8,000. The final price depends on the number of staff, sites and devices, and is agreed in writing before work starts.",
     prepare:
       "Walk us through last month’s payroll: where attendance came from, who approved the pay run and which mistakes had to be fixed by hand.",
     work: {

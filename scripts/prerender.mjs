@@ -47,7 +47,10 @@ try {
       priceRange: "GHS 1,500 to GHS 15,000",
       address: { "@type": "PostalAddress", addressLocality: "Accra", addressRegion: "Greater Accra", addressCountry: "GH" },
       areaServed: [{ "@type": "Country", name: "Ghana" }, "Worldwide"],
-      contactPoint: [{ "@type": "ContactPoint", contactType: "sales", telephone: "+233200214147", email: "hello@perkos.app", availableLanguage: ["English"], areaServed: ["GH", "Worldwide"] }],
+      contactPoint: [
+        { "@type": "ContactPoint", contactType: "sales", telephone: "+233538713916", email: "hello@perkos.app", availableLanguage: ["English"], areaServed: ["GH", "Worldwide"] },
+        { "@type": "ContactPoint", contactType: "customer support", telephone: "+233200214147", availableLanguage: ["English"], areaServed: ["GH", "Worldwide"] },
+      ],
       knowsAbout: ["Website design", "E-commerce", "Point of sale systems", "Inventory management software", "Custom software development", "AI chatbots", "Workflow automation", "Paystack and Mobile Money payments"],
       founder: { "@type": "Person", name: "Francis Annor", url: `${origin}/about` },
       sameAs: ["https://www.instagram.com/perkins_creative/", "https://www.facebook.com/profile.php?id=61588510061817", "https://linkedin.com/in/francis-annor-649a0a26a", "https://github.com/AnnorFrancis"],
